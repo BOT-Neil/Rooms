@@ -74,7 +74,7 @@ processResources {
 
 }
 shadowJar {
-    from file("${buildDir}/libs/Rooms-1.0-SNAPSHOT.out.jar")
+    from file("${buildDir}/libs/Rooms-1.0-SNAPSHOT.jar")
     //configurations = [project.configurations.compileClasspath]
     //configurations.compileClasspath.dependencies.remove dependencies.implementation(files("libs/slimeworldmanager-api-2.7.0-SNAPSHOT.jar"))
     dependencies {
