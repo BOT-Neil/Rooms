@@ -3,7 +3,6 @@ package tel.endho.rooms;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import tel.endho.rooms.storage.Redis;
 
 import java.util.ArrayList;
 import java.util.Comparator;

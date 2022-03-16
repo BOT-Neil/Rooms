@@ -84,7 +84,7 @@ public class Redis {
                                     String lastserver = byteArray.readUTF();
                                     String ownername = byteArray.readUTF();
                                     Long systime = Long.valueOf(byteArray.readUTF());
-                                    int maxPlayers = Integer.parseInt(byteArray.readUTF());
+                                    //int maxPlayers = Integer.parseInt(byteArray.readUTF());
                                     GlobalRoomWorlds.getGlobalRoomWorlds().put(worlduuid, new GlobalRoomWorld(worlduuid, ownername, lastserver, systime));
                                     //GlobalRoomWorlds.putRoom(worlduuid, new GlobalRoomWorld(worlduuid, ownername, lastserver, systime));
                                 }

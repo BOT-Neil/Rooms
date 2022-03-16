@@ -2,12 +2,8 @@ package tel.endho.rooms.Tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import tel.endho.rooms.RoomWorldManager;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
-
-import java.io.File;
-import java.sql.SQLException;
 
 public class UnloadEmptyTask implements Runnable {
 
