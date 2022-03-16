@@ -39,7 +39,7 @@ public class KillConfirmMenu extends Menu {
             case BARRIER:
 
                 //go back to the previous menu
-                new KillPlayerMenu(playerMenuUtility).open();
+                //new KillPlayerMenu(playerMenuUtility).open();
 
                 break;
         }

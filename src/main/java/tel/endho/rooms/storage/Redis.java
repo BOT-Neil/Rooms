@@ -43,7 +43,7 @@ public class Redis {
                 .withPort(port)
                 .withDatabase(0)
                 .build();
-        System.out.println(redisUri.toString());
+        //System.out.println(redisUri.toString());
         redisClient = RedisClient.create(redisUri);
         //connection = redisClient.connect();
         //asyncCommands = connection.async();

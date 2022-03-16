@@ -118,6 +118,29 @@ public class MySQL {
                  KEY `roomid_foreignkey` (`roomid`),
                  CONSTRAINT `roomid_foreignkey` FOREIGN KEY (`roomid`) REFERENCES `room_worlds` (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4""";
+        String netherislands = """
+                CREATE TABLE IF NOT EXISTS `room_netherislands` (
+                 `roomid` int(10) NOT NULL,
+                 `x` int(5) NOT NULL,
+                 `y` int(5) NOT NULL,
+                 `z` int(5) NOT NULL,
+                 `level` int(10) NOT NULL,
+                 `bordercolour` varchar(20) NOT NULL,
+                 `defaultbiome` varchar(20) NOT NULL,
+                 UNIQUE KEY `netherislands_foreignkey` (`roomid`),
+                 CONSTRAINT `netherislands_foreignkey` FOREIGN KEY (`roomid`) REFERENCES `room_worlds` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4""";
+        String endislands = """
+                CREATE TABLE IF NOT EXISTS `room_endislands` (
+                 `roomid` int(10) NOT NULL,
+                 `x` int(5) NOT NULL,
+                 `y` int(5) NOT NULL,
+                 `z` int(5) NOT NULL,
+                 `level` int(10) NOT NULL,
+                 `bordercolour` varchar(20) NOT NULL,
+                 UNIQUE KEY `endislands_foreignkey` (`roomid`),
+                 CONSTRAINT `endislands_foreignkey` FOREIGN KEY (`roomid`) REFERENCES `room_worlds` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4""";
         String roomsglobal = """
                 CREATE TABLE IF NOT EXISTS `room_global` (
                  `worlduuid` varchar(40) NOT NULL,

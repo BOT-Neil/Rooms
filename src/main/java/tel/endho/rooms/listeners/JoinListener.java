@@ -15,9 +15,4 @@ public class JoinListener implements Listener {
     public void onJoin(PlayerJoinEvent event) throws SQLException {
         Rooms.mysql.loadRoomWorlds(event.getPlayer());
     }
-    @EventHandler
-    public void onJoin(PlayerLoginEvent event) {
-        System.out.println("worldname "+event.getPlayer().getLocation().getWorld().getName());
-    }
-
 }

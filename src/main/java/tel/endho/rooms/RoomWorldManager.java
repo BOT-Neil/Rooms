@@ -20,6 +20,8 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.biome.BiomeType;
+import com.sk89q.worldedit.world.biome.BiomeTypes;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -211,15 +213,16 @@ public class RoomWorldManager {
     public void genNether(RoomWorld roomWorld, Player player) {
 
         try {
-            if(sqlLoader.listWorlds().contains(roomWorld.getWorldUUID().toString())){
-
+            if(sqlLoader.listWorlds().contains(roomWorld.getWorldUUID().toString()+"rmnether")){
+                roomWorld.setHasNether(true);
+                return;
             }
             // Note that this method should be called asynchronously
             //SlimeWorld world = plugin.loadWorld(sqlLoader, "my-world", props);
             //UUID worlduuid = UUID.randomUUID();
-            sqlLoader.listWorlds().forEach(a->{
+            /*sqlLoader.listWorlds().forEach(a->{
                 Rooms.getPlugin().getLogger().info(a);
-            });
+            });*/
             //Rooms.getPlugin().getLogger().info("test: "+ plugin.getWorld(sqlLoader,roomWorld.getWorldUUID().toString()+"rmnether").);
             SlimePropertyMap properties = new SlimePropertyMap();
             properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
@@ -243,6 +246,12 @@ public class RoomWorldManager {
                         int halfsize = wbsize/2;
                         CuboidRegion region = new CuboidRegion(BlockVector3.at(halfsize-1, 0, halfsize-1), BlockVector3.at(-halfsize, fillsize, -halfsize));
                         es2.setBlocks((Region) region, BlockTypes.get(fillmaterial));
+                        CuboidRegion regionn = new CuboidRegion(BlockVector3.at(halfsize-1, 0, halfsize-1), BlockVector3.at(-halfsize, 256, -halfsize));
+
+                        regionn.forEach(bv->{
+                            es2.setBiome(bv,BiomeTypes.SOUL_SAND_VALLEY);
+                        });
+                        //es2.setBiome((Region)region, BiomeTypes.CRIMSON_FOREST);
                         Bukkit.getScheduler().runTask(Rooms.getPlugin(),()->{
                             Location loc = new Location(Rooms.getPlugin().getServer().getWorld(world.getName()), Double.valueOf(SlimeProperties.SPAWN_X.getDefaultValue()), Rooms.configs.getGeneralConfig().getInt("spawnheight"),Double.valueOf(SlimeProperties.SPAWN_Z.getDefaultValue()));
                             player.teleport(loc);
@@ -292,11 +301,50 @@ public class RoomWorldManager {
             }
         }
     }
+    public void TpOrLoadHouseWorld(Player p, String uuidstring) throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+        UUID realuuid= UUID.fromString(uuidstring.substring(0, Math.min(uuidstring.length(), 36)));
+        String uuidsuffix = "";
+        if(uuidstring.endsWith("rmnether")){
+            uuidsuffix="rmnether";
+        }
+        if(uuidstring.endsWith("rmend")){
+            uuidsuffix="rmend";
+        }
+        if (GlobalRoomWorlds.isOnAnotherServer(realuuid)) {
+            //maybe if globalroomworld(uuid).getserver=thisserver{load, but that dont load duplicate idk tired}
+            //todo &&if roomworld isnt on this server
+            //todo if() roomworld is on this server
+            //todo if(globalroomworld.region!= config.region)
+            //
+            //todo implement lobby mode
+            Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
+            Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid);
+        } else {
+            if(Rooms.configs.getStorageConfig().getBoolean("redislobby")&&Rooms.redis.isLoaded()){
+                Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
+            } else {
+                if (RoomWorlds.isRoomWorld(realuuid)) {
+                    RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(realuuid);
+                    final World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix);
+                    if (world != null) {
+                        Location location = new Location(world, roomWorld.getSpawnX().doubleValue(), roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
+                        p.teleport(location);
+                    } else {
+                        //todo make async andput player teleport after
+                        loadWorld(roomWorld);
+                        Location location = new Location(world, roomWorld.getSpawnX().doubleValue(), roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
+                        p.teleport(location);
+                    }
+                }
+
+            }
+        }
+    }
     public void unloadRoomWorld(RoomWorld roomWorld){
         World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
         assert world != null;
-        //world.save();
-        Rooms.getPlugin().getLogger().info("unloadWorld: "+Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(),true));
+        world.save();
+        Rooms.getPlugin().getLogger().info("unloadWorld: "+Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(),false));
         //Bukkit.unloadWorld(world,true);
         try {
             Rooms.mysql.saveRoomWorld(roomWorld,true);
