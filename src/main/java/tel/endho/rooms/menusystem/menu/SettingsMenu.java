@@ -18,7 +18,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.bukkit.Material.NETHER_STAR;
 
 public class SettingsMenu extends Menu {
 
@@ -69,6 +68,8 @@ public class SettingsMenu extends Menu {
                             }else {player.sendMessage(
                                     ChatColor.AQUA+"Purchase a rank at endho.tel");}
                             return;
+                        default:
+                            break;
                     }
                 }
             }

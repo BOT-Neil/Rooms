@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static org.bukkit.Bukkit.getServer;
 
 public class GlobalRoomsMenu extends PaginatedMenu {
 
@@ -42,10 +41,10 @@ public class GlobalRoomsMenu extends PaginatedMenu {
     public void handleMenu(InventoryClickEvent e) throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
         Player p = (Player) e.getWhoClicked();
         ArrayList<GlobalRoomWorld>globalrooms= new ArrayList<>(GlobalRoomWorlds.getGlobalRoomWorlds().values());
-        ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
+        //ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
 
         if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)||e.getCurrentItem().getType().equals(Material.ENDER_EYE)||e.getCurrentItem().getType().equals(Material.PODZOL)) {
-            PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
+            //PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
             //playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
             //playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
             Rooms.roomWorldManager.TpOrLoadHouseWorld((Player)e.getWhoClicked(),UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING)));

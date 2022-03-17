@@ -44,7 +44,7 @@ public class LocalRoomsMenu extends PaginatedMenu {
         ArrayList<RoomWorld>playerhouses= new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
 
         if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)||e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
-            PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
+            //PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
             //playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
             //playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
             Rooms.roomWorldManager.TpOrLoadHouseWorld((Player)e.getWhoClicked(),UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING)));

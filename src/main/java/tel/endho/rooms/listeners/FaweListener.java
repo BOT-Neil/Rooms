@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorldManager;
 import tel.endho.rooms.RoomWorlds;
-import tel.endho.rooms.Rooms;
 
 import java.util.UUID;
 

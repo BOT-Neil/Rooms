@@ -57,6 +57,8 @@ public class AdminMenu extends Menu {
 
                     //
                 }
+            default:
+                break;
         }
 
     }

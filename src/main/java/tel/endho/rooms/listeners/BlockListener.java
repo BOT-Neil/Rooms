@@ -1,7 +1,6 @@
 package tel.endho.rooms.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Leaves;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

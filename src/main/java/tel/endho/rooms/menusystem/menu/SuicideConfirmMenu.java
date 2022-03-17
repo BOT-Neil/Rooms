@@ -39,6 +39,8 @@ public class SuicideConfirmMenu extends Menu {
                 e.getWhoClicked().sendMessage("Changed your mind? aww.");
                 e.getWhoClicked().closeInventory();
                 break;
+            default:
+                break;
         }
 
     }

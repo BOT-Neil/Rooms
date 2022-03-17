@@ -47,6 +47,8 @@ public class DeleteConfirmMenu extends Menu {
                 case BARRIER:
 
                     break;
+                default:
+                    break;
             }
         }
 

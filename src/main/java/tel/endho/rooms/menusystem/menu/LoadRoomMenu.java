@@ -51,6 +51,9 @@ public class LoadRoomMenu extends PaginatedMenu {
             case ENDER_EYE, GRASS_BLOCK, NETHERRACK -> {
                 Rooms.roomWorldManager.TpOrLoadHouseWorld(p,UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING)));
             }
+            default->{
+                break;
+            }
         }
         if (e.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
 
@@ -90,7 +93,7 @@ public class LoadRoomMenu extends PaginatedMenu {
         //Map<UUID, HouseWorld> getHouseWorldsPlayer= HouseWorlds.getHouseWorldsPlayer(playerMenuUtility.getOwner());
         ArrayList<RoomWorld>playerhouses= new ArrayList<>(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getPlayerGetHouseList()).values());
         //The thing you will be looping through to place items
-        ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
+        //ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
         playerhouses.sort(Comparator.comparingInt(RoomWorld::getRowid));
         ///////////////////////////////////// Pagination loop template
         if(!RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getPlayerGetHouseList()).isEmpty()) {

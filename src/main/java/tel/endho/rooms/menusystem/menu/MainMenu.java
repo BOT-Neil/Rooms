@@ -74,6 +74,8 @@ public class MainMenu extends Menu {
             case HONEYCOMB:
                 new SettingsMenu(playerMenuUtility).open();
                 break;
+            default:
+                break;
         }
 
     }

@@ -3,7 +3,6 @@ package tel.endho.rooms.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;

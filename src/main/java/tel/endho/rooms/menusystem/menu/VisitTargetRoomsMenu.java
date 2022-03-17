@@ -52,6 +52,9 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
             case ENDER_EYE, GRASS_BLOCK -> {
                 Rooms.roomWorldManager.TpOrLoadHouseWorld(p,UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING)));
             }
+            default ->{
+                break;
+            }
         }
         if (e.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
 
@@ -94,7 +97,7 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
         }else{
             playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(Bukkit.getPlayer(target)).values());
         }
-        ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
+        //ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
         playerhouses.sort(Comparator.comparingInt(RoomWorld::getRowid));
         ///////////////////////////////////// Pagination loop template
         if(!playerhouses.isEmpty()) {

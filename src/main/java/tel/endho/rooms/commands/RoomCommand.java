@@ -122,7 +122,7 @@ public class RoomCommand implements CommandExecutor , TabCompleter {
                     case "clearmembers" ->{
                         if (args.length == 2) {
                             if (Bukkit.getPlayer(args[1]) != null) {
-                                Player target = Bukkit.getPlayer(args[1]);
+                                //Player target = Bukkit.getPlayer(args[1]);
                                 if (RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))) {
                                     RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
                                     if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {

@@ -41,6 +41,8 @@ public class KillConfirmMenu extends Menu {
                 //go back to the previous menu
                 //new KillPlayerMenu(playerMenuUtility).open();
 
+                break;  
+            default:
                 break;
         }
 

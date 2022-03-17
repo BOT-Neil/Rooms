@@ -46,6 +46,9 @@ public class CreateHouseMenu extends Menu {
                 Rooms.roomWorldManager.createWorld("the_end",(Player)e.getWhoClicked());
                 e.getWhoClicked().closeInventory();
                 break;
+            default:
+                e.getWhoClicked().closeInventory();
+                break;
         }
 
     }

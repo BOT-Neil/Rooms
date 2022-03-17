@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.PortalType;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +16,6 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import tel.endho.rooms.RoomWorld;
-import tel.endho.rooms.RoomWorldManager;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 
@@ -133,7 +131,7 @@ public class PortalListener implements Listener {
         if(event.isCancelled()){
             return;
         }
-        Entity e = event.getEntity();
+        //Entity e = event.getEntity();
         Location originalTo = event.getTo();
         Location currentLocation = event.getFrom();
         Rooms.getPlugin().getLogger().info("currentLocation: "+currentLocation.toString());
@@ -146,6 +144,6 @@ public class PortalListener implements Listener {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
-        Player p = (Player) event.getEntity();
+        //Player p = (Player) event.getEntity();
     }
 }
