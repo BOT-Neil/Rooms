@@ -343,7 +343,8 @@ public class RoomWorldManager {
     public void unloadRoomWorld(RoomWorld roomWorld){
         World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
         assert world != null;
-        Rooms.getPlugin().getLogger().info("unloadWorld: "+Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(),true));
+        world.save();
+        Rooms.getPlugin().getLogger().info("unloadWorld: "+Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(),false));
         //Bukkit.unloadWorld(world,true);
         try {
             Rooms.mysql.saveRoomWorld(roomWorld,true);
