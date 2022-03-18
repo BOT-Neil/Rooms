@@ -16,6 +16,7 @@ public class Configs {
   public void loadConfigs() {
     createGeneralConfig();
     createStorageConfig();
+    createPresetConfig();
   }
 
   public FileConfiguration getGeneralConfig() {
