@@ -1,6 +1,5 @@
 package tel.endho.rooms.menusystem.menu;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,156 +19,164 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainMenu extends Menu {
 
-    public MainMenu(PlayerMenuUtility playerMenuUtility) {
-        super(playerMenuUtility);
-    }
+  public MainMenu(PlayerMenuUtility playerMenuUtility) {
+    super(playerMenuUtility);
+  }
 
-    @Override
-    public String getMenuName() {
-        return "RoomManager";
-        //return "Kill " + playerMenuUtility.getPlayerToKill().getDisplayName();
-    }
+  @Override
+  public String getMenuName() {
+    return "RoomManager";
+    // return "Kill " + playerMenuUtility.getPlayerToKill().getDisplayName();
+  }
 
-    @Override
-    public int getSlots() {
-        return 9;
-    }
+  @Override
+  public int getSlots() {
+    return 9;
+  }
 
-    @Override
-    public void handleMenu(InventoryClickEvent e) {
+  @Override
+  public void handleMenu(InventoryClickEvent e) {
 
-        switch (e.getCurrentItem().getType()){
-            case NETHER_STAR:
-                if(!(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size()>getRoomLimitperm(playerMenuUtility.getOwner(), Rooms.configs.getGeneralConfig().getDouble("roomlimit")))){
-                    if(Rooms.configs.getGeneralConfig().getBoolean("islandmode")){
-                        Rooms.roomWorldManager.createWorld("normal",(Player)e.getWhoClicked());//todo add schematics/generator options
-                        return;
-                    }else{
-                        new CreateHouseMenu(playerMenuUtility).open();
-                        break;
-                    }
+    switch (e.getCurrentItem().getType()) {
+      case NETHER_STAR:
+        if (!(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size() > getRoomLimitperm(
+            playerMenuUtility.getOwner(), Rooms.configs.getGeneralConfig().getDouble("roomlimit")))) {
+          if (Rooms.configs.getGeneralConfig().getBoolean("islandmode")) {
+            Rooms.roomWorldManager.createWorld("normal", (Player) e.getWhoClicked());// todo add schematics/generator
+                                                                                     // options
+            return;
+          } else {
+            new CreateHouseMenu(playerMenuUtility).open();
+            break;
+          }
 
-                } else{
-                    playerMenuUtility.getOwner().sendMessage("Buy more rooms at endho.tel");
-                    break;
-                }
-
-
-            case BOOK:
-                switch (e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "menu"), PersistentDataType.STRING)) {
-                    case "personal" -> {
-                        playerMenuUtility.setPlayerGetHouseList((Player) e.getWhoClicked());
-                        new LoadRoomMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
-                    }
-                    case "local" -> new LocalRoomsMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
-                    case "global" -> new GlobalRoomsMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
-                }
-                break;
-            case COMPARATOR:
-                if(e.getSlot()==6){
-                    new AdminMenu(playerMenuUtility).open();
-                    break;
-                    //Rooms.housemanager.migrateAll();
-                }
-            case HONEYCOMB:
-                new SettingsMenu(playerMenuUtility).open();
-                break;
-            default:
-                break;
+        } else {
+          playerMenuUtility.getOwner().sendMessage("Buy more rooms at endho.tel");
+          break;
         }
 
+      case BOOK:
+        switch (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+            .get(new NamespacedKey(Rooms.getPlugin(), "menu"), PersistentDataType.STRING)) {
+          case "personal" -> {
+            playerMenuUtility.setPlayerGetHouseList((Player) e.getWhoClicked());
+            new LoadRoomMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
+          }
+          case "local" -> new LocalRoomsMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
+          case "global" -> new GlobalRoomsMenu(Rooms.getPlayerMenuUtility((Player) e.getWhoClicked())).open();
+        }
+        break;
+      case COMPARATOR:
+        if (e.getSlot() == 6) {
+          new AdminMenu(playerMenuUtility).open();
+          break;
+          // Rooms.housemanager.migrateAll();
+        }
+      case HONEYCOMB:
+        new SettingsMenu(playerMenuUtility).open();
+        break;
+      default:
+        break;
     }
 
-    @Override
-    public void setMenuItems() {
-        ItemStack createHouse = new ItemStack(Material.NETHER_STAR,1);
-        ItemMeta grass_meta = createHouse.getItemMeta();
-        grass_meta.setDisplayName(ChatColor.GREEN + "Create Room");
-        ArrayList<String> yes_lore = new ArrayList<>();
-        yes_lore.add(ChatColor.AQUA + "Click here to start");
-        yes_lore.add(ChatColor.AQUA + "Starts at "+Rooms.configs.getGeneralConfig().getInt("worldborder")+" blocks wide");
-        grass_meta.setLore(yes_lore);
-        createHouse.setItemMeta(grass_meta);
+  }
 
-        int personalroomsint = RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size();
-        ItemStack personalRooms = new ItemStack(Material.BOOK, 1);
-        ItemMeta personalHousesItemMeta = personalRooms.getItemMeta();
-        personalHousesItemMeta.setDisplayName(ChatColor.DARK_RED + "Personal Rooms");
-        personalHousesItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(),"menu"), PersistentDataType.STRING,"personal");
-        ArrayList<String> personal_lore = new ArrayList<>();
-        personal_lore.add(ChatColor.AQUA + "Your Rooms");
-        personal_lore.add(ChatColor.AQUA + "Amount: "+personalroomsint);
-        personalHousesItemMeta.setLore(personal_lore);
-        personalRooms.setItemMeta(personalHousesItemMeta);
+  @Override
+  public void setMenuItems() {
+    ItemStack createHouse = new ItemStack(Material.NETHER_STAR, 1);
+    ItemMeta grass_meta = createHouse.getItemMeta();
+    grass_meta.setDisplayName(ChatColor.GREEN + "Create Room");
+    ArrayList<String> yes_lore = new ArrayList<>();
+    yes_lore.add(ChatColor.AQUA + "Click here to start");
+    yes_lore
+        .add(ChatColor.AQUA + "Starts at " + Rooms.configs.getGeneralConfig().getInt("worldborder") + " blocks wide");
+    grass_meta.setLore(yes_lore);
+    createHouse.setItemMeta(grass_meta);
 
-        int localroomsint = RoomWorlds.getLoadedRoomWorlds().size();
-        ItemStack localRooms = new ItemStack(Material.BOOK, 1);
-        ItemMeta localRoomsItemMeta = localRooms.getItemMeta();
-        localRoomsItemMeta.setDisplayName(ChatColor.DARK_RED + "Local Rooms");
-        localRoomsItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(),"menu"), PersistentDataType.STRING,"local");
-        ArrayList<String> local_lore = new ArrayList<>();
-        local_lore.add(ChatColor.AQUA + "Rooms loaded on this shard");
-        local_lore.add(ChatColor.AQUA + "Amount: "+localroomsint);
-        localRoomsItemMeta.setLore(local_lore);
-        localRooms.setItemMeta(localRoomsItemMeta);
+    int personalroomsint = RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size();
+    ItemStack personalRooms = new ItemStack(Material.BOOK, 1);
+    ItemMeta personalHousesItemMeta = personalRooms.getItemMeta();
+    personalHousesItemMeta.setDisplayName(ChatColor.DARK_RED + "Personal Rooms");
+    personalHousesItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
+        PersistentDataType.STRING, "personal");
+    ArrayList<String> personal_lore = new ArrayList<>();
+    personal_lore.add(ChatColor.AQUA + "Your Rooms");
+    personal_lore.add(ChatColor.AQUA + "Amount: " + personalroomsint);
+    personalHousesItemMeta.setLore(personal_lore);
+    personalRooms.setItemMeta(personalHousesItemMeta);
 
-        AtomicInteger globalroomsint= new AtomicInteger();
-        globalroomsint.set(0);
-        if (GlobalRoomWorlds.getGlobalRoomWorlds()!=null){
-            globalroomsint.set(GlobalRoomWorlds.getGlobalRoomWorlds().size());
-        }
-        ItemStack globalRooms = new ItemStack(Material.BOOK, 1);
-        ItemMeta globalRoomsItemMeta = globalRooms.getItemMeta();
-        globalRoomsItemMeta.setDisplayName(ChatColor.DARK_RED + "Global Rooms");
-        globalRoomsItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(),"menu"), PersistentDataType.STRING,"global");
-        ArrayList<String> global_lore = new ArrayList<>();
-        global_lore.add(ChatColor.AQUA + "Rooms loaded on other shards");
-        global_lore.add(ChatColor.AQUA + "or other regions");
-        global_lore.add(ChatColor.AQUA + "Amount: "+globalroomsint.get());
-        globalRoomsItemMeta.setLore(global_lore);
-        globalRooms.setItemMeta(globalRoomsItemMeta);
+    int localroomsint = RoomWorlds.getLoadedRoomWorlds().size();
+    ItemStack localRooms = new ItemStack(Material.BOOK, 1);
+    ItemMeta localRoomsItemMeta = localRooms.getItemMeta();
+    localRoomsItemMeta.setDisplayName(ChatColor.DARK_RED + "Local Rooms");
+    localRoomsItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
+        PersistentDataType.STRING, "local");
+    ArrayList<String> local_lore = new ArrayList<>();
+    local_lore.add(ChatColor.AQUA + "Rooms loaded on this shard");
+    local_lore.add(ChatColor.AQUA + "Amount: " + localroomsint);
+    localRoomsItemMeta.setLore(local_lore);
+    localRooms.setItemMeta(localRoomsItemMeta);
 
-        ItemStack settingsmenu = new ItemStack(Material.HONEYCOMB);
-        ItemMeta settingsmenuMeta = settingsmenu.getItemMeta();
-        settingsmenuMeta.setDisplayName(ChatColor.DARK_RED + "Room Settings");
-        settingsmenu.setItemMeta(settingsmenuMeta);
-        ItemStack adminmenu = new ItemStack(Material.COMPARATOR);
-        ItemMeta adminmenuMeta = adminmenu.getItemMeta();
-        adminmenuMeta.setDisplayName(ChatColor.DARK_RED + "Admin");
-        inventory.setItem(1, createHouse);
-        inventory.setItem(2, personalRooms);
-        inventory.setItem(3, localRooms);
-        inventory.setItem(4, globalRooms);
-        try{
-        UUID uuidd = UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName());
-            if(RoomWorlds.isRoomWorld(uuidd)){
-                RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
-                if(roomWorld.isOwner(playerMenuUtility.getOwner())){
-                    inventory.setItem(5, settingsmenu);
-                }
-            }
-        }catch(Exception ignored){}
-
-        if(playerMenuUtility.getOwner().hasPermission("rooms.admin")){
-            inventory.setItem(6,adminmenu);
-        }
-
-
-        setFillerGlass();
-
+    AtomicInteger globalroomsint = new AtomicInteger();
+    globalroomsint.set(0);
+    if (GlobalRoomWorlds.getGlobalRoomWorlds() != null) {
+      globalroomsint.set(GlobalRoomWorlds.getGlobalRoomWorlds().size());
     }
-    public static double getRoomLimitperm(Player player, double defaultValue) {
-        String permissionPrefix = "rooms.limit.";
+    ItemStack globalRooms = new ItemStack(Material.BOOK, 1);
+    ItemMeta globalRoomsItemMeta = globalRooms.getItemMeta();
+    globalRoomsItemMeta.setDisplayName(ChatColor.DARK_RED + "Global Rooms");
+    globalRoomsItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
+        PersistentDataType.STRING, "global");
+    ArrayList<String> global_lore = new ArrayList<>();
+    global_lore.add(ChatColor.AQUA + "Rooms loaded on other shards");
+    global_lore.add(ChatColor.AQUA + "or other regions");
+    global_lore.add(ChatColor.AQUA + "Amount: " + globalroomsint.get());
+    globalRoomsItemMeta.setLore(global_lore);
+    globalRooms.setItemMeta(globalRoomsItemMeta);
 
-        for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
-            String permission= attachmentInfo.getPermission();
-            if (permission.startsWith(permissionPrefix)) {
-                System.out.println("permission1; "+permission);
-                return Integer.parseInt(permission.substring(permission.lastIndexOf(".") + 1));
-            }
+    ItemStack settingsmenu = new ItemStack(Material.HONEYCOMB);
+    ItemMeta settingsmenuMeta = settingsmenu.getItemMeta();
+    settingsmenuMeta.setDisplayName(ChatColor.DARK_RED + "Room Settings");
+    settingsmenu.setItemMeta(settingsmenuMeta);
+    ItemStack adminmenu = new ItemStack(Material.COMPARATOR);
+    ItemMeta adminmenuMeta = adminmenu.getItemMeta();
+    adminmenuMeta.setDisplayName(ChatColor.DARK_RED + "Admin");
+    inventory.setItem(1, createHouse);
+    inventory.setItem(2, personalRooms);
+    inventory.setItem(3, localRooms);
+    inventory.setItem(4, globalRooms);
+    try {
+      UUID uuidd = UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName());
+      if (RoomWorlds.isRoomWorld(uuidd)) {
+        RoomWorld roomWorld = RoomWorlds
+            .getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
+        if (roomWorld.isOwner(playerMenuUtility.getOwner())) {
+          inventory.setItem(5, settingsmenu);
         }
-
-        return defaultValue;
+      }
+    } catch (Exception ignored) {
     }
+
+    if (playerMenuUtility.getOwner().hasPermission("rooms.admin")) {
+      inventory.setItem(6, adminmenu);
+    }
+
+    setFillerGlass();
+
+  }
+
+  public static double getRoomLimitperm(Player player, double defaultValue) {
+    String permissionPrefix = "rooms.limit.";
+
+    for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
+      String permission = attachmentInfo.getPermission();
+      if (permission.startsWith(permissionPrefix)) {
+        Rooms.debug("permission1; " + permission);
+        return Integer.parseInt(permission.substring(permission.lastIndexOf(".") + 1));
+      }
+    }
+
+    return defaultValue;
+  }
 
 }

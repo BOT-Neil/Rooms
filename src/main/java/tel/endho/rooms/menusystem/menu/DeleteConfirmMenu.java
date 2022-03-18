@@ -18,63 +18,64 @@ import java.util.UUID;
 
 public class DeleteConfirmMenu extends Menu {
 
-    public DeleteConfirmMenu(PlayerMenuUtility playerMenuUtility) {
-        super(playerMenuUtility);
+  public DeleteConfirmMenu(PlayerMenuUtility playerMenuUtility) {
+    super(playerMenuUtility);
+  }
+
+  @Override
+  public String getMenuName() {
+    return "Delete your room? ";
+  }
+
+  @Override
+  public int getSlots() {
+    return 9;
+  }
+
+  @Override
+  public void handleMenu(InventoryClickEvent e) {
+    if (RoomWorlds.isRoomWorld(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()))
+        || playerMenuUtility.getOwner().hasPermission("rooms.admin")) {
+      RoomWorld roomWorld = RoomWorlds
+          .getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
+      switch (e.getCurrentItem().getType()) {
+        case EMERALD:
+          try {
+            Rooms.roomWorldManager.deleteRoomWorld(roomWorld);
+          } catch (UnknownWorldException | IOException ex) {
+            ex.printStackTrace();
+          }
+          break;
+        case BARRIER:
+
+          break;
+        default:
+          break;
+      }
     }
 
-    @Override
-    public String getMenuName() {
-        return "Delete your room? ";
-    }
+  }
 
-    @Override
-    public int getSlots() {
-        return 9;
-    }
+  @Override
+  public void setMenuItems() {
 
-    @Override
-    public void handleMenu(InventoryClickEvent e) {
-        if(RoomWorlds.isRoomWorld(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()))||playerMenuUtility.getOwner().hasPermission("rooms.admin")){
-            RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
-            switch (e.getCurrentItem().getType()){
-                case EMERALD:
-                    try {
-                        Rooms.roomWorldManager.deleteRoomWorld(roomWorld);
-                    } catch (UnknownWorldException | IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    break;
-                case BARRIER:
+    ItemStack yes = new ItemStack(Material.EMERALD, 1);
+    ItemMeta yes_meta = yes.getItemMeta();
+    yes_meta.setDisplayName(ChatColor.GREEN + "Yes");
+    ArrayList<String> yes_lore = new ArrayList<>();
+    yes_lore.add(ChatColor.AQUA + "Would you like to delete this room?");
+    yes_meta.setLore(yes_lore);
+    yes.setItemMeta(yes_meta);
+    ItemStack no = new ItemStack(Material.BARRIER, 1);
+    ItemMeta no_meta = no.getItemMeta();
+    no_meta.setDisplayName(ChatColor.DARK_RED + "No");
+    no.setItemMeta(no_meta);
 
-                    break;
-                default:
-                    break;
-            }
-        }
+    inventory.setItem(3, yes);
+    inventory.setItem(5, no);
 
+    setFillerGlass();
 
-    }
-
-    @Override
-    public void setMenuItems() {
-
-        ItemStack yes = new ItemStack(Material.EMERALD, 1);
-        ItemMeta yes_meta = yes.getItemMeta();
-        yes_meta.setDisplayName(ChatColor.GREEN + "Yes");
-        ArrayList<String> yes_lore = new ArrayList<>();
-        yes_lore.add(ChatColor.AQUA + "Would you like to delete this room?");
-        yes_meta.setLore(yes_lore);
-        yes.setItemMeta(yes_meta);
-        ItemStack no = new ItemStack(Material.BARRIER, 1);
-        ItemMeta no_meta = no.getItemMeta();
-        no_meta.setDisplayName(ChatColor.DARK_RED + "No");
-        no.setItemMeta(no_meta);
-
-        inventory.setItem(3, yes);
-        inventory.setItem(5, no);
-
-        setFillerGlass();
-
-    }
+  }
 
 }

@@ -1,0 +1,22 @@
+spawnanimals: false
+spawnmonsters: false
+generator: unimplemented #schematics, flat
+gamemode: survival
+islandmode: true #like skyblock
+calculatelevel: true #//todo
+roomlimit: 10 #max rooms without permission rooms.limit.2
+blockspawneggs: true
+bordercolour: green #red,blue
+worldborder: 300
+enablefill: true
+plotsquaredsize: 140
+plotsquaredheight: 66
+spawnheight: 48
+fillsize: 48
+fillmaterial: GRASS_BLOCK
+fillboolean: true
+fillbedrock: true
+blockmobs: true
+spawnworlds: # no building unless rooms.spawnbypass
+  - creativespawn
+  - void

@@ -23,136 +23,140 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class RoomCommand implements CommandExecutor , TabCompleter {
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+public class RoomCommand implements CommandExecutor, TabCompleter {
+  @Override
+  public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-        if (command.getName().equalsIgnoreCase("rooms")) { // checking if my command is the one i'm after
+    if (command.getName().equalsIgnoreCase("rooms")) { // checking if my command is the one i'm after
 
-            List<String> autoCompletes = new ArrayList<>(); //create a new string list for tab completion
-            autoCompletes.add("visit");
-            //todo if isroomworld&&isOwner
-            autoCompletes.add("trust");
-            autoCompletes.add("add");
+      List<String> autoCompletes = new ArrayList<>(); // create a new string list for tab completion
+      autoCompletes.add("visit");
+      // todo if isroomworld&&isOwner
+      autoCompletes.add("trust");
+      autoCompletes.add("add");
 
-            if (args.length == 1) { //only interested in the first sub command, if you wanted to cover more deeper sub commands, you could have multiple if statements or a switch statement
+      if (args.length == 1) { // only interested in the first sub command, if you wanted to cover more deeper
+                              // sub commands, you could have multiple if statements or a switch statement
 
+        return autoCompletes; // then return the list
 
-                return autoCompletes; // then return the list
+      }
+
+    }
+
+    return null; // this will return nothing if it wasn't the disguise command I have
+  }
+
+  @Override
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+    if (sender instanceof Player) {
+
+      Player player = (Player) sender;
+      if (Arrays.stream(args).findFirst().isPresent()) {
+        Rooms.debug("argslength: " + args.length);
+        switch (args[0]) {
+          case "delete" -> {
+            if (args.length == 1) {
+              if (RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName())) != null) {
+                RoomWorld roomWorld = RoomWorlds
+                    .getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
+                if (roomWorld.isOwner(player)) {
+                  if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                    new BRKConfirmDeleteMenu().makemenu(player);
+                  } else {
+                    new DeleteConfirmMenu(Rooms.getPlayerMenuUtility(player)).open();
+                    // new MainMenu(Rooms.getPlayerMenuUtility(p)).open();
+                  }
+                }
+              }
+            }
+          }
+          case "visit" -> {
+            if (args.length == 3) {
+              try {
+                Rooms.mysql.loadOthersRoomWorlds(player, args[1], Integer.valueOf(args[2]));
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            } else if (args.length == 2) {
+              try {
+                if (RoomWorlds.getRoomWorldsPlayer(args[1]).isEmpty()) {
+                  Rooms.mysql.loadOthersRoomWorlds(player, args[1], null);
+                } else {
+                  if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                    new BRKVisitTargetRooms().makemenu(player, args[1]);
+                  } else {
+                    new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), args[1]).open();
+                    // new MainMenu(Rooms.getPlayerMenuUtility(p)).open();
+                  }
+                }
+
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+          case "trust" -> {
+            if (args.length == 2) {
+              if (Bukkit.getPlayer(args[1]) != null) {
+                Player target = Bukkit.getPlayer(args[1]);
+                Rooms.debug("debug59");
+                if (RoomWorlds.isRoomWorld(player.getLocation().getWorld().getName())) {
+                  RoomWorld roomWorld = RoomWorlds
+                      .getRoomWorldString(player.getLocation().getWorld().getName());
+                  if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
+                    try {
+                      roomWorld.getTrustedMembers().put(target.getUniqueId(), target.getName());
+                      player.sendMessage("You trusted " + target.getName());
+                    } catch (Exception exception) {
+                      player.sendMessage("Unknown error");
+                    }
+                  }
+                }
+              } else {
+                player.sendMessage("Player not found, or offline.");
+              }
 
             }
 
-        }
-
-        return null; // this will return nothing if it wasn't the disguise command I have
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (sender instanceof Player) {
-
-            Player player = (Player) sender;
-            if(Arrays.stream(args).findFirst().isPresent()){
-                System.out.println("argslength: "+args.length );
-                switch (args[0]) {
-                    case "delete" -> {
-                        if(args.length==1){
-                            if(RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()))!=null){
-                                RoomWorld roomWorld= RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
-                                if(roomWorld.isOwner(player)){
-                                    if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
-                                        new BRKConfirmDeleteMenu().makemenu(player);
-                                    } else {
-                                        new DeleteConfirmMenu(Rooms.getPlayerMenuUtility(player)).open();
-                                        //new MainMenu(Rooms.getPlayerMenuUtility(p)).open();
-                                    }
-                                }
-                            }
-                        }
+          }
+          case "clearmembers" -> {
+            if (args.length == 2) {
+              if (Bukkit.getPlayer(args[1]) != null) {
+                // Player target = Bukkit.getPlayer(args[1]);
+                if (RoomWorlds.isRoomWorld(player.getLocation().getWorld().getName())) {
+                  RoomWorld roomWorld = RoomWorlds
+                      .getRoomWorldString(player.getLocation().getWorld().getName());
+                  if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
+                    try {
+                      roomWorld.clearMembers(true);
+                      player.sendMessage("You cleared the members");
+                    } catch (Exception exception) {
+                      player.sendMessage("Unknown error");
                     }
-                    case "visit" -> {
-                        if (args.length == 3) {
-                            try {
-                                Rooms.mysql.loadOthersRoomWorlds(player, args[1], Integer.valueOf(args[2]));
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        } else if (args.length == 2) {
-                            try {
-                                if (RoomWorlds.getRoomWorldsPlayer(args[1]).isEmpty()) {
-                                    Rooms.mysql.loadOthersRoomWorlds(player, args[1], null);
-                                } else {
-                                    if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
-                                        new BRKVisitTargetRooms().makemenu(player, args[1]);
-                                    } else {
-                                        new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), args[1]).open();
-                                        //new MainMenu(Rooms.getPlayerMenuUtility(p)).open();
-                                    }
-                                }
-
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    case "trust" -> {
-                        if (args.length == 2) {
-                            if (Bukkit.getPlayer(args[1]) != null) {
-                                Player target = Bukkit.getPlayer(args[1]);
-                                System.out.println("debug59");
-                                if (RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))) {
-                                    RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
-                                    if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
-                                        try {
-                                            roomWorld.getTrustedMembers().put(target.getUniqueId(), target.getName());
-                                            player.sendMessage("You trusted " + target.getName());
-                                        } catch (Exception exception) {
-                                            player.sendMessage("Unknown error");
-                                        }
-                                    }
-                                }
-                            } else {
-                                player.sendMessage("Player not found, or offline.");
-                            }
-
-                        }
-
-                    }
-                    case "clearmembers" ->{
-                        if (args.length == 2) {
-                            if (Bukkit.getPlayer(args[1]) != null) {
-                                //Player target = Bukkit.getPlayer(args[1]);
-                                if (RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))) {
-                                    RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
-                                    if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
-                                        try {
-                                            roomWorld.clearMembers(true);
-                                            player.sendMessage("You cleared the members");
-                                        } catch (Exception exception) {
-                                            player.sendMessage("Unknown error");
-                                        }
-                                    }
-                                }
-                            } else {
-                                player.sendMessage("Player not found, or offline.");
-                            }
-
-                        }
-                    }
+                  }
                 }
-                //check houses for player if online or else load offlinehouseworld hashmap for player
-            }else {
-                if(FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())){
-                    new BRKMainMenu().makemenu(player);
-                } else{
-                    new MainMenu(Rooms.getPlayerMenuUtility(player)).open();
-                }
+              } else {
+                player.sendMessage("Player not found, or offline.");
+              }
+
             }
-
+          }
         }
+        // check houses for player if online or else load offlinehouseworld hashmap for
+        // player
+      } else {
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+          new BRKMainMenu().makemenu(player);
+        } else {
+          new MainMenu(Rooms.getPlayerMenuUtility(player)).open();
+        }
+      }
 
-        return true;
     }
+
+    return true;
+  }
 
 }

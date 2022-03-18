@@ -8,8 +8,8 @@ import tel.endho.rooms.Rooms;
 import java.sql.SQLException;
 
 public class JoinListener implements Listener {
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) throws SQLException {
-        Rooms.mysql.loadRoomWorlds(event.getPlayer());
-    }
+  @EventHandler
+  public void onJoin(PlayerJoinEvent event) throws SQLException {
+    Rooms.mysql.loadRoomWorlds(event.getPlayer());
+  }
 }

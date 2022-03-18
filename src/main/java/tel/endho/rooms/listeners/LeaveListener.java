@@ -10,14 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class LeaveListener implements Listener {
-    @EventHandler
-    public void onLeave(PlayerQuitEvent event) throws SQLException {
-        //HouseMain.mysql.loadHouseWorlds(event.getPlayer());
-        ArrayList<RoomWorld> playerhouses= new ArrayList<>(RoomWorlds.getRoomWorldsPlayer(event.getPlayer()).values());
-        playerhouses.forEach(roomWorld -> {
-            if (!roomWorld.isLoaded()){
-                RoomWorlds.getRoomWolrds().remove(roomWorld.getWorldUUID(),roomWorld);
-            }
-        });
-    }
+  @EventHandler
+  public void onLeave(PlayerQuitEvent event) throws SQLException {
+    // HouseMain.mysql.loadHouseWorlds(event.getPlayer());
+    ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getRoomWorldsPlayer(event.getPlayer()).values());
+    playerhouses.forEach(roomWorld -> {
+      if (!roomWorld.isLoaded()) {
+        RoomWorlds.getRoomWolrds().remove(roomWorld.getWorldUUID(), roomWorld);
+      }
+    });
+  }
 }

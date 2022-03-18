@@ -1,14 +1,11 @@
 package tel.endho.rooms;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.apache.commons.lang.math.NumberUtils;
+
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PAPIExpansion  extends PlaceholderExpansion {
 
@@ -106,7 +103,7 @@ public class PAPIExpansion  extends PlaceholderExpansion {
         if(player == null){
             return "";
         }
-        if(RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))){
+        if(RoomWorlds.isRoomWorld(player.getLocation().getWorld().getName())){
             RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
             if(identifier.equals("owner")){
                 return String.valueOf(roomWorld.getOwnerName());

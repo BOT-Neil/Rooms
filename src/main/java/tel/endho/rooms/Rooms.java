@@ -25,130 +25,145 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class Rooms extends JavaPlugin {
-    public static Rooms instance;
-    public static MySQL mysql;
-    public static Redis redis;
+  public static Rooms instance;
+  public static MySQL mysql;
+  public static Redis redis;
+  private static Boolean debugMode;
+  public static RoomWorldManager roomWorldManager;
+  public static Configs configs;
+  private FaweListener faweListener;
+  private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
+  public static HashMap<UUID, HashMap<UUID, Long>> pendingTeleports = new HashMap<>();
 
-    public static RoomWorldManager roomWorldManager;
-    public static Configs configs;
-    private FaweListener faweListener;
-    private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
-    public static HashMap<UUID, HashMap<UUID, Long>> pendingTeleports = new HashMap<>();
+  @Override
+  public void onEnable() {
+    instance = this;
+    configs = new Configs();
+    configs.loadConfigs();
+    debugMode = configs.getGeneralConfig().getBoolean("enabledebugging");
+    roomWorldManager = new RoomWorldManager();
+    mysql = new MySQL();
+    try {
+      mysql.initmysql(configs.getStorageConfig().getString("mysqlhost"),
+          configs.getStorageConfig().getString("mysqldatabase"), configs.getStorageConfig().getString("mysqlusername"),
+          configs.getStorageConfig().getString("mysqlpassword"), configs.getStorageConfig().getInt("mysqlport"));
+    } catch (SQLException | ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+    if (configs.getStorageConfig().getBoolean("enableredis")) {
+      redis = new Redis();
+      try {
+        redis.initRedis(configs.getStorageConfig().getString("bungeeservername"),
+            configs.getStorageConfig().getString("redishost"), configs.getStorageConfig().getString("redispassword"),
+            configs.getStorageConfig().getInt("redisport"));
+      } catch (ExecutionException | InterruptedException | TimeoutException e) {
+        e.printStackTrace();
+      }
+    }
 
-    @Override
-    public void onEnable(){
-        instance = this;
-        configs = new Configs();
-        configs.loadConfigs();
-        roomWorldManager = new RoomWorldManager();
-        mysql = new MySQL();
+    getCommand("Room").setExecutor(new RoomCommand());
+    this.faweListener = new FaweListener();
+    faweListener.startListening();
+    // Menu listener system
+    getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+    getServer().getPluginManager().registerEvents(new BlockListener(), this);
+    getServer().getPluginManager().registerEvents(new EntitiyListener(), this);
+    getServer().getPluginManager().registerEvents(new FallEvent(), this);
+    getServer().getPluginManager().registerEvents(new JoinListener(), this);
+    getServer().getPluginManager().registerEvents(new LeaveListener(), this);
+    getServer().getPluginManager().registerEvents(new BucketListener(), this);
+    // getServer().getPluginManager().registerEvents(new FaweListener(), this);
+    getServer().getPluginManager().registerEvents(new MenuListener(), this);
+    getServer().getPluginManager().registerEvents(new PortalListener(), this);
+    if (!Bukkit.getServer().getOnlinePlayers().isEmpty()) {
+      Bukkit.getServer().getOnlinePlayers().forEach(e -> {
         try {
-            mysql.initmysql(configs.getStorageConfig().getString("bungeeservername"),configs.getStorageConfig().getString("mysqlhost"),configs.getStorageConfig().getString("mysqldatabase"),configs.getStorageConfig().getString("mysqlusername"),configs.getStorageConfig().getString("mysqlpassword"),configs.getStorageConfig().getInt("mysqlport"));
-        } catch (SQLException | ClassNotFoundException e) {
+          mysql.loadRoomWorlds(e.getPlayer());
+        } catch (SQLException ex) {
+          ex.printStackTrace();
+        }
+      });
+    }
+    // todo purge globalhouselist
+    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UpdateGlobalTask(), 0, 300);
+    // this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new
+    // FetchBungeeInfoTask(), 0, 600);
+    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new WorldBorderTask(), 0, 300);
+    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadEmptyTask(), 0, 200);
+    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadStaleGlobalTask(), 0, 300);
+  }
+
+  @Override
+  public void onDisable() {
+    RoomWorlds.getRoomWolrds().forEach((uuid, roomWorld) -> {
+      if (roomWorld.isLoaded()) {
+        World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
+        if ((world != null) && !world.getPlayers().isEmpty()) {
+          world.getPlayers().forEach(player -> {
+            player.kickPlayer("room world plugin disabled");
+          });
+        }
+        if (world != null) {
+          try {
+            Rooms.mysql.saveRoomWorld(roomWorld, false);
+            File bob = new File(Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + uuid);
+            bob.deleteOnExit();
+          } catch (SQLException e) {
             e.printStackTrace();
+          }
+          world.save();
+          Bukkit.unloadWorld(world, false);
         }
-        if(configs.getStorageConfig().getBoolean("enableredis")){
-            redis= new Redis();
-            try {
-                redis.initRedis(configs.getStorageConfig().getString("bungeeservername"),configs.getStorageConfig().getString("redishost"),configs.getStorageConfig().getString("redispassword"),configs.getStorageConfig().getInt("redisport"));
-            } catch (ExecutionException | InterruptedException | TimeoutException e) {
-                e.printStackTrace();
-            }
-        }
+        // todo mysql save houseworld
+        // RoomWorlds.getRoomWolrds().remove(uuid);
+      }
+    });
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    try {
+      mysql.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 
-        getCommand("Room").setExecutor(new RoomCommand());
-        this.faweListener= new FaweListener();
-        faweListener.startListening();
-        //Menu listener system
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        getServer().getPluginManager().registerEvents(new BlockListener(), this);
-        getServer().getPluginManager().registerEvents(new EntitiyListener(), this);
-        getServer().getPluginManager().registerEvents(new FallEvent(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(), this);
-        getServer().getPluginManager().registerEvents(new LeaveListener(), this);
-        getServer().getPluginManager().registerEvents(new BucketListener(),this);
-        //getServer().getPluginManager().registerEvents(new FaweListener(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new PortalListener(),this);
-        if(!Bukkit.getServer().getOnlinePlayers().isEmpty()){
-            Bukkit.getServer().getOnlinePlayers().forEach(e->{
-                try {
-                    mysql.loadRoomWorlds(e.getPlayer());
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            });
-        }
-        //todo purge globalhouselist
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UpdateGlobalTask(), 0, 300);
-        //this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new FetchBungeeInfoTask(), 0, 600);
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new WorldBorderTask(), 0, 300);
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadEmptyTask(), 0, 200);
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadStaleGlobalTask(), 0, 300);
-    }
-    @Override
-    public void onDisable(){
-        RoomWorlds.getRoomWolrds().forEach((uuid, roomWorld) -> {
-            if(roomWorld.isLoaded()){
-                World world= Bukkit.getWorld(roomWorld.getWorldUUID().toString());
-                if((world!=null)&&!world.getPlayers().isEmpty()){
-                    world.getPlayers().forEach(player -> {
-                        player.kickPlayer("room world plugin disabled");
-                    });
-                }
-                if(world!=null){
-                    try {
-                        Rooms.mysql.saveRoomWorld(roomWorld,false);
-                        File bob = new File(Rooms.getPlugin().getDataFolder().getParent()+"/WorldGuard/worlds/"+ uuid);
-                        bob.deleteOnExit();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    world.save();
-                    Bukkit.unloadWorld(world,false);
-                }
-                //todo mysql save houseworld
-                //RoomWorlds.getRoomWolrds().remove(uuid);
-            }
-        });
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            mysql.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+  public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
+    PlayerMenuUtility playerMenuUtility;
+    if (!(playerMenuUtilityMap.containsKey(p))) { // See if the player has a playermenuutility "saved" for them
 
-    public static PlayerMenuUtility getPlayerMenuUtility(Player p) {
-        PlayerMenuUtility playerMenuUtility;
-        if (!(playerMenuUtilityMap.containsKey(p))) { //See if the player has a playermenuutility "saved" for them
+      // This player doesn't. Make one for them add add it to the hashmap
+      playerMenuUtility = new PlayerMenuUtility(p);
+      playerMenuUtilityMap.put(p, playerMenuUtility);
 
-            //This player doesn't. Make one for them add add it to the hashmap
-            playerMenuUtility = new PlayerMenuUtility(p);
-            playerMenuUtilityMap.put(p, playerMenuUtility);
+      return playerMenuUtility;
+    } else {
+      return playerMenuUtilityMap.get(p); // Return the object by using the provided player
+    }
+  }
 
-            return playerMenuUtility;
-        } else {
-            return playerMenuUtilityMap.get(p); //Return the object by using the provided player
-        }
-    }
+  public static Rooms getPlugin() {
+    return instance;
+  }
 
-    public static Rooms getPlugin() {
-        return instance;
+  public static void debug(String string) {
+    if (debugMode) {
+      getPlugin().getLogger().info(string);
     }
-    public static boolean isOffline(UUID uuid){
-        return Bukkit.getOfflinePlayer(uuid).isOnline();
-    }
-    public void sendPlayer(Player p, String s){
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Connect");
-        out.writeUTF(s);
-        Player player = p;
-        player.sendPluginMessage(this, "BungeeCord", out.toByteArray());
-    }
+  }
+
+  public static boolean isOffline(UUID uuid) {
+    return Bukkit.getOfflinePlayer(uuid).isOnline();
+  }
+
+  public void sendPlayer(Player p, String s) {
+    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+    out.writeUTF("Connect");
+    out.writeUTF(s);
+    Player player = p;
+    player.sendPluginMessage(this, "BungeeCord", out.toByteArray());
+  }
 
 }

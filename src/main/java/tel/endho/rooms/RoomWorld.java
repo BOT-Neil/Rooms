@@ -23,12 +23,11 @@ public class RoomWorld {
     private Map<UUID, String>blocked;
     private Map<UUID, String>trustedMembers;
     private Map<UUID, String>members;
-    private String LastServer;
     private Long systemTime;
     private int inactiveTicks;
     private String enviroment;
     private String BorderColor;
-
+    private String creationPreset;
     private Boolean hasNether;
     private Boolean hasEnd;//todo set true after island gen
     private String RoomName;//todo room.user.rename if string null || null { }
@@ -46,12 +45,12 @@ public class RoomWorld {
         this.blocked=blocked;
         this.trustedMembers=trustedMembers;
         this.members=members;
-        this.LastServer=LastServer;
-        this.systemTime=systemTime;
+        this.systemTime=System.currentTimeMillis();
         this.enviroment=enviroment;
         this.BorderColor=borderColor;
         this.inactiveTicks=0;//noplayers in world
         this.hasNether=false;
+        //this.icon=Material.GRASS_BLOCK;
     };
     public int getRowid(){return this.rowid;}
     public UUID getWorldUUID(){

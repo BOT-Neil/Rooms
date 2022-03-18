@@ -56,14 +56,7 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
                 break;
             }
         }
-        if (e.getCurrentItem().getType().equals(Material.PLAYER_HEAD)) {
-
-            PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
-            playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
-
-            new KillConfirmMenu(playerMenuUtility).open();
-
-        }else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+        if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
 
             //close inventory
             p.closeInventory();
