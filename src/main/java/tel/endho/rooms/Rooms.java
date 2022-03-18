@@ -69,7 +69,7 @@ public class Rooms extends JavaPlugin {
       ConfigurationSection presetSection = configs.getPresetConfig().getConfigurationSection(x);
       String name= presetSection.getString("name");
       String locString= presetSection.getString("spawnloc");
-      Preset preset = new Preset(name,);
+      Preset preset = new Preset(name,locString);
       roomWorldManager.getPresetMap().put(id, preset);
     });
     getCommand("Room").setExecutor(new RoomCommand());

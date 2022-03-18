@@ -5,6 +5,8 @@ import org.bukkit.Material;
 public class Preset {
   private String name;
   private String spawnlocString;
+  private String netherlocString;
+  private String endlocString;
   private String mainEnvironment;
   private String mainBiome;
   private String netherBiome;

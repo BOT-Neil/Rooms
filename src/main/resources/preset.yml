@@ -2,6 +2,7 @@
 0:
   name: "flat"
   spawnloc: ""
+  netherspawnloc: ""
   mainenvironment: "normal" #nether , the_end
   biome: "plains"
   netherbiome: "warped_forest"

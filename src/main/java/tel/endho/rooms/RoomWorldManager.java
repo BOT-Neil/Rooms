@@ -39,14 +39,21 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
   SlimeLoader sqlLoader = plugin.getLoader("mysql");
   private static Map<Integer, Preset> presetMap = new HashMap<>();
-  public Map<Integer,Preset> getPresetMap(){return presetMap;}
+
+  public Map<Integer, Preset> getPresetMap() {
+    return presetMap;
+  }
+
   public void migrateAll() {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -301,6 +308,7 @@ public class RoomWorldManager {
     }
   }
 
+  // todo depreciate and remove this
   public void TpOrLoadHouseWorld(Player p, UUID uuid)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
 
@@ -429,13 +437,31 @@ public class RoomWorldManager {
     // Rooms.configs.getGeneralConfig().getBoolean("spawnanimals"));
     // properties.setValue(SlimeProperties.ALLOW_MONSTERS,
     // Rooms.configs.getGeneralConfig().getBoolean("spawnmonsters"));
+    // SlimeWorld world = plugin.loadWorld(sqlLoader,
+    // roomWorld.getWorldUUID().toString(), false, properties);
+    BukkitRunnable r = new BukkitRunnable() {
+      @Override
+      public void run() {
+        try {
+          Optional<SlimeWorld> opworld = plugin
+              .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties).get();
+          SlimeWorld world = opworld.get();
+          plugin.generateWorld(world);
+          Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
+              GameRule.DO_MOB_SPAWNING,
+              false);
+          Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
+              GameRule.DO_FIRE_TICK,
+              false);
+        } catch (InterruptedException | ExecutionException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
 
-    SlimeWorld world = plugin.loadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties);
-    plugin.generateWorld(world);
-    Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(GameRule.DO_MOB_SPAWNING,
-        false);
-    Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(GameRule.DO_FIRE_TICK,
-        false);
+      }
+    };
+    r.runTaskAsynchronously(Rooms.getPlugin());
+
     // plugin.loadWorld(sqlLoader,houseWorld.getWorldUUID().toString(),false,properties);
 
   }
