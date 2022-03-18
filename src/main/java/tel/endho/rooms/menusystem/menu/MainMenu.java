@@ -41,12 +41,15 @@ public class MainMenu extends Menu {
       case NETHER_STAR:
         if (!(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size() > getRoomLimitperm(
             playerMenuUtility.getOwner(), Rooms.configs.getGeneralConfig().getDouble("roomlimit")))) {
-          if (Rooms.configs.getGeneralConfig().getBoolean("islandmode")) {
-            Rooms.roomWorldManager.createWorld("normal", (Player) e.getWhoClicked());// todo add schematics/generator
+
+          
+          if (Rooms.configs.getGeneralConfig().getBoolean("presetSelector")) {
+            new CreateHouseMenu(playerMenuUtility).open();
                                                                                      // options
             return;
           } else {
-            new CreateHouseMenu(playerMenuUtility).open();
+                        Rooms.roomWorldManager.createWorld("normal", (Player) e.getWhoClicked());// todo add schematics/generator
+
             break;
           }
 
