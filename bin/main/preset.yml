@@ -6,7 +6,7 @@
   biome: "plains"
   netherbiome: "warped_forest"
   iconmaterial: "GRASS_BLOCK"
-  mainschematic: "flat"#set flatgen to flase
+  mainschematic: "flat"#schemname, flat, empty
   netherschematic: "flat"
   endschematic: "flat"
   fillsize: 48
