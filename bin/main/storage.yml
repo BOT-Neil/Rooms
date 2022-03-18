@@ -1,0 +1,15 @@
+ #name as in bungee config/ leave default if single server
+bungeeservername: Creative
+#run this true on your first server and leave it false on the rest
+purgeglobaltask: true
+mysqlhost: "localhost"
+mysqlusername: "user"
+mysqldatabase: "server_rooms"
+mysqlpassword: "gr3atpassword"
+mysqlport: 3306
+enableredis: false #only if using multiple spigots
+redishost: "localhost"
+redispassword: ""
+redisport: 6639
+region: "eu"
+enableregion: false #todo implement this
