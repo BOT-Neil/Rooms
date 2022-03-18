@@ -1,7 +1,7 @@
 #remember to set default border in general
 0:
   name: "flat"
-  spawn: ""
+  spawnloc: ""
   mainenvironment: "normal" #nether , the_end
   biome: "plains"
   netherbiome: "warped_forest"

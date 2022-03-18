@@ -31,9 +31,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import tel.endho.rooms.storage.Preset;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -41,7 +45,8 @@ import java.util.regex.Pattern;
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
   SlimeLoader sqlLoader = plugin.getLoader("mysql");
-
+  private static Map<Integer, Preset> presetMap = new HashMap<>();
+  public Map<Integer,Preset> getPresetMap(){return presetMap;}
   public void migrateAll() {
     BukkitRunnable r = new BukkitRunnable() {
       @Override

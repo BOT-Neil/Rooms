@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import tel.endho.rooms.Tasks.UnloadEmptyTask;
@@ -15,11 +16,13 @@ import tel.endho.rooms.listeners.*;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import tel.endho.rooms.storage.Configs;
 import tel.endho.rooms.storage.MySQL;
+import tel.endho.rooms.storage.Preset;
 import tel.endho.rooms.storage.Redis;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -60,7 +63,15 @@ public class Rooms extends JavaPlugin {
         e.printStackTrace();
       }
     }
-
+    int presetsize = configs.getPresetConfig().getKeys(false).size();
+    configs.getPresetConfig().getKeys(false).forEach(x->{
+      int id = Integer.parseInt(x);
+      ConfigurationSection presetSection = configs.getPresetConfig().getConfigurationSection(x);
+      String name= presetSection.getString("name");
+      String locString= presetSection.getString("spawnloc");
+      Preset preset = new Preset(name,);
+      roomWorldManager.getPresetMap().put(id, preset);
+    });
     getCommand("Room").setExecutor(new RoomCommand());
     this.faweListener = new FaweListener();
     faweListener.startListening();
