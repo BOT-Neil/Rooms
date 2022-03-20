@@ -5,7 +5,6 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.geysermc.cumulus.SimpleForm;
 import org.geysermc.cumulus.component.ButtonComponent;
-import org.geysermc.cumulus.impl.SimpleFormImpl;
 import org.geysermc.cumulus.response.SimpleFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
@@ -16,7 +15,6 @@ public class BRKCreateRoomMenu {
   public void makemenu(Player player) {
     Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
     FloodgateApi flapi = FloodgateApi.getInstance();
-    ButtonComponent buttons;
     SimpleForm simpleForm = SimpleForm.builder()
         .title("Create a Room")
         .content("")
