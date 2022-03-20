@@ -44,7 +44,7 @@ public class MainMenu extends Menu {
 
           
           if (Rooms.configs.getGeneralConfig().getBoolean("presetSelector")) {
-            new CreateHouseMenu(playerMenuUtility).open();
+            new CreateRoomMenu(playerMenuUtility).open();
                                                                                      // options
             return;
           } else {

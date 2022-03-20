@@ -10,17 +10,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import tel.endho.rooms.Rooms;
-import tel.endho.rooms.menusystem.Menu;
 import tel.endho.rooms.menusystem.PaginatedMenu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import tel.endho.rooms.util.Preset;
 
-import java.util.ArrayList;
 import java.util.Map;
 
-public class CreateHouseMenu extends PaginatedMenu {
+public class CreateRoomMenu extends PaginatedMenu {
 
-  public CreateHouseMenu(PlayerMenuUtility playerMenuUtility) {
+  public CreateRoomMenu(PlayerMenuUtility playerMenuUtility) {
     super(playerMenuUtility);
   }
 
@@ -35,21 +33,20 @@ public class CreateHouseMenu extends PaginatedMenu {
   }
 
   @Override
-  public void handleMenu(InventoryClickEvent e){
+  public void handleMenu(InventoryClickEvent e) {
     Player p = (Player) e.getWhoClicked();
-    //ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
     Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
-    //int indexxx= Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));    
+    // int indexxx=
+    // Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
+    // NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
 
-    if(e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Rooms.getPlugin(), "presetid"),PersistentDataType.STRING)){
+    if (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+        .has(new NamespacedKey(Rooms.getPlugin(), "presetid"), PersistentDataType.STRING)) {
       int ind = Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
+          .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
       Rooms.roomWorldManager.createWorld(presetMap.get(ind), p);
-    }else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+    } else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
       new MainMenu(playerMenuUtility).open();
-      // close inventory
-      // p.closeInventory();
-
     } else if (e.getCurrentItem().getType().equals(Material.DARK_OAK_BUTTON)) {
       if (ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Left")) {
         if (page == 0) {
@@ -68,6 +65,7 @@ public class CreateHouseMenu extends PaginatedMenu {
       }
     }
   }
+
   @Override
   public void setMenuItems() {
 
