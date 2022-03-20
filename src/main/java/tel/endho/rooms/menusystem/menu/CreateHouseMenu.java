@@ -13,7 +13,7 @@ import tel.endho.rooms.Rooms;
 import tel.endho.rooms.menusystem.Menu;
 import tel.endho.rooms.menusystem.PaginatedMenu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
-import tel.endho.rooms.storage.Preset;
+import tel.endho.rooms.util.Preset;
 
 import java.util.ArrayList;
 import java.util.Map;
