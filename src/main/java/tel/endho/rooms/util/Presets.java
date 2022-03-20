@@ -27,4 +27,7 @@ public class Presets {
     });;
     return presetMap.get(atomicInteger.get());
   }
+  public static Preset getFirstPreset(){
+    return presetMap.get(0);
+  }
 }

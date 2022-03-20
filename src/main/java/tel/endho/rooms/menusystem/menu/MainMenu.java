@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import tel.endho.rooms.*;
 import tel.endho.rooms.menusystem.Menu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
+import tel.endho.rooms.util.Presets;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -36,20 +37,16 @@ public class MainMenu extends Menu {
 
   @Override
   public void handleMenu(InventoryClickEvent e) {
-
     switch (e.getCurrentItem().getType()) {
       case NETHER_STAR:
         if (!(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size() > getRoomLimitperm(
             playerMenuUtility.getOwner(), Rooms.configs.getGeneralConfig().getDouble("roomlimit")))) {
-
-          
           if (Rooms.configs.getGeneralConfig().getBoolean("presetSelector")) {
             new CreateRoomMenu(playerMenuUtility).open();
-                                                                                     // options
+            // options
             return;
           } else {
-                        Rooms.roomWorldManager.createWorld("normal", (Player) e.getWhoClicked());// todo add schematics/generator
-
+            Rooms.roomWorldManager.createWorld(Presets.getFirstPreset(), (Player) e.getWhoClicked());
             break;
           }
 
@@ -57,7 +54,6 @@ public class MainMenu extends Menu {
           playerMenuUtility.getOwner().sendMessage("Buy more rooms at endho.tel");
           break;
         }
-
       case BOOK:
         switch (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
             .get(new NamespacedKey(Rooms.getPlugin(), "menu"), PersistentDataType.STRING)) {

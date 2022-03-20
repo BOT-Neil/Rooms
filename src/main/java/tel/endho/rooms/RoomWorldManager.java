@@ -26,7 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -187,12 +186,8 @@ public class RoomWorldManager {
       UUID worlduuid = UUID.randomUUID();
       SlimePropertyMap properties = new SlimePropertyMap();
       properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
-      properties.setValue(SlimeProperties.ENVIRONMENT, worldtype);
-      Rooms.debug("test123: " + Biome.CRIMSON_FOREST.toString());
-      if (worldtype.equals("nether")) {
-        properties.setValue(SlimeProperties.DEFAULT_BIOME, "minecraft:crimson_forest");
-        Rooms.debug("propbiome: " + properties.getValue(SlimeProperties.DEFAULT_BIOME));
-      }
+      properties.setValue(SlimeProperties.ENVIRONMENT, preset.getmainEnvironment());
+      properties.setValue(SlimeProperties.DEFAULT_BIOME, preset.getmainBiome());
       properties.setValue(SlimeProperties.DIFFICULTY, "normal");
       properties.setValue(SlimeProperties.SPAWN_X, 1);
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("spawnheight"));
@@ -250,10 +245,11 @@ public class RoomWorldManager {
        */
       // Rooms.debug("test: "+
       // plugin.getWorld(sqlLoader,roomWorld.getWorldUUID().toString()+"rmnether").);
+      Preset preset = Presets.gePreset(roomWorld.getEnviroment());
       SlimePropertyMap properties = new SlimePropertyMap();
       properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
       properties.setValue(SlimeProperties.ENVIRONMENT, "nether");
-      properties.setValue(SlimeProperties.DEFAULT_BIOME, "minecraft:crimson_forest");
+      properties.setValue(SlimeProperties.DEFAULT_BIOME, preset.getnetherBiome());
       properties.setValue(SlimeProperties.DIFFICULTY, "normal");
       properties.setValue(SlimeProperties.SPAWN_X, 1);
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("spawnheight"));
@@ -399,7 +395,7 @@ public class RoomWorldManager {
       Rooms.mysql.saveRoomWorld(roomWorld, true);
       // RoomWorlds.houseWorldBungeeInfoArrayList.remove(roomWorld.getWorldUUID());
       Rooms.debug("system path: " + Rooms.getPlugin().getDataFolder().getAbsolutePath());// system path:
-                                                                                         // /home/creative/CreativeEU1/plugins/Rooms
+      // /home/creative/CreativeEU1/plugins/Rooms
       File bob = new File(
           Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + roomWorld.getWorldUUID().toString());
       bob.deleteOnExit();
@@ -447,7 +443,7 @@ public class RoomWorldManager {
           Optional<SlimeWorld> opworld = plugin
               .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties).get();
           SlimeWorld world = opworld.get();
-          //todo sync
+          // todo sync
           plugin.generateWorld(world);
           Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
               GameRule.DO_MOB_SPAWNING,
