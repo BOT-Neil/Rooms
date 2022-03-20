@@ -1,4 +1,4 @@
-package tel.endho.rooms.storage;
+package tel.endho.rooms.util;
 
 import org.bukkit.Material;
 

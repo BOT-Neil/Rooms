@@ -31,7 +31,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import tel.endho.rooms.storage.Preset;
+import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.Presets;
 
 import java.io.File;
 import java.io.IOException;
@@ -424,8 +425,9 @@ public class RoomWorldManager {
   public void loadWorld(RoomWorld roomWorld)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     SlimePropertyMap properties = new SlimePropertyMap();
+    Preset preset = Presets.gePreset(roomWorld.getEnviroment());
     properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
-    properties.setValue(SlimeProperties.ENVIRONMENT, roomWorld.getEnviroment());
+    properties.setValue(SlimeProperties.ENVIRONMENT, preset.getmainEnvironment());
     properties.setValue(SlimeProperties.DIFFICULTY, "normal");
     properties.setValue(SlimeProperties.SPAWN_X, 1);
     properties.setValue(SlimeProperties.SPAWN_Y, roomWorld.getSpawnY());
@@ -446,6 +448,7 @@ public class RoomWorldManager {
           Optional<SlimeWorld> opworld = plugin
               .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties).get();
           SlimeWorld world = opworld.get();
+          //todo sync
           plugin.generateWorld(world);
           Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
               GameRule.DO_MOB_SPAWNING,
