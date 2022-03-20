@@ -59,7 +59,7 @@ public class CreateHouseMenu extends PaginatedMenu {
           super.open();
         }
       } else if (ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Right")) {
-        if (!((index + 1) >= playerhouses.size())) {
+        if (!((index + 1) >= presetMap.size())) {
           page = page + 1;
           super.open();
         } else {
@@ -67,7 +67,7 @@ public class CreateHouseMenu extends PaginatedMenu {
         }
       }
     }
-
+  }
   @Override
   public void setMenuItems() {
 
