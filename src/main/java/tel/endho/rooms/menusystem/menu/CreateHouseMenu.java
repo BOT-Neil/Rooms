@@ -2,17 +2,23 @@ package tel.endho.rooms.menusystem.menu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
 import tel.endho.rooms.Rooms;
 import tel.endho.rooms.menusystem.Menu;
+import tel.endho.rooms.menusystem.PaginatedMenu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
+import tel.endho.rooms.storage.Preset;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-public class CreateHouseMenu extends Menu {
+public class CreateHouseMenu extends PaginatedMenu {
 
   public CreateHouseMenu(PlayerMenuUtility playerMenuUtility) {
     super(playerMenuUtility);
@@ -20,66 +26,95 @@ public class CreateHouseMenu extends Menu {
 
   @Override
   public String getMenuName() {
-    return "Create World - Choose Type";
-    // return "Kill " + playerMenuUtility.getPlayerToKill().getDisplayName();
+    return "Choose a local Player to Visit";
   }
 
   @Override
   public int getSlots() {
-    return 9;
+    return 54;
   }
 
   @Override
-  public void handleMenu(InventoryClickEvent e) {
-
-    switch (e.getCurrentItem().getType()) {
-      case GRASS_BLOCK:
-        Rooms.roomWorldManager.createWorld("normal", (Player) e.getWhoClicked());
-        e.getWhoClicked().closeInventory();
-        break;
-      case NETHERRACK:
-        Rooms.roomWorldManager.createWorld("nether", (Player) e.getWhoClicked());
-        e.getWhoClicked().closeInventory();
-        break;
-      case ENDER_EYE:
-        Rooms.roomWorldManager.createWorld("the_end", (Player) e.getWhoClicked());
-        e.getWhoClicked().closeInventory();
-        break;
-      default:
-        e.getWhoClicked().closeInventory();
-        break;
+  public void handleMenu(InventoryClickEvent e){
+    Player p = (Player) e.getWhoClicked();
+    //ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
+    Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
+    if(e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Rooms.getPlugin(), "UUID"),PersistentDataType.STRING)){
+      Rooms.roomWorldManager.createWorld(worldtype, player);
     }
+    int indexxx= Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));    
+    if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
+        || e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
+      // PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
+      // playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
+      // NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
+      // playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
+      // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
+      Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
+          UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)));
+      // new LoadRoomMenu(playerMenuUtility).open();
+      // new KillConfirmMenu(playerMenuUtility).open();
 
-  }
+    } else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+      new MainMenu(playerMenuUtility).open();
+      // close inventory
+      // p.closeInventory();
+
+    } else if (e.getCurrentItem().getType().equals(Material.DARK_OAK_BUTTON)) {
+      if (ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Left")) {
+        if (page == 0) {
+          p.sendMessage(ChatColor.GRAY + "You are already on the first page.");
+        } else {
+          page = page - 1;
+          super.open();
+        }
+      } else if (ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Right")) {
+        if (!((index + 1) >= playerhouses.size())) {
+          page = page + 1;
+          super.open();
+        } else {
+          p.sendMessage(ChatColor.GRAY + "You are on the last page.");
+        }
+      }
+    }
+  
 
   @Override
   public void setMenuItems() {
-    ItemStack grass = new ItemStack(Material.GRASS_BLOCK, 1);
-    ItemMeta grass_meta = grass.getItemMeta();
-    grass_meta.setDisplayName(ChatColor.GREEN + "Normal");
-    ArrayList<String> yes_lore = new ArrayList<>();
-    yes_lore.add(ChatColor.AQUA + "Overworld");
-    grass_meta.setLore(yes_lore);
-    grass.setItemMeta(grass_meta);
-    ItemStack nether = new ItemStack(Material.NETHERRACK, 1);
-    ItemMeta nether_meta = nether.getItemMeta();
-    nether_meta.setDisplayName(ChatColor.DARK_RED + "Nether");
-    nether.setItemMeta(nether_meta);
-    ArrayList<String> nether_lore = new ArrayList<>();
-    nether_lore.add(ChatColor.AQUA + "Nether");
-    ItemStack end = new ItemStack(Material.ENDER_EYE, 1);
-    ItemMeta end_meta = end.getItemMeta();
-    end_meta.setDisplayName(ChatColor.DARK_RED + "End");
-    end.setItemMeta(end_meta);
-    ArrayList<String> end_lore = new ArrayList<>();
-    end_lore.add(ChatColor.AQUA + "End");
 
-    inventory.setItem(3, grass);
-    inventory.setItem(4, nether);
-    inventory.setItem(5, end);
+    addMenuBorder();
 
-    setFillerGlass();
+    // The thing you will be looping through to place items
+    // ArrayList<Player> players = new
+    // ArrayList<Player>(getServer().getOnlinePlayers());
+    //ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
+    Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
+
+    ///////////////////////////////////// Pagination loop template
+    if (presetMap != null && !presetMap.isEmpty()) {
+      for (int i = 0; i < getMaxItemsPerPage(); i++) {
+        index = getMaxItemsPerPage() * page + i;
+        if (index >= presetMap.size())
+          break;
+        if (presetMap.get(index) != null) {
+          ///////////////////////////
+          final Preset preset = presetMap.get(index);
+          // Create an item from our collection and place it into the inventory
+          ItemStack presetIcon = new ItemStack(preset.getIconMaterial());
+          ItemMeta presetIconMeta = presetIcon.getItemMeta();
+          presetIconMeta.setDisplayName(ChatColor.RED + presetMap.get(index).getName());//todo parse hex
+          presetIconMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.instance, "presetid"),
+              PersistentDataType.STRING, String.valueOf(index));
+          presetIcon.setItemMeta(presetIconMeta);
+
+          inventory.addItem(presetIcon);
+
+          ////////////////////////
+        }
+      }
+    }
+    ////////////////////////
 
   }
-
 }

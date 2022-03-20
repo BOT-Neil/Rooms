@@ -16,6 +16,7 @@ import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
 import tel.endho.rooms.menusystem.menu.DeleteConfirmMenu;
 import tel.endho.rooms.menusystem.menu.MainMenu;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
+import tel.endho.rooms.util.LocationSerializer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -142,6 +143,9 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
               }
 
             }
+          }
+          case "locationdebug" ->{
+            player.sendMessage(LocationSerializer.getSerializedPresetLocation(player.getLocation()));
           }
         }
         // check houses for player if online or else load offlinehouseworld hashmap for
