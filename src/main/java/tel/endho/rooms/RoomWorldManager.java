@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
@@ -181,7 +180,7 @@ public class RoomWorldManager {
     }
   }
 
-  public void createWorld(String worldtype, Player player) {
+  public void createWorld(Preset preset, Player player) {
     try {
       // Note that this method should be called asynchronously
       // SlimeWorld world = plugin.loadWorld(sqlLoader, "my-world", props);

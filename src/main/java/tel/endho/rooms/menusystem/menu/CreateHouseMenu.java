@@ -39,24 +39,13 @@ public class CreateHouseMenu extends PaginatedMenu {
     Player p = (Player) e.getWhoClicked();
     //ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
     Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
-    if(e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Rooms.getPlugin(), "UUID"),PersistentDataType.STRING)){
-      Rooms.roomWorldManager.createWorld(worldtype, player);
-    }
-    int indexxx= Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));    
-    if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
-        || e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
-      // PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
-      // playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
-      // NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
-      // playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
-      // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
-      Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
-          UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)));
-      // new LoadRoomMenu(playerMenuUtility).open();
-      // new KillConfirmMenu(playerMenuUtility).open();
+    //int indexxx= Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));    
 
-    } else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+    if(e.getCurrentItem().getItemMeta().getPersistentDataContainer().has(new NamespacedKey(Rooms.getPlugin(), "presetid"),PersistentDataType.STRING)){
+      int ind = Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
+      Rooms.roomWorldManager.createWorld(presetMap.get(ind), p);
+    }else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
       new MainMenu(playerMenuUtility).open();
       // close inventory
       // p.closeInventory();
@@ -78,7 +67,6 @@ public class CreateHouseMenu extends PaginatedMenu {
         }
       }
     }
-  
 
   @Override
   public void setMenuItems() {
@@ -88,7 +76,8 @@ public class CreateHouseMenu extends PaginatedMenu {
     // The thing you will be looping through to place items
     // ArrayList<Player> players = new
     // ArrayList<Player>(getServer().getOnlinePlayers());
-    //ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
+    // ArrayList<RoomWorld> playerhouses = new
+    // ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
     Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
 
     ///////////////////////////////////// Pagination loop template
@@ -103,7 +92,7 @@ public class CreateHouseMenu extends PaginatedMenu {
           // Create an item from our collection and place it into the inventory
           ItemStack presetIcon = new ItemStack(preset.getIconMaterial());
           ItemMeta presetIconMeta = presetIcon.getItemMeta();
-          presetIconMeta.setDisplayName(ChatColor.RED + presetMap.get(index).getName());//todo parse hex
+          presetIconMeta.setDisplayName(ChatColor.RED + presetMap.get(index).getName());// todo parse hex
           presetIconMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.instance, "presetid"),
               PersistentDataType.STRING, String.valueOf(index));
           presetIcon.setItemMeta(presetIconMeta);
