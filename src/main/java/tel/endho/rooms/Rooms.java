@@ -62,12 +62,39 @@ public class Rooms extends JavaPlugin {
         e.printStackTrace();
       }
     }
-    int presetsize = configs.getPresetConfig().getKeys(false).size();
+    //loading presets, will default if values missing    
     configs.getPresetConfig().getKeys(false).forEach(x->{
       int id = Integer.parseInt(x);
       ConfigurationSection presetSection = configs.getPresetConfig().getConfigurationSection(x);
       String name= presetSection.getString("name");
-      String locString= presetSection.getString("spawnloc");
+      String locString;
+      String netherlocString;
+      String endlocString;
+      String mainEnvironmentString;
+      String mainBiome;
+      String netherBiome;
+      String iconMaterial;
+      int fillsize;
+      if(presetSection.contains("fillsize")){
+        fillsize = presetSection.getInt("fillsize");
+      } else{
+        fillsize=69;
+      }
+      if(presetSection.contains("spawnloc")){
+        locString = presetSection.getString("spawnloc");
+      }else{
+        locString="0;"+fillsize+";0";
+      }
+      if (presetSection.contains("netherspawnloc")) {
+        locString = presetSection.getString("netherspawnloc");
+      } else {
+        locString = "0;" + fillsize + ";0";
+      }
+      if (presetSection.contains("endspawnloc")) {
+        locString = presetSection.getString("endspawnloc");
+      } else {
+        locString = "0;" + fillsize + ";0";
+      }
       Preset preset = new Preset(name,locString);
       roomWorldManager.getPresetMap().put(id, preset);
     });

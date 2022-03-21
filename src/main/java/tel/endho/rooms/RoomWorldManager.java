@@ -13,6 +13,10 @@ import com.plotsquared.core.plot.Plot;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
@@ -34,6 +38,7 @@ import tel.endho.rooms.util.Preset;
 import tel.endho.rooms.util.Presets;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -201,7 +206,10 @@ public class RoomWorldManager {
         @Override
         public void run() {
           try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(world.getName()))) {
-            int wbsize = Rooms.configs.getGeneralConfig().getInt("worldborder");
+            if(preset.getmainSchematic().equals("empty")){
+                es2.setBlock(0, 1, 0, BlockTypes.BEDROCK);
+            }else if (preset.getmainSchematic().equals("flat")){
+              int wbsize = Rooms.configs.getGeneralConfig().getInt("worldborder");
             int fillsize = Rooms.configs.getGeneralConfig().getInt("fillsize");
             String fillmaterial = Rooms.configs.getGeneralConfig().getString("fillmaterial").toLowerCase();
             int halfsize = wbsize / 2;
@@ -215,6 +223,31 @@ public class RoomWorldManager {
                   Double.valueOf(SlimeProperties.SPAWN_Z.getDefaultValue()));
               player.teleport(loc);
             });
+            }else {
+              //load schematic
+              File file = new File(Rooms.getPlugin().getDataFolder() + "/schematics/"+preset.getmainSchematic());
+              BlockVector3 to = BlockVector3.at(0, 0, 0);
+              ClipboardFormat format = ClipboardFormats.findByFile(file);
+              ClipboardReader reader = null;
+              try {
+                reader = format.getReader(new FileInputStream(file));
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+              Clipboard clipboard = null;
+              try {
+                clipboard = reader.read();
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
+              Operation operation = new ClipboardHolder(clipboard)
+                  .createPaste(es2)
+                  .to(to)
+                  .ignoreAirBlocks(false)
+                  .build();
+              Operations.complete(operation);
+            }
+            
             // do bedrock too
           }
         }
@@ -307,7 +340,7 @@ public class RoomWorldManager {
   // todo depreciate and remove this
   public void TpOrLoadHouseWorld(Player p, UUID uuid)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
-
+    // todo implement lobby mode
     if (GlobalRoomWorlds.isOnAnotherServer(uuid)) {
       // maybe if globalroomworld(uuid).getserver=thisserver{load, but that dont load
       // duplicate idk tired}
@@ -315,7 +348,7 @@ public class RoomWorldManager {
       // todo if() roomworld is on this server
       // todo if(globalroomworld.region!= config.region)
       //
-      // todo implement lobby mode
+      
       Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
       Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid);
     } else {

@@ -22,6 +22,7 @@ public class Preset {
 
   public Preset(String name, String spawnlocString) {
     this.name = name;
+    this.spawnlocString=spawnlocString;
 
   }
 
@@ -32,7 +33,13 @@ public class Preset {
   public String getSpawnlocString() {
     return spawnlocString;
   }
+  public String getnetherSpawnlocString(){
+    return netherlocString;
+  }
 
+  public String getendSpawnlocString() {
+    return endlocString;
+  }
   public String getmainEnvironment() {
     return mainEnvironment;
   }
