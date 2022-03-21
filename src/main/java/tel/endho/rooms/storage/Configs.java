@@ -176,7 +176,7 @@ public class Configs {
       }
       Preset preset = new Preset(name, locString, netherlocString, endlocString, mainEnvironmentString, mainBiome,
           netherBiome, iconMaterial, mainSchematic, netherSchematic, endSchematic, mainfillblock, netherfillblock,
-          endfillblock, flatbedrock);
+          endfillblock,fillsize,flatbedrock);
       Rooms.roomWorldManager.getPresetMap().put(id, preset);
     });
   }
