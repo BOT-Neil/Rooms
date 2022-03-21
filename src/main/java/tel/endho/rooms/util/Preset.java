@@ -20,7 +20,7 @@ public class Preset {
   private Material endMaterial;
   private Boolean fillBedrock;
 
-  public Preset(String name, String spawnlocString,String netherlocString, String endlocString, String mainEnvString, String mainBiome, String netherBiome, String iconString) {
+  public Preset(String name, String spawnlocString,String netherlocString, String endlocString, String mainEnvString, String mainBiome, String netherBiome, String iconString,String mainschem,String netherschem, String endschem,String mainfillblock, String netherfillblock , String endfillblock, Boolean flatbedrock) {
     this.name = name;
     this.spawnlocString=spawnlocString;
     this.netherlocString=netherlocString;
@@ -29,6 +29,7 @@ public class Preset {
     this.mainBiome=mainBiome;
     this.netherBiome=netherBiome;
     this.iconMaterial=Material.getMaterial(iconString);
+    this.mainSchematic=mainschem;
   }
 
   public String getName() {

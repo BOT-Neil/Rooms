@@ -79,11 +79,18 @@ public class Rooms extends JavaPlugin {
       String mainBiome;
       String netherBiome;
       String iconMaterial;
+      String mainSchematic;
+      String netherSchematic;
+      String endSchematic;
+      String mainfillblock;
+      String netherfillblock;
+      String endfillblock;
+      Boolean flatbedrock;
       int fillsize;
-      if(presetSection.contains("fillsize")){
+      if (presetSection.contains("fillsize")) {
         fillsize = presetSection.getInt("fillsize");
-      } else{
-        fillsize=69;
+      } else {
+        fillsize = 69;
       }
       if(presetSection.contains("spawnloc")){
         locString = presetSection.getString("spawnloc");
@@ -105,7 +112,6 @@ public class Rooms extends JavaPlugin {
       } else {
         mainEnvironmentString = "normal";
       }
-
       if (presetSection.contains("biome")) {
         mainBiome = presetSection.getString("biome");
       } else {
@@ -121,7 +127,42 @@ public class Rooms extends JavaPlugin {
       } else {
         iconMaterial = "GRASS_BLOCK";
       }
-      Preset preset = new Preset(name,locString,netherlocString,endlocString,mainEnvironmentString,mainBiome,netherBiome,iconMaterial);
+      if (presetSection.contains("mainschematic")) {
+        mainSchematic = presetSection.getString("mainschematic");
+      } else {
+        mainSchematic = "flat";
+      }
+      if (presetSection.contains("netherschematic")) {
+        netherSchematic = presetSection.getString("netherschematic");
+      } else {
+        netherSchematic = "flat";
+      }
+      if (presetSection.contains("endschematic")) {
+        endSchematic = presetSection.getString("endschematic");
+      } else {
+        endSchematic = "flat";
+      }
+      if (presetSection.contains("fillmaterial")) {
+        mainfillblock = presetSection.getString("fillmaterial");
+      } else {
+        mainfillblock = "GRASS_BLOCK";
+      }
+      if (presetSection.contains("nethermaterial")) {
+        netherfillblock = presetSection.getString("nethermaterial");
+      } else {
+        netherfillblock = "NETHERRACK";
+      }
+      if (presetSection.contains("endmaterial")) {
+        endfillblock = presetSection.getString("endmaterial");
+      } else {
+        endfillblock= "END_STONE";
+      }
+      if (presetSection.contains("fillbedrock")) {
+        flatbedrock = presetSection.getBoolean("fillbedrock");
+      } else {
+        flatbedrock = true;
+      }
+      Preset preset = new Preset(name,locString,netherlocString,endlocString,mainEnvironmentString,mainBiome,netherBiome,iconMaterial,mainSchematic,netherSchematic,endSchematic,mainfillblock,netherfillblock,endfillblock,flatbedrock);
       roomWorldManager.getPresetMap().put(id, preset);
     });
     getCommand("Room").setExecutor(new RoomCommand());
