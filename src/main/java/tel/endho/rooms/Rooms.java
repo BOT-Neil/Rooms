@@ -42,6 +42,11 @@ public class Rooms extends JavaPlugin {
     instance = this;
     configs = new Configs();
     configs.loadConfigs();
+    File schemfolder = new File(this.getDataFolder()+"/schematics");
+    schemfolder.mkdir();
+    this.saveResource("schematics/normal.schem", false);
+    this.saveResource("schematics/nether.schem", false);
+    this.saveResource("schematics/the_end.schem", false);
     debugMode = configs.getGeneralConfig().getBoolean("enabledebugging");
     roomWorldManager = new RoomWorldManager();
     mysql = new MySQL();
@@ -86,16 +91,37 @@ public class Rooms extends JavaPlugin {
         locString="0;"+fillsize+";0";
       }
       if (presetSection.contains("netherspawnloc")) {
-        locString = presetSection.getString("netherspawnloc");
+        netherlocString = presetSection.getString("netherspawnloc");
       } else {
-        locString = "0;" + fillsize + ";0";
+        netherlocString = "0;" + fillsize + ";0";
       }
       if (presetSection.contains("endspawnloc")) {
-        locString = presetSection.getString("endspawnloc");
+        endlocString = presetSection.getString("endspawnloc");
       } else {
-        locString = "0;" + fillsize + ";0";
+        endlocString = "0;" + fillsize + ";0";
       }
-      Preset preset = new Preset(name,locString);
+      if (presetSection.contains("mainenvironment")) {
+        mainEnvironmentString = presetSection.getString("mainenvironment");
+      } else {
+        mainEnvironmentString = "normal";
+      }
+
+      if (presetSection.contains("biome")) {
+        mainBiome = presetSection.getString("biome");
+      } else {
+        mainBiome  = "normal";
+      }
+      if (presetSection.contains("netherbiome")) {
+        netherBiome= presetSection.getString("netherbiome");
+      } else {
+        netherBiome = "minecraft:crimson_forest";
+      }
+      if (presetSection.contains("iconmaterial")) {
+        iconMaterial = presetSection.getString("iconmaterial");
+      } else {
+        iconMaterial = "GRASS_BLOCK";
+      }
+      Preset preset = new Preset(name,locString,netherlocString,endlocString,mainEnvironmentString,mainBiome,netherBiome,iconMaterial);
       roomWorldManager.getPresetMap().put(id, preset);
     });
     getCommand("Room").setExecutor(new RoomCommand());
