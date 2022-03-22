@@ -4,7 +4,6 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import tel.endho.rooms.Tasks.UnloadEmptyTask;
@@ -17,7 +16,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import tel.endho.rooms.storage.Configs;
 import tel.endho.rooms.storage.MySQL;
 import tel.endho.rooms.storage.Redis;
-import tel.endho.rooms.util.Preset;
 
 import java.io.File;
 import java.sql.SQLException;
