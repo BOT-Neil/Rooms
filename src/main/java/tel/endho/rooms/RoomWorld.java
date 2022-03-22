@@ -4,6 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.Presets;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
@@ -30,7 +33,7 @@ public class RoomWorld {
     private String creationPreset;
     private Boolean hasNether;
     private Boolean hasEnd;//todo set true after island gen
-    private String RoomName;//todo room.user.rename if string null || null { }
+    private String roomName;//todo room.user.rename if string null || null { }
     private Material icon;
 
     public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String Ownername, String timestamp, Integer spawnX, Integer spawnY, Integer spawnZ,Map<UUID,String> blocked, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment, String borderColor){
@@ -128,5 +131,11 @@ public class RoomWorld {
     }
     public void setHasNether(Boolean bool){
         hasNether=bool;
+    }
+    public Preset getPreset(){
+      return Presets.gePreset(creationPreset);
+    }
+    public String getRoomsName(){
+      return roomName;
     }
 }

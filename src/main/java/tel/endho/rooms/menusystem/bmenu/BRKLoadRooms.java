@@ -28,7 +28,7 @@ public class BRKLoadRooms {
     List<String> stockList = new ArrayList<String>();
     AtomicInteger index = new AtomicInteger();
     for (int i = 0; i < playerhouses.size(); i++) {
-      stockList.add(i + ". " + playerhouses.get(i).getEnviroment());
+      stockList.add(i + ". " + playerhouses.get(i).getRoomsName());
       index.set(i);
     }
     String[] stockArr = new String[playerhouses.size()];

@@ -9,8 +9,14 @@ import tel.endho.rooms.util.Preset;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import com.sk89q.worldedit.world.biome.BiomeType;
+import com.sk89q.worldedit.world.biome.BiomeTypes;
 
 public class Configs {
+  private List<String> mainBiomeList;
+  private List<String> netherBiomeList;
   private FileConfiguration storageConfig;
   private FileConfiguration generalConfig;
   private FileConfiguration presetConfig;
@@ -20,6 +26,7 @@ public class Configs {
     createStorageConfig();
     createPresetConfig();
     fillPresetmap();
+    fillBiomes();
   }
 
   public FileConfiguration getGeneralConfig() {
@@ -179,5 +186,41 @@ public class Configs {
           endfillblock,fillsize,flatbedrock);
       Rooms.roomWorldManager.getPresetMap().put(id, preset);
     });
+  }
+  private void fillBiomes(){
+    for(BiomeType bt:BiomeTypes.values()){
+      switch(bt.getId()){
+        case "nether"->{
+          break;
+        }
+        case "custom"->{
+          break;
+        }
+        case "minecraft:basalt_deltas"->{
+          netherBiomeList.add(bt.getId());
+          break;
+        }
+        case "minecraft:crimson_forest" -> {
+          netherBiomeList.add(bt.getId());
+          break;
+        }
+        case "minecraft:nether_wastes" -> {
+          netherBiomeList.add(bt.getId());
+          break;
+        }
+        case "minecraft:soul_sand_valley" -> {
+          netherBiomeList.add(bt.getId());
+          break;
+        }
+        case "minecraft:warped_forest" -> {
+          netherBiomeList.add(bt.getId());
+          break;
+        }
+        default -> {
+          mainBiomeList.add(bt.getId());
+          break;
+        }
+      }
+    }
   }
 }
