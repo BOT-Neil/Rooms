@@ -1,4 +1,5 @@
 enabledebugging: false
+enabledpresets: true
 spawnanimals: false
 spawnmonsters: false
 gamemode: creative

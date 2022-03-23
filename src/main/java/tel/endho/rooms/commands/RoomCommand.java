@@ -63,7 +63,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                 RoomWorld roomWorld = RoomWorlds
                     .getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
                 if (roomWorld.isOwner(player)) {
-                  if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                  if (Rooms.isFloodgateLoaded()&&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                     new BRKConfirmDeleteMenu().makemenu(player);
                   } else {
                     new DeleteConfirmMenu(Rooms.getPlayerMenuUtility(player)).open();
@@ -85,7 +85,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                 if (RoomWorlds.getRoomWorldsPlayer(args[1]).isEmpty()) {
                   Rooms.mysql.loadOthersRoomWorlds(player, args[1], null);
                 } else {
-                  if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                  if (Rooms.isFloodgateLoaded() &&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                     new BRKVisitTargetRooms().makemenu(player, args[1]);
                   } else {
                     new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), args[1]).open();
@@ -151,7 +151,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
         // check houses for player if online or else load offlinehouseworld hashmap for
         // player
       } else {
-        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+        if (Rooms.isFloodgateLoaded()&&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
           new BRKMainMenu().makemenu(player);
         } else {
           new MainMenu(Rooms.getPlayerMenuUtility(player)).open();

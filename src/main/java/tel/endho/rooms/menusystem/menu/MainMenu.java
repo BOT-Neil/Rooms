@@ -41,7 +41,7 @@ public class MainMenu extends Menu {
       case NETHER_STAR:
         if (!(RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getOwner()).size() > getRoomLimitperm(
             playerMenuUtility.getOwner(), Rooms.configs.getGeneralConfig().getDouble("roomlimit")))) {
-          if (Rooms.configs.getGeneralConfig().getBoolean("presetSelector")) {
+          if (Rooms.configs.getGeneralConfig().getBoolean("enablepresets")) {
             new CreateRoomMenu(playerMenuUtility).open();
             // options
             return;

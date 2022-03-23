@@ -5,7 +5,7 @@ api-version: 1.17
 depend: [SlimeWorldManager, FastAsyncWorldEdit]
 softdepend: [PlotSquared, floodgate]
 authors: [Trashulius]
-description: Private World Manager [SWM Addon]
+description: Private World Manager [ASWM Addon]
 website: https://endho.tel
 commands:
   room:

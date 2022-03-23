@@ -29,6 +29,7 @@ public class Rooms extends JavaPlugin {
   public static MySQL mysql;
   public static Redis redis;
   private static Boolean debugMode;
+  private static Boolean isFloodgateLoaded;
   public static RoomWorldManager roomWorldManager;
   public static Configs configs;
   private FaweListener faweListener;
@@ -40,7 +41,7 @@ public class Rooms extends JavaPlugin {
     instance = this;
     configs = new Configs();
     configs.loadConfigs();
-    File schemfolder = new File(this.getDataFolder()+"/schematics");
+    File schemfolder = new File(this.getDataFolder() + "/schematics");
     schemfolder.mkdir();
     this.saveResource("schematics/normal.schem", false);
     this.saveResource("schematics/nether.schem", false);
@@ -65,7 +66,7 @@ public class Rooms extends JavaPlugin {
         e.printStackTrace();
       }
     }
-    //loading presets, will default if values missing    
+    // loading presets, will default if values missing
     getCommand("Room").setExecutor(new RoomCommand());
     this.faweListener = new FaweListener();
     faweListener.startListening();
@@ -96,6 +97,12 @@ public class Rooms extends JavaPlugin {
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new WorldBorderTask(), 0, 300);
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadEmptyTask(), 0, 200);
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UnloadStaleGlobalTask(), 0, 300);
+    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+      new PAPIExpansion(this).register();
+    }
+    if (Bukkit.getPluginManager().isPluginEnabled("floodgate")) {
+      isFloodgateLoaded = true;
+    }
   }
 
   @Override
@@ -169,6 +176,10 @@ public class Rooms extends JavaPlugin {
     out.writeUTF(s);
     Player player = p;
     player.sendPluginMessage(this, "BungeeCord", out.toByteArray());
+  }
+
+  public static Boolean isFloodgateLoaded() {
+    return isFloodgateLoaded;
   }
 
 }

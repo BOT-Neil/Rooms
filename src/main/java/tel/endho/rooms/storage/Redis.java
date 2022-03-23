@@ -132,7 +132,6 @@ public class Redis {
                   String servername = byteArray.readUTF();
                   if (!servername.equals(bungeesrvname))
                     return;
-
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
                   if (RoomWorlds.isRoomWorld(worlduuid)) {
                     RoomWorlds.getRoomWorldUUID(worlduuid).clearMembers(false);
