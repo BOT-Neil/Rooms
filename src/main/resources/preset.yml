@@ -1,12 +1,12 @@
 #remember to set default border in general
 0:
-  name: "flat"
-  spawnloc: ""
-  netherspawnloc: ""
-  endspawnloc: ""
+  name: "normal"
+  spawnloc: "0;48;0"
+  netherspawnloc: "0;48;0"
+  endspawnloc: "0;48;0"
   mainenvironment: "normal" #nether , the_end
-  biome: "plains"
-  netherbiome: "warped_forest"
+  biome: "minecraft:plains"
+  netherbiome: "minecraft:warped_forest"
   iconmaterial: "GRASS_BLOCK"
   mainschematic: "flat"#schemname, flat, empty
   netherschematic: "flat"
@@ -19,49 +19,55 @@
   fillbedrock: true
 1:
   name: "nether"
-  mainenvironment: "nether" #nether , the_end
-  biome: "warped_forest"
-  netherbiome: "warped_forest"
-  iconmaterial: "NETHERRACK"
-  mainschematic: "flat"#set flatgen to flase
+  spawnloc: "0;48;0"
+  netherspawnloc: "0;48;0"
+  endspawnloc: "0;48;0"
+  mainenvironment: "normal" #nether , the_end
+  biome: "minecraft:nether_wastes"
+  netherbiome: "minecraft:warped_forest"
+  iconmaterial: "GRASS_BLOCK"
+  mainschematic: "flat"#schemname, flat, empty
   netherschematic: "flat"
   endschematic: "flat"
   fillsize: 48
-  fillmaterial: "NETHERRACK"
+  fillmaterial: "GRASS_BLOCK"
   nethermaterial: "NETHERRACK"
   endmaterial: "endstone"
   fillboolean: true
   fillbedrock: true
 2:
-  name: "end"
-  mainenvironment: "the_end" #nether , the_end
-  biome: "the_end"
-  netherbiome: "warped_forest"
-  iconmaterial: "ENDER_EYE"
-  mainschematic: "flat"#set flatgen to flase
+  name: "the_end"
+  spawnloc: "0;48;0"
+  netherspawnloc: "0;48;0"
+  endspawnloc: "0;48;0"
+  mainenvironment: "normal" #nether , the_end
+  biome: "minecraft:the_end"
+  netherbiome: "minecraft:warped_forest"
+  iconmaterial: "GRASS_BLOCK"
+  mainschematic: "flat"#schemname, flat, empty
   netherschematic: "flat"
   endschematic: "flat"
   fillsize: 48
-  fillmaterial: "endstone"
+  fillmaterial: "GRASS_BLOCK"
   nethermaterial: "NETHERRACK"
   endmaterial: "endstone"
   fillboolean: true
   fillbedrock: true
 3:
   name: "skyblock"
+  spawnloc: "0;48;0"
+  netherspawnloc: "0;48;0"
+  endspawnloc: "0;48;0"
   mainenvironment: "normal" #nether , the_end
-  biome: "plains"
-  netherbiome: "crimson_forest"
-  iconmaterial: "ENDER_EYE"
-  mainschematic: "skyblock"#set flatgen to flase
+  biome: "minecraft:plains"
+  netherbiome: "minecraft:warped_forest"
+  iconmaterial: "GRASS_BLOCK"
+  mainschematic: "skyblock"#schemname, flat, empty
   netherschematic: "skyblock_nether"
   endschematic: "skyblock_end"
-4:
-  name: "skyblocknether"
-  mainenvironment: "nether" #nether , the_end
-  biome: "warped_forest"
-  netherbiome: "crimson_forest"
-  iconmaterial: "ENDER_EYE"
-  mainschematic: "skyblock"#set flatgen to flase
-  netherschematic: "skyblock_nether"
-  endschematic: "skyblock_end"
+  fillsize: 48
+  fillmaterial: "GRASS_BLOCK"
+  nethermaterial: "NETHERRACK"
+  endmaterial: "endstone"
+  fillboolean: true
+  fillbedrock: true
