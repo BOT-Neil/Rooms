@@ -177,7 +177,7 @@ public class RoomWorldManager {
         Operations.complete(operation);
       } // it is automatically closed/flushed when the code exits the block
       plot.unclaim();
-      Rooms.mysql.insertRoomWorld(player, world, properties);
+      Rooms.mysql.insertRoomWorld(player, world, properties,Presets.gePreset("normal"));
       // Location location= new
       // Location(Bukkit.getWorld(worlduuid.toString()),1,255,1);
       // player.teleport(location);
@@ -254,7 +254,7 @@ public class RoomWorldManager {
       };
       r.runTaskAsynchronously(Rooms.getPlugin());
 
-      Rooms.mysql.insertRoomWorld(player, world, properties);
+      Rooms.mysql.insertRoomWorld(player, world, properties,preset);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
     } catch (IOException | WorldAlreadyExistsException | SQLException ex) {
       /* Exception handling */

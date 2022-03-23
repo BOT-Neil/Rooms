@@ -12,6 +12,7 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import tel.endho.rooms.*;
 import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
+import tel.endho.rooms.util.Preset;
 
 import javax.annotation.Nullable;
 import java.sql.*;
@@ -217,15 +218,15 @@ public class MySQL {
             String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
             // trustedMembers.putIfAbsent();
-            if (!RoomWorlds.getRoomWolrds().containsKey(uuid)) {
+            if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
                   spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
-            } else {
+            } /*else {
               if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
                 RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
                     spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
               }
-            }
+            }*/
 
           }
           if (target != null) {
@@ -311,15 +312,15 @@ public class MySQL {
             String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
             // trustedMembers.putIfAbsent();
-            if (!RoomWorlds.getRoomWolrds().containsKey(uuid)) {
+            if (!RoomWorlds.getRoomWolrds().containsKey(uuid)||!RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
                   spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
-            } else {
+            } /*else {
               if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
                 RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
                     spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
               }
-            }
+            }*/
 
           }
         } catch (SQLException e) {
@@ -390,7 +391,7 @@ public class MySQL {
 
   }
 
-  public void insertRoomWorld(Player player, SlimeWorld world, SlimePropertyMap sprop) throws SQLException {
+  public void insertRoomWorld(Player player, SlimeWorld world, SlimePropertyMap sprop,Preset preset) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
@@ -403,7 +404,8 @@ public class MySQL {
           stmt.setInt(4, sprop.getValue(SlimeProperties.SPAWN_X));
           stmt.setInt(5, sprop.getValue(SlimeProperties.SPAWN_Y));
           stmt.setInt(6, sprop.getValue(SlimeProperties.SPAWN_Z));
-          stmt.setString(7, world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT));
+          stmt.setString(7,preset.getName());
+          //stmt.setString(7, world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT));
           stmt.setString(8, Rooms.configs.getGeneralConfig().getString("bordercolour"));
 
           stmt.executeUpdate();
