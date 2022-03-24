@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import tel.endho.rooms.RoomWorld;
+import tel.endho.rooms.RoomWorldManager;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 import tel.endho.rooms.menusystem.PaginatedMenu;
@@ -44,7 +45,7 @@ public class LocalRoomsMenu extends PaginatedMenu {
     Player p = (Player) e.getWhoClicked();
     ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
 
-    if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
+    /*if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
         || e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
       // PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
       // playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
@@ -57,7 +58,16 @@ public class LocalRoomsMenu extends PaginatedMenu {
       // new LoadRoomMenu(playerMenuUtility).open();
       // new KillConfirmMenu(playerMenuUtility).open();
 
-    } else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
+    } */
+    if (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+        .has(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)) {
+      UUID uuid = UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+          .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
+      Rooms.roomWorldManager.TpOrLoadHouseWorld(p, uuid);
+      
+    }
+    
+    else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
       new MainMenu(playerMenuUtility).open();
       // close inventory
       // p.closeInventory();
@@ -100,16 +110,17 @@ public class LocalRoomsMenu extends PaginatedMenu {
           ///////////////////////////
 
           // Create an item from our collection and place it into the inventory
-          ItemStack playerItem = switch (playerhouses.get(index).getEnviroment()) {
+          /*ItemStack playerItem = switch (playerhouses.get(index).getEnviroment()) {
             case "normal" -> new ItemStack(Material.GRASS_BLOCK, 1);
             case "nether" -> new ItemStack(Material.NETHERRACK, 1);
             case "the_end" -> new ItemStack(Material.ENDER_EYE, 1);
             default -> throw new IllegalStateException("Unexpected value: " + playerhouses.get(index).getEnviroment());
-          };
+          };*/
+          ItemStack playerItem = new ItemStack(playerhouses.get(index).getIcon(),1);
           ItemMeta playerMeta = playerItem.getItemMeta();
           playerMeta.setDisplayName(ChatColor.RED + playerhouses.get(index).getOwnerName());
 
-          playerMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.instance, "uuid"),
+          playerMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.instance, "UUID"),
               PersistentDataType.STRING, playerhouses.get(index).getWorldUUID().toString());
           playerItem.setItemMeta(playerMeta);
 

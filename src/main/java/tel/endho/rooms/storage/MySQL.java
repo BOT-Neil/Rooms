@@ -1,5 +1,7 @@
 package tel.endho.rooms.storage;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
@@ -452,6 +454,8 @@ public class MySQL {
           stmt.setInt(9, roomWorld.getRowid());
           Rooms.debug(stmt.toString());
           stmt.executeUpdate();
+          Gson gson = new GsonBuilder().create();
+          String json = gson.toJson(roomWorld.getBlocked());
           roomWorld.getMembers().forEach((uuid, s) -> {
             try {
               PreparedStatement statement = connection.prepareStatement(

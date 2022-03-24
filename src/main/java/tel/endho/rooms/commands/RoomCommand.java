@@ -57,13 +57,24 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
       if (Arrays.stream(args).findFirst().isPresent()) {
         Rooms.debug("argslength: " + args.length);
         switch (args[0]) {
+          case "seticon" -> {
+            if (args.length == 1) {
+              if (RoomWorlds.getRoomWorldString(player.getLocation().getWorld().getName()) != null) {
+                RoomWorld roomWorld = RoomWorlds
+                    .getRoomWorldString(player.getLocation().getWorld().getName());
+                if (roomWorld.isOwner(player)) {
+                  roomWorld.setIconMaterial(player.getInventory().getItemInMainHand().getType());
+                }
+              }
+            }
+          }
           case "delete" -> {
             if (args.length == 1) {
-              if (RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName())) != null) {
+              if (RoomWorlds.getRoomWorldString(player.getLocation().getWorld().getName()) != null) {
                 RoomWorld roomWorld = RoomWorlds
-                    .getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
+                    .getRoomWorldString(player.getLocation().getWorld().getName());
                 if (roomWorld.isOwner(player)) {
-                  if (Rooms.isFloodgateLoaded()&&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                  if (Rooms.isFloodgateLoaded() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                     new BRKConfirmDeleteMenu().makemenu(player);
                   } else {
                     new DeleteConfirmMenu(Rooms.getPlayerMenuUtility(player)).open();

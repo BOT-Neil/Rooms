@@ -26,17 +26,16 @@ public class RoomWorld {
     private Map<UUID, String>blocked;
     private Map<UUID, String>trustedMembers;
     private Map<UUID, String>members;
-    private Long systemTime;
-    private int inactiveTicks;
-    private String enviroment;
+    private Long systemTime;//temp
+    private int inactiveTicks;//temp
+    private String preset;
     private String BorderColor;
-    private String creationPreset;
     private Boolean hasNether;
     private Boolean hasEnd;//todo set true after island gen
     private String roomName;//todo room.user.rename if string null || null { }
     private Material icon;
 
-    public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String Ownername, String timestamp, Integer spawnX, Integer spawnY, Integer spawnZ,Map<UUID,String> blocked, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment, String borderColor){
+    public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String Ownername, String timestamp, Integer spawnX, Integer spawnY, Integer spawnZ,Map<UUID,String> blocked, Map<UUID, String> trustedMembers, Map<UUID, String> members, String preset, String borderColor){
         this.rowid=rowid;
         this.uuid = uuid;
         this.OwnerUUID=ownerUUID;
@@ -49,7 +48,7 @@ public class RoomWorld {
         this.trustedMembers=trustedMembers;
         this.members=members;
         this.systemTime=System.currentTimeMillis();
-        this.enviroment=enviroment;
+        this.preset=preset;
         this.BorderColor=borderColor;
         this.inactiveTicks=0;//noplayers in world
         this.hasNether=false;
@@ -104,7 +103,7 @@ public class RoomWorld {
         inactiveTicks= inactiveTicks + 1;
     }
     public String getEnviroment(){
-        return this.enviroment;
+        return this.preset;
     }
     public String getBorderColor(){return this.BorderColor;}
     public void setBorderColor(String borderColor){
@@ -133,9 +132,15 @@ public class RoomWorld {
         hasNether=bool;
     }
     public Preset getPreset(){
-      return Presets.gePreset(creationPreset);
+      return Presets.gePreset(preset);
     }
     public String getRoomsName(){
       return roomName;
+    }
+    public void setIconMaterial(Material material){
+      this.icon=material;
+    }
+    public Material getIcon(){
+      return this.icon;
     }
 }

@@ -42,9 +42,9 @@ public class CreateRoomMenu extends PaginatedMenu {
 
     if (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
         .has(new NamespacedKey(Rooms.getPlugin(), "presetid"), PersistentDataType.STRING)) {
-      int ind = Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-          .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
-      Rooms.roomWorldManager.createWorld(presetMap.get(ind), p);
+      int presetindex = Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+          .get(new NamespacedKey(Rooms.getPlugin(), "presetid"), PersistentDataType.STRING));
+      Rooms.roomWorldManager.createWorld(presetMap.get(presetindex), p);
     } else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
       new MainMenu(playerMenuUtility).open();
     } else if (e.getCurrentItem().getType().equals(Material.DARK_OAK_BUTTON)) {

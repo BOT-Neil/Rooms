@@ -312,6 +312,7 @@ public class RoomWorldManager {
             CuboidRegion regionn = new CuboidRegion(BlockVector3.at(halfsize - 1, 0, halfsize - 1),
                 BlockVector3.at(-halfsize, 256, -halfsize));
             regionn.forEach(bv -> {
+              //es2.getBlock(bv).getBlockType().getMaterial().toString();
               es2.setBiome(bv, BiomeTypes.SOUL_SAND_VALLEY);
             });
             // es2.setBiome((Region)region, BiomeTypes.CRIMSON_FOREST);

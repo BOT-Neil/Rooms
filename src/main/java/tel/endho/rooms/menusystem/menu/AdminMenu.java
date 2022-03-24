@@ -54,7 +54,6 @@ public class AdminMenu extends Menu {
         break;
       case COMPARATOR:
         if (e.getSlot() == 6) {
-
           //
         }
       default:
