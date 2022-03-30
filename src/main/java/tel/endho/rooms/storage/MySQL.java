@@ -84,6 +84,29 @@ public class MySQL {
 
   public void createTable() throws SQLException {
     String roomworld = """
+        CREATE TABLE `room_worlds` (
+         `id` int(11) NOT NULL AUTO_INCREMENT,
+         `worlduuid` varchar(40) NOT NULL,
+         `owneruuid` varchar(40) NOT NULL,
+         `owner` varchar(40) NOT NULL,
+         `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+         `spawnlocation` varchar(60) NOT NULL,
+         `enviroment` varchar(20) NOT NULL,
+         `bordercolour` varchar(20) NOT NULL,
+         `hasnether` tinyint(1) NOT NULL,
+         `hasend` tinyint(1) NOT NULL,
+         `roomname` varchar(100) NOT NULL,
+         `icon` varchar(40) NOT NULL,
+         `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+         `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+         `trustedmembers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+         `levels` varchar(100) NOT NULL,
+         `totallevel` int(15) NOT NULL,
+         PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+        """;
+    /*
+    String roomworld = """
         CREATE TABLE IF NOT EXISTS `room_worlds` (
          `id` int(11) NOT NULL AUTO_INCREMENT,
          `worlduuid` varchar(40) NOT NULL,
@@ -152,15 +175,15 @@ public class MySQL {
          `owner_name` varchar(20) NOT NULL,
          `lastupdate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
          UNIQUE KEY `worlduuid` (`worlduuid`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4""";
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4""";*/
     try {
       connection.prepareStatement(roomworld).executeUpdate();
-      connection.prepareStatement(blocked).executeUpdate();
+      /*connection.prepareStatement(blocked).executeUpdate();
       connection.prepareStatement(members).executeUpdate();
       connection.prepareStatement(trustedmembers).executeUpdate();
       connection.prepareStatement(netherislands).executeUpdate();
       connection.prepareStatement(endislands).executeUpdate();
-      connection.prepareStatement(roomsglobal).executeUpdate();
+      connection.prepareStatement(roomsglobal).executeUpdate();*/
       // connection.prepareStatement(sql).executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();

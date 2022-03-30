@@ -8,6 +8,8 @@ import io.lettuce.core.api.StatefulRedisConnection;
 
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import tel.endho.rooms.*;
@@ -132,9 +134,19 @@ public class Redis {
                   String servername = byteArray.readUTF();
                   if (!servername.equals(bungeesrvname))
                     return;
+                  UUID playeruuid = UUID.fromString(byteArray.readUTF());
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
+                  String islandchoice=byteArray.readUTF();
+                  Long syslong = Long.valueOf(byteArray.readUTF());
                   if (RoomWorlds.isRoomWorld(worlduuid)) {
-                    RoomWorlds.getRoomWorldUUID(worlduuid).clearMembers(false);
+                    //if player online put into island
+                    //else put player into map with playeruuid,worldstring, systime,play
+                    //on playerjoinevent if in joinmap put tporload..
+                    if(Bukkit.getOfflinePlayer(playeruuid)==null||!Bukkit.getOfflinePlayer(playeruuid).isOnline()){
+                      //put in map
+                    }else{
+                      Rooms.roomWorldManager.TpOrLoadHouseWorld(Bukkit.getPlayer(playeruuid), worlduuid.toString()+islandchoice);
+                    }
                   }
                 }
                 // todo clear trust and blocked
@@ -179,16 +191,18 @@ public class Redis {
 
   }
 
-  public void teleportPlayer(Player player, String server, UUID worlduuid) {
+  public void teleportPlayer(Player player, String targetserver, UUID worlduuid, String islandchoice) {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
 
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("teleportplayer");
-        out.writeUTF(worlduuid.toString());
-        out.writeUTF(server);
+        out.writeUTF(serverUuid.toString());
+        out.writeUTF(targetserver);
         out.writeUTF(player.getUniqueId().toString());
+        out.writeUTF(worlduuid.toString());
+        out.writeUTF(islandchoice);
         out.writeUTF(String.valueOf(System.currentTimeMillis()));
         // pubSubAsyncCommands.set("Rooms"+bungeesrvname,out.toString());
         String storeStr = new String(out.toByteArray(), StandardCharsets.UTF_8);

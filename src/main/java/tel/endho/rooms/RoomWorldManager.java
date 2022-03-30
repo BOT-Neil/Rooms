@@ -351,7 +351,7 @@ public class RoomWorldManager {
       //
       
       Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
-      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid);
+      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid,"");
     } else {
       if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
         Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
@@ -394,7 +394,7 @@ public class RoomWorldManager {
       //
       // todo implement lobby mode
       Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
-      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid);
+      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid,uuidsuffix);
     } else {
       if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
         Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
