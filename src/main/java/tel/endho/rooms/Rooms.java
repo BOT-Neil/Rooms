@@ -19,7 +19,9 @@ import tel.endho.rooms.storage.Redis;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -67,6 +69,9 @@ public class Rooms extends JavaPlugin {
       }
     }
     // loading presets, will default if values missing
+    List<String> bozo = new ArrayList<>();
+    bozo.add("skyblock");
+    getCommand("name").setAliases(bozo);
     getCommand("Room").setExecutor(new RoomCommand());
     this.faweListener = new FaweListener();
     faweListener.startListening();

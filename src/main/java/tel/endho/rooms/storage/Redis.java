@@ -144,6 +144,7 @@ public class Redis {
                     //on playerjoinevent if in joinmap put tporload..
                     if(Bukkit.getOfflinePlayer(playeruuid)==null||!Bukkit.getOfflinePlayer(playeruuid).isOnline()){
                       //put in map
+                      //later make a repeating task to expire waiting teleports after 30 seconds run every 10 seconds
                     }else{
                       Rooms.roomWorldManager.TpOrLoadHouseWorld(Bukkit.getPlayer(playeruuid), worlduuid.toString()+islandchoice);
                     }
