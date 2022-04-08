@@ -72,15 +72,15 @@ public class Configs {
   }
   
   private void createPresetConfig() {
-    File mysqlConfigFile = new File(Rooms.getPlugin().getDataFolder(), "creation-preset.yml");
-    if (!mysqlConfigFile.exists()) {
-      mysqlConfigFile.getParentFile().mkdirs();
-      Rooms.getPlugin().saveResource("creation-preset.yml", false);
+    File presetConfigFile = new File(Rooms.getPlugin().getDataFolder(), "preset.yml");
+    if (!presetConfigFile.exists()) {
+      presetConfigFile.getParentFile().mkdirs();
+      Rooms.getPlugin().saveResource("preset.yml", false);
     }
 
-    storageConfig = new YamlConfiguration();
+    presetConfig = new YamlConfiguration();
     try {
-      storageConfig.load(mysqlConfigFile);
+      presetConfig.load(presetConfigFile);
     } catch (IOException | InvalidConfigurationException e) {
       e.printStackTrace();
     }
