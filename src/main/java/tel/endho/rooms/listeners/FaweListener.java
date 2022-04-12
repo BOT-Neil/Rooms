@@ -50,12 +50,13 @@ public class FaweListener {
           if (session.getClipboard() != null) {
             if (!session.getClipboard().getClipboards().isEmpty()) {
               Clipboard clipboard = session.getClipboard().getClipboards().stream().iterator().next();
-              // int height =clipboard.getHeight();
+              //int height =clipboard.getHeight();
+              int width = clipboard.getWidth();
               int length = clipboard.getLength();
               BlockVector3 placement = session.getPlacementPosition(actor);
               int absX = Math.abs(placement.getX());
               int absZ = Math.abs(placement.getZ());
-              int totalX = absX + length;
+              int totalX = absX + width;
               int totalZ = absZ + length;
               if (Bukkit.getWorld(event.getWorld().getName()).getWorldBorder() == null) {
                 event.setCancelled(true);
