@@ -54,6 +54,10 @@ public class RoomWorld {
         this.hasNether=false;
         //this.icon=Material.GRASS_BLOCK;
     };
+    public RoomWorld(int rowid2, UUID uuid2, UUID ownerUUID2, String ownername2, String locktime, String spawnlocation,
+        Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers2, Map<UUID, String> members2,
+        String enviroment, String bordercolour) {
+    }
     public int getRowid(){return this.rowid;}
     public UUID getWorldUUID(){
         return this.uuid;
