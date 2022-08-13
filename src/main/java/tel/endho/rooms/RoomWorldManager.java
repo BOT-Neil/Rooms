@@ -26,6 +26,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.biome.BiomeTypes;
 import com.sk89q.worldedit.world.block.BlockTypes;
+import com.sk89q.worldguard.WorldGuard;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -485,6 +486,8 @@ public class RoomWorldManager {
           Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
               GameRule.DO_FIRE_TICK,
               false);
+          RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+
         } catch (InterruptedException | ExecutionException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
