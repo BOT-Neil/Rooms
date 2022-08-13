@@ -27,6 +27,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.biome.BiomeTypes;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -111,6 +112,7 @@ public class RoomWorldManager {
       } // it is automatically closed/flushed when the code exits the block
       try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(worlduuid.toString()))) {
         int plotsize = -(Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2);
+        @SuppressWarnings("all")
         Operation operation = new ClipboardHolder(clipboard)
             .createPaste(es2)
             .to(BlockVector3.at(plotsize, 0, plotsize))
@@ -171,6 +173,7 @@ public class RoomWorldManager {
       } // it is automatically closed/flushed when the code exits the block
       try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(plot.getWorldName()))) {
         int plotsize = -(Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2);
+        @SuppressWarnings("all")
         Operation operation = new ClipboardHolder(clipboard)
             .createPaste(es2)
             .to(BlockVector3.at(plotsize, 0, plotsize))
@@ -179,7 +182,7 @@ public class RoomWorldManager {
         Operations.complete(operation);
       } // it is automatically closed/flushed when the code exits the block
       plot.unclaim();
-      Rooms.mysql.insertRoomWorld(player, world, properties,Presets.gePreset("normal"));
+      Rooms.mysql.insertRoomWorld(player, world, properties, Presets.gePreset("normal"));
       // Location location= new
       // Location(Bukkit.getWorld(worlduuid.toString()),1,255,1);
       // player.teleport(location);
@@ -208,26 +211,26 @@ public class RoomWorldManager {
         @Override
         public void run() {
           try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(world.getName()))) {
-            if(preset.getmainSchematic().equals("empty")){
-                es2.setBlock(0, 1, 0, BlockTypes.BEDROCK);
-            }else if (preset.getmainSchematic().equals("flat")){
+            if (preset.getmainSchematic().equals("empty")) {
+              es2.setBlock(0, 1, 0, BlockTypes.BEDROCK);
+            } else if (preset.getmainSchematic().equals("flat")) {
               int wbsize = Rooms.configs.getGeneralConfig().getInt("worldborder");
-            int fillsize = Rooms.configs.getGeneralConfig().getInt("fillsize");
-            String fillmaterial = Rooms.configs.getGeneralConfig().getString("fillmaterial").toLowerCase();
-            int halfsize = wbsize / 2;
-            CuboidRegion region = new CuboidRegion(BlockVector3.at(halfsize - 1, 0, halfsize - 1),
-                BlockVector3.at(-halfsize, fillsize, -halfsize));
-            es2.setBlocks((Region) region, BlockTypes.get(fillmaterial));
-            Bukkit.getScheduler().runTask(Rooms.getPlugin(), () -> {
-              Location loc = new Location(Rooms.getPlugin().getServer().getWorld(world.getName()),
-                  Double.valueOf(SlimeProperties.SPAWN_X.getDefaultValue()),
-                  Rooms.configs.getGeneralConfig().getInt("spawnheight"),
-                  Double.valueOf(SlimeProperties.SPAWN_Z.getDefaultValue()));
-              player.teleport(loc);
-            });
-            }else {
-              //load schematic
-              File file = new File(Rooms.getPlugin().getDataFolder() + "/schematics/"+preset.getmainSchematic());
+              int fillsize = Rooms.configs.getGeneralConfig().getInt("fillsize");
+              String fillmaterial = Rooms.configs.getGeneralConfig().getString("fillmaterial").toLowerCase();
+              int halfsize = wbsize / 2;
+              CuboidRegion region = new CuboidRegion(BlockVector3.at(halfsize - 1, 0, halfsize - 1),
+                  BlockVector3.at(-halfsize, fillsize, -halfsize));
+              es2.setBlocks((Region) region, BlockTypes.get(fillmaterial));
+              Bukkit.getScheduler().runTask(Rooms.getPlugin(), () -> {
+                Location loc = new Location(Rooms.getPlugin().getServer().getWorld(world.getName()),
+                    Double.valueOf(SlimeProperties.SPAWN_X.getDefaultValue()),
+                    Rooms.configs.getGeneralConfig().getInt("spawnheight"),
+                    Double.valueOf(SlimeProperties.SPAWN_Z.getDefaultValue()));
+                player.teleport(loc);
+              });
+            } else {
+              // load schematic
+              File file = new File(Rooms.getPlugin().getDataFolder() + "/schematics/" + preset.getmainSchematic());
               BlockVector3 to = BlockVector3.at(0, 0, 0);
               ClipboardFormat format = ClipboardFormats.findByFile(file);
               ClipboardReader reader = null;
@@ -242,21 +245,23 @@ public class RoomWorldManager {
               } catch (IOException e) {
                 e.printStackTrace();
               }
+              @SuppressWarnings("all")
               Operation operation = new ClipboardHolder(clipboard)
                   .createPaste(es2)
                   .to(to)
                   .ignoreAirBlocks(false)
                   .build();
               Operations.complete(operation);
+
             }
-            
+
             // do bedrock too
           }
         }
       };
       r.runTaskAsynchronously(Rooms.getPlugin());
 
-      Rooms.mysql.insertRoomWorld(player, world, properties,preset);
+      Rooms.mysql.insertRoomWorld(player, world, properties, preset);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
     } catch (IOException | WorldAlreadyExistsException | SQLException ex) {
       /* Exception handling */
@@ -314,7 +319,7 @@ public class RoomWorldManager {
             CuboidRegion regionn = new CuboidRegion(BlockVector3.at(halfsize - 1, 0, halfsize - 1),
                 BlockVector3.at(-halfsize, 256, -halfsize));
             regionn.forEach(bv -> {
-              //es2.getBlock(bv).getBlockType().getMaterial().toString();
+              // es2.getBlock(bv).getBlockType().getMaterial().toString();
               es2.setBiome(bv, BiomeTypes.SOUL_SAND_VALLEY);
             });
             // es2.setBiome((Region)region, BiomeTypes.CRIMSON_FOREST);
@@ -351,9 +356,9 @@ public class RoomWorldManager {
       // todo if() roomworld is on this server
       // todo if(globalroomworld.region!= config.region)
       //
-      
+
       Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
-      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid,"");
+      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid, "");
     } else {
       if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
         Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
@@ -396,7 +401,7 @@ public class RoomWorldManager {
       //
       // todo implement lobby mode
       Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
-      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid,uuidsuffix);
+      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid, uuidsuffix);
     } else {
       if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
         Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
@@ -481,13 +486,14 @@ public class RoomWorldManager {
           SlimeWorld world = opworld.get();
           // todo sync
           plugin.generateWorld(world);
-          Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
-              GameRule.DO_MOB_SPAWNING,
-              false);
-          Objects.requireNonNull(Bukkit.getWorld(roomWorld.getWorldUUID().toString())).setGameRule(
-              GameRule.DO_FIRE_TICK,
-              false);
-          RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+          if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()) != null) {
+            World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
+            world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            world2.setGameRule(GameRule.DO_FIRE_TICK, false);
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionManager regions = container.get(FaweAPI.getWorld(world2.getName()));
+            regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());
+          }
 
         } catch (InterruptedException | ExecutionException e) {
           // TODO Auto-generated catch block
