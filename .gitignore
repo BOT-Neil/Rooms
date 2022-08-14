@@ -252,6 +252,7 @@ modules.xml
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+.VSCodeCounter/*
 
 # Local History for Visual Studio Code
 .history/
