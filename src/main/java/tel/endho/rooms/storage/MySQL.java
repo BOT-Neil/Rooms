@@ -16,6 +16,7 @@ import tel.endho.rooms.*;
 import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
 import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.enums.usergroup;
 
 import javax.annotation.Nullable;
 import java.sql.*;
@@ -54,7 +55,7 @@ public class MySQL {
       createTable();
     }
   }
-
+  //
   public void createTable() throws SQLException {
     String roomworld = """
         CREATE TABLE `room_worlds` (
@@ -363,6 +364,12 @@ public class MySQL {
           stmt.executeUpdate();
           Gson gson = new GsonBuilder().create();
           String json = gson.toJson(roomWorld.getBlocked());
+          
+          //java enum of groups, foreach(groupEnum)
+          for(usergroup userg: usergroup.values()){
+            //bla bla where userg//refaaaactor
+          }
+          //
           roomWorld.getMembers().forEach((uuid, s) -> {
             try {
               PreparedStatement statement = connection.prepareStatement(

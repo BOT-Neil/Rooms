@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import tel.endho.rooms.util.Preset;
 import tel.endho.rooms.util.Presets;
+import tel.endho.rooms.util.enums.usergroup;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,6 +24,7 @@ public class RoomWorld {
     private Integer spawnX;
     private Integer spawnY;
     private Integer spawnZ;
+    private Map<String,Map<UUID,String>> groupMap;
     private Map<UUID, String>blocked;
     private Map<UUID, String>trustedMembers;
     private Map<UUID, String>members;
@@ -67,7 +69,14 @@ public class RoomWorld {
     }
     public String getOwnerName(){ return this.Ownername; }
     public String getTimestamp(){return this.timestamp;}
-    public Map<UUID, String> getBlocked(){return this.blocked;}
+    public Map<String, Map<UUID, String>> getGroupMap(){return this.groupMap;}
+    public Map<UUID, String> getUserGroup(String string) {//doesnt look good
+      return getGroupMap().get(string);
+    }
+    public Map<UUID, String> getBlocked() {
+      return getGroupMap().get(usergroup.BLOCKED.toString());
+    }
+    //public Map<UUID, String> getBlocked(){return this.blocked;}
     public Map<UUID, String> getMembers(){return this.members;}
     public Map<UUID, String> getTrustedMembers(){return this.trustedMembers;}
     public Integer getSpawnX(){return this.spawnX;}
