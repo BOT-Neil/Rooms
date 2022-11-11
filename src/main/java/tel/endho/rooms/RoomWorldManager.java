@@ -208,6 +208,7 @@ public class RoomWorldManager {
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_MOB_SPAWNING, false);
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_FIRE_TICK, false);
       BukkitRunnable r = new BukkitRunnable() {
+        @SuppressWarnings("null")
         @Override
         public void run() {
           try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(world.getName()))) {
@@ -234,6 +235,7 @@ public class RoomWorldManager {
               BlockVector3 to = BlockVector3.at(0, 0, 0);
               ClipboardFormat format = ClipboardFormats.findByFile(file);
               ClipboardReader reader = null;
+              
               try {
                 reader = format.getReader(new FileInputStream(file));
               } catch (IOException e) {
@@ -478,6 +480,7 @@ public class RoomWorldManager {
     // SlimeWorld world = plugin.loadWorld(sqlLoader,
     // roomWorld.getWorldUUID().toString(), false, properties);
     BukkitRunnable r = new BukkitRunnable() {
+      @SuppressWarnings("null")
       @Override
       public void run() {
         try {

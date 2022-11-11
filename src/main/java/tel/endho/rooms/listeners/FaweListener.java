@@ -17,6 +17,7 @@ public class FaweListener {
   public void startListening() {
     WorldEdit.getInstance().getEventBus().register(new Object() /* [1] */ {
       // Make sure you import WorldEdit's @Subscribe!
+      @SuppressWarnings("null")
       @Subscribe
       public void onEditSessionEvent(EditSessionEvent event) {
         Actor actor = event.getActor();
@@ -58,6 +59,7 @@ public class FaweListener {
               int absZ = Math.abs(placement.getZ());
               int totalX = absX + width;
               int totalZ = absZ + length;
+              
               if (Bukkit.getWorld(event.getWorld().getName()).getWorldBorder() == null) {
                 event.setCancelled(true);
               } else {
