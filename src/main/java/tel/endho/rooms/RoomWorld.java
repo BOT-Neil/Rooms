@@ -21,14 +21,11 @@ public class RoomWorld {
   private UUID OwnerUUID;
   private String Ownername;
   private String timestamp;
-  private Integer spawnX;
-  private Integer spawnY;
-  private Integer spawnZ;
+  private String spawnLocation;
   private Map<String, Map<UUID, String>> groupsMap;
-  //private Map<UUID, String> blocked;
+  // private Map<UUID, String> blocked;
   private Map<UUID, String> trustedMembers;
   private Map<UUID, String> members;
-  private Long systemTime;// temp
   private int inactiveTicks;// temp
   private String preset;
   private String BorderColor;
@@ -49,10 +46,9 @@ public class RoomWorld {
     this.spawnY = spawnY;
     this.spawnZ = spawnZ;
     this.groupsMap.put("BLOCKED", blocked);
-    //this.blocked = blocked;
+    // this.blocked = blocked;
     this.trustedMembers = trustedMembers;
     this.members = members;
-    this.systemTime = System.currentTimeMillis();
     this.preset = preset;
     this.BorderColor = borderColor;
     this.inactiveTicks = 0;// noplayers in world
@@ -60,9 +56,9 @@ public class RoomWorld {
     // this.icon=Material.GRASS_BLOCK;
   };
 
-  public RoomWorld(int rowid2, UUID uuid2, UUID ownerUUID2, String ownername2, String locktime, String spawnlocation,
-      Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers2, Map<UUID, String> members2,
-      String enviroment, String bordercolour) {
+  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID2, String ownername, String locktime, String spawnlocation,
+      Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment,
+      String bordercolour) {
   }
 
   public int getRowid() {
@@ -135,14 +131,6 @@ public class RoomWorld {
 
     });
     return x.get();
-  }
-
-  public Long getSystemTime() {
-    return this.systemTime;
-  }
-
-  public void setSystemTime(Long systemTime) {
-    this.systemTime = systemTime;
   }
 
   public Boolean isLoaded() {

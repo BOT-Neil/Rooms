@@ -55,6 +55,7 @@ public class MySQL {
       createTable();
     }
   }
+
   //
   public void createTable() throws SQLException {
     String roomworld = """
@@ -106,8 +107,8 @@ public class MySQL {
             String spawnlocation = result.getString("spawnlocation");
             String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
-            Boolean hasnether= result.getBoolean("hasnether");
-            Boolean hasend= result.getBoolean("hasend");
+            Boolean hasnether = result.getBoolean("hasnether");
+            Boolean hasend = result.getBoolean("hasend");
             String roomname = result.getString("roomname");
             String iconMaterial = result.getString("icon");
             Gson gson = new GsonBuilder().create();
@@ -122,8 +123,9 @@ public class MySQL {
                 }.getType());
 
             // trustedMembers.putIfAbsent();
+            //todo fix this
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-              RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnlocation,
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnlocation,
                   blockedMembers, trustedMembers, members, enviroment, bordercolour));
             } /*
                * else {
@@ -209,8 +211,9 @@ public class MySQL {
             String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
             // trustedMembers.putIfAbsent();
+            //todo update, maybe copy from loadroomworld
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-              RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
                   spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
             } /*
                * else {
@@ -283,7 +286,7 @@ public class MySQL {
             int rowid = result.getInt("id");
             String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
-            RoomWorlds.addHouse(UUID.fromString(world.getName()),
+            RoomWorlds.addRoom(UUID.fromString(world.getName()),
                 new RoomWorld(rowid, UUID.fromString(world.getName()), playeruuid, ownername, timestamp,
                     sprop.getValue(SlimeProperties.SPAWN_X), sprop.getValue(SlimeProperties.SPAWN_Y),
                     sprop.getValue(SlimeProperties.SPAWN_Z), new HashMap<>(), new HashMap<>(), new HashMap<>(),
@@ -327,7 +330,7 @@ public class MySQL {
             int rowid = result.getInt("id");
             String timestamp = result.getString("timestamp");
             Rooms.debug("ROW ID: " + rowid);
-            RoomWorlds.addHouse(UUID.fromString(world.getName()),
+            RoomWorlds.addRoom(UUID.fromString(world.getName()),
                 new RoomWorld(rowid, UUID.fromString(world.getName()), player.getUniqueId(), player.getName(),
                     timestamp, sprop.getValue(SlimeProperties.SPAWN_X), sprop.getValue(SlimeProperties.SPAWN_Y),
                     sprop.getValue(SlimeProperties.SPAWN_Z), new HashMap<>(), new HashMap<>(), new HashMap<>(),
@@ -364,10 +367,10 @@ public class MySQL {
           stmt.executeUpdate();
           Gson gson = new GsonBuilder().create();
           String json = gson.toJson(roomWorld.getBlocked());
-          
-          //java enum of groups, foreach(groupEnum)
-          for(usergroup userg: usergroup.values()){
-            //bla bla where userg//refaaaactor
+
+          // java enum of groups, foreach(groupEnum)
+          for (usergroup userg : usergroup.values()) {
+            // bla bla where userg//refaaaactor
           }
           //
           roomWorld.getMembers().forEach((uuid, s) -> {

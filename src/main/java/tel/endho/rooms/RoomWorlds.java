@@ -68,7 +68,7 @@ public class RoomWorlds {
     return roomWorldmap;
   }
 
-  public static void addHouse(UUID uuid, RoomWorld roomWorld) {
+  public static void addRoom(UUID uuid, RoomWorld roomWorld) {
     if (!roomWorldmap.containsKey(uuid))
       roomWorldmap.put(uuid, roomWorld);
   }
