@@ -59,6 +59,7 @@ public class RoomWorld {
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID2, String ownername, String locktime, String spawnlocation,
       Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment,
       String bordercolour) {
+        
   }
 
   public int getRowid() {

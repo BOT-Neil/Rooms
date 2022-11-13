@@ -111,6 +111,7 @@ public class MySQL {
             Boolean hasend = result.getBoolean("hasend");
             String roomname = result.getString("roomname");
             String iconMaterial = result.getString("icon");
+            //todo preset
             Gson gson = new GsonBuilder().create();
             Map<UUID, String> blockedMembers = gson.fromJson(result.getString("blockedmembers"),
                 new TypeToken<Map<UUID, String>>() {
