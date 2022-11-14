@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import tel.endho.rooms.util.LocationSerializer;
 import tel.endho.rooms.util.Preset;
 import tel.endho.rooms.util.Presets;
 import tel.endho.rooms.util.enums.usergroup;
@@ -27,9 +28,9 @@ public class RoomWorld {
   private Map<UUID, String> trustedMembers;
   private Map<UUID, String> members;
   private int inactiveTicks;// temp
-  private String preset;
-  private String BorderColor;
-  private Boolean hasNether;
+  private String preset;//presetconfig options
+  private String BorderColor;//red, blue, green
+  private Boolean hasNether;//
   private Boolean hasEnd;// todo set true after island gen
   private String roomName;// todo room.user.rename if string null || null { }
   private Material icon;
@@ -42,9 +43,6 @@ public class RoomWorld {
     this.OwnerUUID = ownerUUID;
     this.Ownername = Ownername;
     this.timestamp = timestamp;
-    this.spawnX = spawnX;
-    this.spawnY = spawnY;
-    this.spawnZ = spawnZ;
     this.groupsMap.put("BLOCKED", blocked);
     // this.blocked = blocked;
     this.trustedMembers = trustedMembers;
@@ -56,10 +54,15 @@ public class RoomWorld {
     // this.icon=Material.GRASS_BLOCK;
   };
 
-  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID2, String ownername, String locktime, String spawnlocation,
+  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String locktime, String spawnlocation,
       Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment,
       String bordercolour) {
-        
+        this.rowid = rowid;
+    this.uuid = uuid;
+    this.OwnerUUID = ownerUUID;
+    this.Ownername = Ownername;
+    this.timestamp = timestamp;
+    this.spawnLocation=spawnlocation;
   }
 
   public int getRowid() {
@@ -102,17 +105,21 @@ public class RoomWorld {
   public Map<UUID, String> getTrustedMembers() {
     return this.trustedMembers;
   }
+  //todo getcustommembers(?)
+  public String getSpawnLocation(){
+    return this.spawnLocation;
+  }
 
   public Integer getSpawnX() {
-    return this.spawnX;
+    return LocationSerializer.getDeserializedXYZ(this.spawnLocation)[0];
   }
 
   public Integer getSpawnY() {
-    return this.spawnY;
+    return LocationSerializer.getDeserializedXYZ(this.spawnLocation)[1];
   }
 
   public Integer getSpawnZ() {
-    return this.spawnZ;
+    return LocationSerializer.getDeserializedXYZ(this.spawnLocation)[2];
   }
 
   public Integer getOrderId() {

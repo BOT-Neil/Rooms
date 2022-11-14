@@ -58,7 +58,7 @@ public class MySQL {
 
   //
   public void createTable() throws SQLException {
-    String roomworld = """
+    String roomworlds = """
         CREATE TABLE `room_worlds` (
          `id` int(11) NOT NULL AUTO_INCREMENT,
          `worlduuid` varchar(40) NOT NULL,
@@ -81,7 +81,7 @@ public class MySQL {
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         """;
     try {
-      connection.prepareStatement(roomworld).executeUpdate();
+      connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -107,27 +107,32 @@ public class MySQL {
             String spawnlocation = result.getString("spawnlocation");
             String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
-            Boolean hasnether = result.getBoolean("hasnether");
-            Boolean hasend = result.getBoolean("hasend");
-            String roomname = result.getString("roomname");
-            String iconMaterial = result.getString("icon");
+            Boolean hasnether = result.getBoolean("hasnether");//if nether-linked island is generated
+            Boolean hasend = result.getBoolean("hasend");//if end-linked island is generated
+            String roomname = result.getString("roomname");//todo add hex support for gui etc
+            String iconMaterial = result.getString("icon");//todo add customizablity
+            String preset = result.getString("preset");//selectable on creation only due to world type
             //todo preset
             Gson gson = new GsonBuilder().create();
-            Map<UUID, String> blockedMembers = gson.fromJson(result.getString("blockedmembers"),
+            Map<String, Map<UUID, String>> groupsMap= new HashMap<>();
+            //todoinmysql add colum of users customgroups?
+            Map<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
                 new TypeToken<Map<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> trustedMembers = gson.fromJson(result.getString("trustedmembers"),
+            Map<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
                 new TypeToken<Map<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> members = gson.fromJson(result.getString("trustedmembers"),
+            Map<UUID, String> members = gson.fromJson(result.getString("members"),
                 new TypeToken<Map<UUID, String>>() {
                 }.getType());
-
+            groupsMap.put("MEMBERS", members);
+            groupsMap.put("TRUSTED", trusted);
+            groupsMap.put("BLOCKED", blocked);
             // trustedMembers.putIfAbsent();
             //todo fix this
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnlocation,
-                  blockedMembers, trustedMembers, members, enviroment, bordercolour));
+                  blocked, trusted, members, enviroment, bordercolour));
             } /*
                * else {
                * if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
@@ -353,6 +358,7 @@ public class MySQL {
       @Override
       public void run() {
         try {
+          //todo update location string etc
           PreparedStatement stmt = connection.prepareStatement(
               "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,x=? ,y=? ,z=? ,enviroment=?, bordercolour=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
