@@ -80,6 +80,8 @@ public class MySQL {
          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         """;
+    //todo groups
+    //roomusers
     try {
       connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {

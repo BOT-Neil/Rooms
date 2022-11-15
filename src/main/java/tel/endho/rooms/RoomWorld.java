@@ -1,6 +1,7 @@
 package tel.endho.rooms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,9 @@ public class RoomWorld {
   private String Ownername;
   private String timestamp;
   private String spawnLocation;
+  //<groupid, Map<PlayerUUID,PlayerName>
   private Map<String, Map<UUID, String>> groupsMap;
+  //todo customgroups/perms/users/etc
   // private Map<UUID, String> blocked;
   private Map<UUID, String> trustedMembers;
   private Map<UUID, String> members;
@@ -106,7 +109,11 @@ public class RoomWorld {
     return this.trustedMembers;
   }
   //todo getcustommembers(?)
-  public String getSpawnLocation(){
+  public Location getSpawnLocation() {
+    return LocationSerializer.getDeserializedPresetLocation(this.spawnLocation, this.uuid.toString());
+  }
+
+  public String getSpawnString(){
     return this.spawnLocation;
   }
 

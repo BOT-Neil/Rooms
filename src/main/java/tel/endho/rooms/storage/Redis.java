@@ -101,6 +101,7 @@ public class Redis {
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
                   RoomWorlds.getRoomWolrds().remove(worlduuid);
                 }
+                //removememberfromgroup
                 if (tag.equals("removemember")) {
                   UUID serveruuid = UUID.fromString(byteArray.readUTF());
                   if (serveruuid == serverUuid)
