@@ -138,7 +138,7 @@ public class Redis {
                   UUID playeruuid = UUID.fromString(byteArray.readUTF());
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
                   String islandchoice=byteArray.readUTF();
-                  Long syslong = Long.valueOf(byteArray.readUTF());
+                  Long syslong = Long.valueOf(byteArray.readUTF());//use this to expire tps
                   if (RoomWorlds.isRoomWorld(worlduuid)) {
                     //if player online put into island
                     //else put player into map with playeruuid,worldstring, systime,play

@@ -105,9 +105,9 @@ public class MySQL {
             UUID uuid = UUID.fromString(result.getString("worlduuid"));
             UUID OwnerUUID = player.getUniqueId();
             String Ownername = player.getName();
-            String locktime = result.getString("timestamp");
+            String timestamp = result.getString("timestamp");
             String spawnlocation = result.getString("spawnlocation");
-            String enviroment = result.getString("enviroment");
+            //String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
             Boolean hasnether = result.getBoolean("hasnether");//if nether-linked island is generated
             Boolean hasend = result.getBoolean("hasend");//if end-linked island is generated
@@ -133,8 +133,8 @@ public class MySQL {
             // trustedMembers.putIfAbsent();
             //todo fix this
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnlocation,
-                  blocked, trusted, members, enviroment, bordercolour));
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
+                  groupsMap, bordercolour, preset));
             } /*
                * else {
                * if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {

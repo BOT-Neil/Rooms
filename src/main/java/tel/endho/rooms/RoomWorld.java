@@ -24,15 +24,15 @@ public class RoomWorld {
   private String Ownername;
   private String timestamp;
   private String spawnLocation;
-  //<groupid, Map<PlayerUUID,PlayerName>
+  // <groupid, Map<PlayerUUID,PlayerName>
   private Map<String, Map<UUID, String>> groupsMap;
-  //todo customgroups/perms/users/etc
+  // todo customgroups/perms/users/etc
   // private Map<UUID, String> blocked;
   private Map<UUID, String> trustedMembers;
   private Map<UUID, String> members;
   private int inactiveTicks;// temp
-  private String preset;//presetconfig options
-  private String BorderColor;//red, blue, green
+  private String preset;// presetconfig options
+  private String BorderColor;// red, blue, green
   private Boolean hasNether;//
   private Boolean hasEnd;// todo set true after island gen
   private String roomName;// todo room.user.rename if string null || null { }
@@ -57,15 +57,17 @@ public class RoomWorld {
     // this.icon=Material.GRASS_BLOCK;
   };
 
-  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String locktime, String spawnlocation,
-      Map<UUID, String> blockedMembers, Map<UUID, String> trustedMembers, Map<UUID, String> members, String enviroment,
-      String bordercolour) {
-        this.rowid = rowid;
+  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
+      Map<String, Map<UUID, String>> groupsMap, String bordercolour,String preset) {
+    this.rowid = rowid;
     this.uuid = uuid;
     this.OwnerUUID = ownerUUID;
-    this.Ownername = Ownername;
+    this.Ownername = ownername;
     this.timestamp = timestamp;
-    this.spawnLocation=spawnlocation;
+    this.spawnLocation = spawnlocation;
+    this.groupsMap = groupsMap;
+    this.BorderColor=bordercolour;
+    this.preset=preset;
   }
 
   public int getRowid() {
@@ -108,12 +110,13 @@ public class RoomWorld {
   public Map<UUID, String> getTrustedMembers() {
     return this.trustedMembers;
   }
-  //todo getcustommembers(?)
+
+  // todo getcustommembers(?)
   public Location getSpawnLocation() {
     return LocationSerializer.getDeserializedPresetLocation(this.spawnLocation, this.uuid.toString());
   }
 
-  public String getSpawnString(){
+  public String getSpawnString() {
     return this.spawnLocation;
   }
 

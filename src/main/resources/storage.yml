@@ -1,7 +1,5 @@
- #name as in bungee config/ leave default if single server
+#name as in bungee config/ leave default if single server
 bungeeservername: Creative
-#run this true on your first server and leave it false on the rest
-purgeglobaltask: true
 mysqlhost: "localhost"
 mysqlusername: "user"
 mysqldatabase: "server_rooms"

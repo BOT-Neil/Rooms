@@ -1,5 +1,5 @@
 enabledebugging: false
-enabledpresets: true
+enabledpresets: true #todo if false use first preset or?
 spawnanimals: false
 spawnmonsters: false
 gamemode: creative
