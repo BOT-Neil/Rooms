@@ -132,8 +132,7 @@ public class Rooms extends JavaPlugin {
           world.save();
           Bukkit.unloadWorld(world, false);
         }
-        // todo mysql save houseworld
-        // RoomWorlds.getRoomWolrds().remove(uuid);
+        // todo use unloadRoomworld
       }
     });
     try {
