@@ -123,6 +123,7 @@ public class Rooms extends JavaPlugin {
         if (world != null) {
           try {
             Rooms.mysql.saveRoomWorld(roomWorld, false);
+            WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());
             File bob = new File(Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + uuid);
             bob.deleteOnExit();
           } catch (SQLException e) {

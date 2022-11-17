@@ -235,7 +235,7 @@ public class RoomWorldManager {
               BlockVector3 to = BlockVector3.at(0, 0, 0);
               ClipboardFormat format = ClipboardFormats.findByFile(file);
               ClipboardReader reader = null;
-              
+
               try {
                 reader = format.getReader(new FileInputStream(file));
               } catch (IOException e) {
@@ -439,6 +439,7 @@ public class RoomWorldManager {
       // RoomWorlds.houseWorldBungeeInfoArrayList.remove(roomWorld.getWorldUUID());
       Rooms.debug("system path: " + Rooms.getPlugin().getDataFolder().getAbsolutePath());// system path:
       // /home/creative/CreativeEU1/plugins/Rooms
+      WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());  
       File bob = new File(
           Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + roomWorld.getWorldUUID().toString());
       bob.deleteOnExit();
