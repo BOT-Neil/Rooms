@@ -360,7 +360,10 @@ public class MySQL {
       @Override
       public void run() {
         try {
-          //todo update location string etc
+          Gson gson = new GsonBuilder().create();
+          String blocked = gson.toJson(roomWorld.getBlocked());
+          String trusted = gson.toJson(roomWorld.getBlocked());
+          String member = gson.toJson(roomWorld.getBlocked());
           PreparedStatement stmt = connection.prepareStatement(
               "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,x=? ,y=? ,z=? ,enviroment=?, bordercolour=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
@@ -374,8 +377,8 @@ public class MySQL {
           stmt.setInt(9, roomWorld.getRowid());
           Rooms.debug(stmt.toString());
           stmt.executeUpdate();
-          Gson gson = new GsonBuilder().create();
-          String json = gson.toJson(roomWorld.getBlocked());
+          
+          
 
           // java enum of groups, foreach(groupEnum)
           for (usergroup userg : usergroup.values()) {

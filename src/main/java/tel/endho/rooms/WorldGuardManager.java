@@ -12,6 +12,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 public class WorldGuardManager {
+  //todo call after load
   public void setupRoom(RoomWorld roomWorld) {
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
     RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString()));
