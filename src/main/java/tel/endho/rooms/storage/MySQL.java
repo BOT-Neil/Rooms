@@ -85,7 +85,6 @@ public class MySQL {
     }
   }
 
-  // update
   public void loadRoomWorlds(Player player) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
