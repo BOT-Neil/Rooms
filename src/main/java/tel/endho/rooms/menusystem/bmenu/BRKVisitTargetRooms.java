@@ -35,7 +35,7 @@ public class BRKVisitTargetRooms {
     for (int i = 0; i < playerhouses.size(); i++) {
       int n = i;
       n++;
-      stockList.add(n + ". " + playerhouses.get(i).getEnviroment());
+      stockList.add(n + ". " + playerhouses.get(i).getPreset());
       index.set(i);
 
     }

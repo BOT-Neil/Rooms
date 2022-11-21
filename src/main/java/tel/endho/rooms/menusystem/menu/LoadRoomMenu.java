@@ -44,7 +44,8 @@ public class LoadRoomMenu extends PaginatedMenu {
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     Player p = (Player) e.getWhoClicked();
 
-    //ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
+    // ArrayList<Player> players = new
+    // ArrayList<Player>(getServer().getOnlinePlayers());
     switch (e.getCurrentItem().getType()) {
       case ENDER_EYE, GRASS_BLOCK, NETHERRACK -> {
         Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
@@ -85,24 +86,24 @@ public class LoadRoomMenu extends PaginatedMenu {
     addMenuBorder();
     // Map<UUID, HouseWorld> getHouseWorldsPlayer=
     // HouseWorlds.getHouseWorldsPlayer(playerMenuUtility.getOwner());
-    ArrayList<RoomWorld> playerhouses = new ArrayList<>(
+    ArrayList<RoomWorld> playerrooms = new ArrayList<>(
         RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getPlayerGetHouseList()).values());
     // The thing you will be looping through to place items
     // ArrayList<Player> players = new
     // ArrayList<Player>(getServer().getOnlinePlayers());
-    playerhouses.sort(Comparator.comparingInt(RoomWorld::getRowid));
+    playerrooms.sort(Comparator.comparingInt(RoomWorld::getRowid));
     ///////////////////////////////////// Pagination loop template
     if (!RoomWorlds.getRoomWorldsPlayer(playerMenuUtility.getPlayerGetHouseList()).isEmpty()) {
       for (int i = 0; i < getMaxItemsPerPage(); i++) {
         index = getMaxItemsPerPage() * page + i;
-        if (index >= playerhouses.size())
+        if (index >= playerrooms.size())
           break;
-        if (playerhouses.get(index) != null) {
+        if (playerrooms.get(index) != null) {
           ///////////////////////////
           ;
-          Rooms.debug("enviroment: " + playerhouses.get(index).getEnviroment());
+          Rooms.debug("enviroment: " + playerrooms.get(index).getPreset());
           // Create an item from our collection and place it into the inventory
-          ItemStack itemStack = switch (playerhouses.get(index).getEnviroment()) {
+          ItemStack itemStack = switch (playerrooms.get(index).getPreset().getmainEnvironment()) {
             case "normal" -> new ItemStack(Material.GRASS_BLOCK, 1);
             case "nether" -> new ItemStack(Material.NETHERRACK, 1);
             case "the_end" -> new ItemStack(Material.ENDER_EYE, 1);
@@ -112,7 +113,7 @@ public class LoadRoomMenu extends PaginatedMenu {
           playerMeta.setDisplayName(ChatColor.RED + String.valueOf(index) + ".");
 
           playerMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.instance, "uuid"),
-              PersistentDataType.STRING, playerhouses.get(index).getWorldUUID().toString());
+              PersistentDataType.STRING, playerrooms.get(index).getWorldUUID().toString());
           itemStack.setItemMeta(playerMeta);
 
           inventory.addItem(itemStack);

@@ -85,7 +85,8 @@ public class MySQL {
       e.printStackTrace();
     }
   }
-  //update
+
+  // update
   public void loadRoomWorlds(Player player) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -103,14 +104,14 @@ public class MySQL {
             String timestamp = result.getString("timestamp");
             String spawnlocation = result.getString("spawnlocation");
             String bordercolour = result.getString("bordercolour");
-            Boolean hasnether = result.getBoolean("hasnether");//if nether-linked island is generated
-            Boolean hasend = result.getBoolean("hasend");//if end-linked island is generated
-            String roomname = result.getString("roomname");//todo add hex support for gui etc
-            String iconMaterial = result.getString("icon");//todo add customizablity
-            String preset = result.getString("preset");//selectable on creation only due to world type
+            Boolean hasnether = result.getBoolean("hasnether");// if nether-linked island is generated
+            Boolean hasend = result.getBoolean("hasend");// if end-linked island is generated
+            String roomname = result.getString("roomname");// todo add hex support for gui etc
+            String iconMaterial = result.getString("icon");// todo add customizablity
+            String preset = result.getString("preset");// selectable on creation only due to world type
             Gson gson = new GsonBuilder().create();
-            Map<String, Map<UUID, String>> groupsMap= new HashMap<>();
-            //todoinmysql add colum of users customgroups?
+            Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+            // todoinmysql add colum of users customgroups?
             Map<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
                 new TypeToken<Map<UUID, String>>() {
                 }.getType());
@@ -125,8 +126,8 @@ public class MySQL {
             groupsMap.put("BLOCKED", blocked);
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
-                  groupsMap, bordercolour,hasnether,hasend,roomname,iconMaterial, preset));
-            } 
+                  groupsMap, bordercolour, hasnether, hasend, roomname, iconMaterial, preset));
+            }
 
           }
         } catch (SQLException e) {
@@ -148,7 +149,8 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-  //todo fix roomnumber direct tp?  called from cmd only ie room v 69
+
+  // todo fix roomnumber direct tp? called from cmd only ie room v 69
   public void loadOthersRoomWorlds(Player player, String target, @Nullable Integer roomnumber) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -219,7 +221,8 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-  //todo
+
+  // todo timestamp from plot long
   public void insertMigratedRoomWorld(UUID playeruuid, SlimeWorld world, SlimePropertyMap sprop) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -267,7 +270,8 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-  //todo
+
+  // fix data
   public void insertRoomWorld(Player player, SlimeWorld world, SlimePropertyMap sprop, Preset preset)
       throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
@@ -323,19 +327,18 @@ public class MySQL {
           String trusted = gson.toJson(roomWorld.getBlocked());
           String members = gson.toJson(roomWorld.getBlocked());
           PreparedStatement stmt = connection.prepareStatement(
-              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,x=? ,y=? ,z=? ,enviroment=?, bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
+              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,spawnlocation=?, roomname=?, preset=? ,bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
           stmt.setString(2, roomWorld.getOwnerUUID().toString());
           stmt.setString(3, roomWorld.getOwnerName());
-          stmt.setInt(4, roomWorld.getSpawnX());
-          stmt.setInt(5, roomWorld.getSpawnY());
-          stmt.setInt(6, roomWorld.getSpawnZ());
-          stmt.setString(7, roomWorld.getEnviroment());
-          stmt.setString(8, roomWorld.getBorderColor());
-          stmt.setString(9, blocked);
-          stmt.setString(10, members);
-          stmt.setString(11, trusted);
-          stmt.setInt(12, roomWorld.getRowid());
+          stmt.setString(4, roomWorld.getSpawnString());
+          stmt.setString(5, roomWorld.getRoomsName());
+          stmt.setString(6, roomWorld.getPreset().getName());
+          stmt.setString(7, roomWorld.getBorderColor());
+          stmt.setString(8, blocked);
+          stmt.setString(9, members);
+          stmt.setString(10, trusted);
+          stmt.setInt(11, roomWorld.getRowid());
           Rooms.debug(stmt.toString());
           stmt.executeUpdate();
           // todo make sync instead of sync for shutdown

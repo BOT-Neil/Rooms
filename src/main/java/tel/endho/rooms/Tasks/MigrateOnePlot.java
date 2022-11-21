@@ -7,6 +7,7 @@ import tel.endho.rooms.Rooms;
 
 import java.io.IOException;
 import java.sql.SQLException;
+//import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MigrateOnePlot implements Runnable{
@@ -17,7 +18,9 @@ public class MigrateOnePlot implements Runnable{
         for(Plot plot :api.getAllPlots()) {
             if (!migratedOne.get() && !plot.isMerged()) {
                 try {
-
+                    //api.getPlotSquared().getImpromptuUUIDPipeline().get
+                    //Instant instant = Instant.ofEpochSecond(plot.getTimestamp());
+                    plot.isMerged();
                     Rooms.roomWorldManager.migratePlot(plot);
                     migratedOne.set(true);
                     break;

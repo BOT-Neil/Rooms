@@ -53,11 +53,13 @@ import java.util.regex.Pattern;
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
   SlimeLoader sqlLoader = plugin.getLoader("mysql");
-  /*private static Map<Integer, Preset> presetMap = new HashMap<>();
-
-  public Map<Integer, Preset> getPresetMap() {
-    return presetMap;
-  }*/
+  /*
+   * private static Map<Integer, Preset> presetMap = new HashMap<>();
+   * 
+   * public Map<Integer, Preset> getPresetMap() {
+   * return presetMap;
+   * }
+   */
 
   public void migrateAll() {
     BukkitRunnable r = new BukkitRunnable() {
@@ -98,6 +100,7 @@ public class RoomWorldManager {
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
 
       plugin.generateWorld(world);
+      //todo timestamp 
       Rooms.mysql.insertMigratedRoomWorld(plot.getOwner(), world, properties);
       defaultBorder(world.getName());
       CuboidRegion region = plot.getLargestRegion();
@@ -123,7 +126,8 @@ public class RoomWorldManager {
       plot.unclaim();
     }
   }
-  //todo update and maybe use roomWorld class
+
+  // todo update and maybe use roomWorld class
   public void migratePlot(Player player) throws SQLException, IOException, WorldAlreadyExistsException {
     PlotAPI api = new PlotAPI();
     Rooms.debug("debug1");
@@ -180,7 +184,7 @@ public class RoomWorldManager {
         Operations.complete(operation);
       } // it is automatically closed/flushed when the code exits the block
       plot.unclaim();
-      Rooms.mysql.insertRoomWorld(player, world, properties, Presets.gePreset("normal"));
+      Rooms.mysql.insertRoomWorld(player, world, properties, Presets.getPreset("normal"));
       // Location location= new
       // Location(Bukkit.getWorld(worlduuid.toString()),1,255,1);
       // player.teleport(location);
@@ -285,7 +289,7 @@ public class RoomWorldManager {
        */
       // Rooms.debug("test: "+
       // plugin.getWorld(sqlLoader,roomWorld.getWorldUUID().toString()+"rmnether").);
-      Preset preset = Presets.gePreset(roomWorld.getEnviroment());
+      Preset preset = roomWorld.getPreset();
       SlimePropertyMap properties = new SlimePropertyMap();
       properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
       properties.setValue(SlimeProperties.ENVIRONMENT, "nether");
@@ -437,7 +441,7 @@ public class RoomWorldManager {
       // RoomWorlds.houseWorldBungeeInfoArrayList.remove(roomWorld.getWorldUUID());
       Rooms.debug("system path: " + Rooms.getPlugin().getDataFolder().getAbsolutePath());// system path:
       // /home/creative/CreativeEU1/plugins/Rooms
-      WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());  
+      WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());
       File bob = new File(
           Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + roomWorld.getWorldUUID().toString());
       bob.deleteOnExit();
@@ -462,7 +466,7 @@ public class RoomWorldManager {
   public void loadWorld(RoomWorld roomWorld)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     SlimePropertyMap properties = new SlimePropertyMap();
-    Preset preset = Presets.gePreset(roomWorld.getEnviroment());
+    Preset preset = roomWorld.getPreset();
     properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
     properties.setValue(SlimeProperties.ENVIRONMENT, preset.getmainEnvironment());
     properties.setValue(SlimeProperties.DIFFICULTY, "normal");

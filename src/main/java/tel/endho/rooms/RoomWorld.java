@@ -55,7 +55,8 @@ public class RoomWorld {
   };
 
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
-      Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether,Boolean hasEnd,String roomName, String icon,String preset) {
+      Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd, String roomName,
+      String icon, String preset) {
     this.rowid = rowid;
     this.uuid = uuid;
     this.OwnerUUID = ownerUUID;
@@ -63,12 +64,12 @@ public class RoomWorld {
     this.timestamp = timestamp;
     this.spawnLocation = spawnlocation;
     this.groupsMap = groupsMap;
-    this.BorderColor=bordercolour;
-    this.hasNether=hasNether;
-    this.hasEnd=hasEnd;
-    this.roomName=roomName;
-    this.icon=Material.getMaterial(icon);
-    this.preset=preset;
+    this.BorderColor = bordercolour;
+    this.hasNether = hasNether;
+    this.hasEnd = hasEnd;
+    this.roomName = roomName;
+    this.icon = Material.getMaterial(icon);
+    this.preset = preset;
   }
 
   public int getRowid() {
@@ -121,6 +122,10 @@ public class RoomWorld {
     return this.spawnLocation;
   }
 
+  public String getRoomName() {
+    return this.roomName;
+  }
+
   public Integer getSpawnX() {
     return LocationSerializer.getDeserializedXYZ(this.spawnLocation)[0];
   }
@@ -170,7 +175,8 @@ public class RoomWorld {
   }
 
   public String getEnviroment() {
-    return this.preset;
+    // return this.preset;
+    return Presets.getPreset(this.preset).getmainEnvironment();
   }
 
   public String getBorderColor() {
@@ -221,7 +227,7 @@ public class RoomWorld {
   }
 
   public Preset getPreset() {
-    return Presets.gePreset(preset);
+    return Presets.getPreset(preset);
   }
 
   public String getRoomsName() {
