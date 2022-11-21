@@ -74,21 +74,19 @@ public class MySQL {
          `icon` varchar(40) NOT NULL,
          `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
          `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-         `trustedmembers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+         `trusted` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
          `levels` varchar(100) NOT NULL,
          `totallevel` int(15) NOT NULL,
          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         """;
-    //todo groups
-    //roomusers
     try {
       connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
     }
   }
-
+  //update
   public void loadRoomWorlds(Player player) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -165,7 +163,7 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-
+  //update
   public void loadOthersRoomWorlds(Player player, String target, @Nullable Integer roomnumber) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -261,7 +259,7 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-
+  //todo
   public void insertMigratedRoomWorld(UUID playeruuid, SlimeWorld world, SlimePropertyMap sprop) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
@@ -309,7 +307,7 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-
+  //todo
   public void insertRoomWorld(Player player, SlimeWorld world, SlimePropertyMap sprop, Preset preset)
       throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
@@ -363,9 +361,9 @@ public class MySQL {
           Gson gson = new GsonBuilder().create();
           String blocked = gson.toJson(roomWorld.getBlocked());
           String trusted = gson.toJson(roomWorld.getBlocked());
-          String member = gson.toJson(roomWorld.getBlocked());
+          String members = gson.toJson(roomWorld.getBlocked());
           PreparedStatement stmt = connection.prepareStatement(
-              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,x=? ,y=? ,z=? ,enviroment=?, bordercolour=? WHERE `id` = ?;");
+              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,x=? ,y=? ,z=? ,enviroment=?, bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
           stmt.setString(2, roomWorld.getOwnerUUID().toString());
           stmt.setString(3, roomWorld.getOwnerName());
@@ -374,70 +372,12 @@ public class MySQL {
           stmt.setInt(6, roomWorld.getSpawnZ());
           stmt.setString(7, roomWorld.getEnviroment());
           stmt.setString(8, roomWorld.getBorderColor());
-          stmt.setInt(9, roomWorld.getRowid());
+          stmt.setString(9, blocked);
+          stmt.setString(10, members);
+          stmt.setString(11, trusted);
+          stmt.setInt(12, roomWorld.getRowid());
           Rooms.debug(stmt.toString());
           stmt.executeUpdate();
-          
-          
-
-          // java enum of groups, foreach(groupEnum)
-          for (usergroup userg : usergroup.values()) {
-            // bla bla where userg//refaaaactor
-          }
-          //
-          roomWorld.getMembers().forEach((uuid, s) -> {
-            try {
-              PreparedStatement statement = connection.prepareStatement(
-                  "UPDATE `room_members` SET player_uuid=? ,player_name=? WHERE `roomid` = ?;");
-              statement.setString(1, uuid.toString());
-              statement.setString(2, s);
-              statement.setString(3, roomWorld.getWorldUUID().toString());
-              statement.executeUpdate();
-            } catch (SQLException e) {
-              e.printStackTrace();
-            }
-          });
-          roomWorld.getTrustedMembers().forEach((uuid, s) -> {
-            try {
-              PreparedStatement statement = connection.prepareStatement(
-                  "UPDATE `room_trustedmembers` SET player_uuid=? ,player_name=? WHERE `roomid` = ?;");
-              statement.setString(1, uuid.toString());
-              statement.setString(2, s);
-              statement.setString(3, roomWorld.getWorldUUID().toString());
-              statement.executeUpdate();
-            } catch (SQLException e) {
-              e.printStackTrace();
-            }
-          });
-          roomWorld.getBlocked().forEach((uuid, s) -> {
-            try {
-              PreparedStatement statement = connection.prepareStatement(
-                  "UPDATE `room_blocked` SET player_uuid=? ,player_name=? WHERE `roomid` = ?;");
-              statement.setString(1, uuid.toString());
-              statement.setString(2, s);
-              statement.setString(3, roomWorld.getWorldUUID().toString());
-              statement.executeUpdate();
-            } catch (SQLException e) {
-              e.printStackTrace();
-            }
-          });
-          /*
-           * try{
-           * if(!Bukkit.getOfflinePlayer(roomWorld.getOwnerUUID()).isOnline()){
-           * RoomWorlds.getRoomWolrds().remove(roomWorld.getWorldUUID());
-           * }}catch (Exception exception){
-           * RoomWorlds.getRoomWolrds().remove(roomWorld.getWorldUUID());
-           * }
-           */
-
-          // RoomWorlds.houseWorldBungeeInfoArrayList.remove(roomWorld.getWorldUUID());
-          /*
-           * if(!Bukkit.getOfflinePlayer(houseWorld.getOwnerUUID()).isOnline()){
-           * RoomWorlds.removeRoomWorld(houseWorld.getWorldUUID());
-           * }
-           */
-          // RoomWorlds.removeRoomWorld(houseWorld.getWorldUUID());
-          /// RoomWorlds.getRoomWolrds().remove(houseWorld.getWorldUUID(),houseWorld);
           // todo make sync instead of sync for shutdown
         } catch (SQLException e) {
           e.printStackTrace();
