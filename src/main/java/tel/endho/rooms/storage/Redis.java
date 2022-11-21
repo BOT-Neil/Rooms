@@ -240,6 +240,9 @@ public class Redis {
    * }
    */
   public void insertGlobal(RoomWorld roomWorld) {
+    if (!this.isLoaded()) {
+      return;
+    }
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
@@ -262,6 +265,9 @@ public class Redis {
   }
 
   public void delete(UUID worlduuid) {
+    if(!this.isLoaded()){
+      return;
+    }
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
@@ -275,7 +281,7 @@ public class Redis {
     };
     r.runTaskAsynchronously(Rooms.getPlugin());
   }
-
+//todo add group specificity
   public void removeMember(UUID worlduuid, UUID playerUUID) {
     BukkitRunnable r = new BukkitRunnable() {
       @Override

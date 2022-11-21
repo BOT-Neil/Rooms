@@ -68,10 +68,6 @@ public class Rooms extends JavaPlugin {
         e.printStackTrace();
       }
     }
-    // loading presets, will default if values missing
-    List<String> bozo = new ArrayList<>();
-    bozo.add("skyblock");
-    getCommand("name").setAliases(bozo);
     getCommand("Room").setExecutor(new RoomCommand());
     this.faweListener = new FaweListener();
     faweListener.startListening();

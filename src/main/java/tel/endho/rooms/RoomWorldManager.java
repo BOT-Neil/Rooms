@@ -55,11 +55,11 @@ import java.util.regex.Pattern;
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
   SlimeLoader sqlLoader = plugin.getLoader("mysql");
-  private static Map<Integer, Preset> presetMap = new HashMap<>();
+  /*private static Map<Integer, Preset> presetMap = new HashMap<>();
 
   public Map<Integer, Preset> getPresetMap() {
     return presetMap;
-  }
+  }*/
 
   public void migrateAll() {
     BukkitRunnable r = new BukkitRunnable() {

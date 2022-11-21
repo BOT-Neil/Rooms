@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Presets {
   private static Map<Integer, Preset> presetMap = new HashMap<>();
 
-  public Map<Integer, Preset> getPresetMap() {
+  public static Map<Integer, Preset> getPresetMap() {
     return presetMap;
   }
   public static Preset gePreset(String string){

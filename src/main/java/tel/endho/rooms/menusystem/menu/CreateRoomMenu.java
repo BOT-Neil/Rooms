@@ -13,6 +13,7 @@ import tel.endho.rooms.Rooms;
 import tel.endho.rooms.menusystem.PaginatedMenu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.Presets;
 
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class CreateRoomMenu extends PaginatedMenu {
   @Override
   public void handleMenu(InventoryClickEvent e) {
     Player p = (Player) e.getWhoClicked();
-    Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
+    Map<Integer, Preset> presetMap = Presets.getPresetMap();
     // int indexxx=
     // Integer.parseInt(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
     // NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
@@ -76,8 +77,8 @@ public class CreateRoomMenu extends PaginatedMenu {
     // ArrayList<Player>(getServer().getOnlinePlayers());
     // ArrayList<RoomWorld> playerhouses = new
     // ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
-    Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
-
+    Map<Integer, Preset> presetMap = Presets.getPresetMap();
+    
     ///////////////////////////////////// Pagination loop template
     if (presetMap != null && !presetMap.isEmpty()) {
       for (int i = 0; i < getMaxItemsPerPage(); i++) {

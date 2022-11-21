@@ -16,7 +16,6 @@ import tel.endho.rooms.*;
 import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
 import tel.endho.rooms.util.Preset;
-import tel.endho.rooms.util.enums.usergroup;
 
 import javax.annotation.Nullable;
 import java.sql.*;

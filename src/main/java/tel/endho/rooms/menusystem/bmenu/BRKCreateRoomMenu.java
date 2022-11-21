@@ -10,10 +10,11 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import tel.endho.rooms.Rooms;
 import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.Presets;
 
 public class BRKCreateRoomMenu {
   public void makemenu(Player player) {
-    Map<Integer, Preset> presetMap = Rooms.roomWorldManager.getPresetMap();
+    Map<Integer, Preset> presetMap = Presets.getPresetMap();
     FloodgateApi flapi = FloodgateApi.getInstance();
     SimpleForm simpleForm = SimpleForm.builder()
         .title("Create a Room")

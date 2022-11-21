@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import tel.endho.rooms.Rooms;
 import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.Presets;
 
 import java.io.File;
 import java.io.IOException;
@@ -184,7 +185,8 @@ public class Configs {
       Preset preset = new Preset(name, locString, netherlocString, endlocString, mainEnvironmentString, mainBiome,
           netherBiome, iconMaterial, mainSchematic, netherSchematic, endSchematic, mainfillblock, netherfillblock,
           endfillblock,fillsize,flatbedrock);
-      Rooms.roomWorldManager.getPresetMap().put(id, preset);
+      //Rooms.roomWorldManager.getPresetMap().put(id, preset);
+      Presets.getPresetMap().put(id, preset);
     });
   }
   private void fillBiomes(){
