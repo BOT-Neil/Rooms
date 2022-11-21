@@ -29,6 +29,8 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -44,6 +46,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -98,10 +103,54 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.DIFFICULTY, "normal");
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("plotsquaredheight"));
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
-
       plugin.generateWorld(world);
-      //todo timestamp 
-      Rooms.mysql.insertMigratedRoomWorld(plot.getOwner(), world, properties);
+      Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+      Map<UUID, String> blocked = new HashMap<>();
+      Map<UUID, String> trusted = new HashMap<>();
+      Map<UUID, String> members = new HashMap<>();
+      PlotAPI api = new PlotAPI();
+      String pusername;
+      try {
+        pusername = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(plot.getOwner(), 1000L);
+      } catch (Exception e) {
+        String generatedString = RandomStringUtils.random(4, true, true);
+        pusername = ("migrated" + generatedString);
+      }
+      plot.getMembers().forEach(uuid->{
+        String username;
+        try{
+          username=api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+        }catch(Exception e){
+          String generatedString = RandomStringUtils.random(4, true, true);
+          username=("migrated" + generatedString);
+        }
+        members.put(uuid, username);
+      });
+      plot.getTrusted().forEach(uuid -> {
+        String username;
+        try {
+          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+        } catch (Exception e) {
+          String generatedString = RandomStringUtils.random(4, true, true);
+          username = ("migrated" + generatedString);
+        }
+        trusted.put(uuid, username);
+      });
+      plot.getDenied().forEach(uuid -> {
+        String username;
+        try {
+          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+        } catch (Exception e) {
+          String generatedString = RandomStringUtils.random(4, true, true);
+          username = ("migrated" + generatedString);
+        }
+        blocked.put(uuid, username);
+      });
+      groupsMap.put("MEMBERS", members);
+      groupsMap.put("TRUSTED", trusted);
+      groupsMap.put("BLOCKED", blocked);
+      Instant timestamp = Instant.ofEpochSecond(plot.getTimestamp());
+      Rooms.mysql.insertMigratedRoomWorld(plot.getOwner(), pusername, world, properties,groupsMap, timestamp.toString());
       defaultBorder(world.getName());
       CuboidRegion region = plot.getLargestRegion();
       BlockArrayClipboard clipboard = new BlockArrayClipboard(region);

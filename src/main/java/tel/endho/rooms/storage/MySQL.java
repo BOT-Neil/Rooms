@@ -7,8 +7,6 @@ import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimeProperties;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.geysermc.floodgate.api.FloodgateApi;
@@ -16,6 +14,7 @@ import tel.endho.rooms.*;
 import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
 import tel.endho.rooms.util.Preset;
+import tel.endho.rooms.util.enums.usergroup;
 
 import javax.annotation.Nullable;
 import java.sql.*;
@@ -223,29 +222,31 @@ public class MySQL {
   }
 
   // todo timestamp from plot long
-  public void insertMigratedRoomWorld(UUID playeruuid, SlimeWorld world, SlimePropertyMap sprop) throws SQLException {
+  public void insertMigratedRoomWorld(UUID playeruuid, String playername, SlimeWorld world, SlimePropertyMap sprop,
+      Map<String, Map<UUID, String>> groupsMap, String timeString) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
         try {
+          String x = sprop.getValue(SlimeProperties.SPAWN_X).toString();
+          String y = sprop.getValue(SlimeProperties.SPAWN_Y).toString();
+          String z = sprop.getValue(SlimeProperties.SPAWN_Z).toString();
+          String spawnloc = x + ";" + y + ";" + z + ";" + ";" + ";";
+          Gson gson = new GsonBuilder().create();
+          String blocked = gson.toJson(groupsMap.get(usergroup.BLOCKED.name()));
+          String members = gson.toJson(groupsMap.get(usergroup.TRUSTED.name()));
+          String trusted = gson.toJson(groupsMap.get(usergroup.MEMBER.name()));
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `x`, `y`, `z`, `enviroment`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, playeruuid.toString());
-          String generatedString = RandomStringUtils.random(3, true, false);
-          try {
-            String playerName = Bukkit.getOfflinePlayer(playeruuid).getName();
-            stmt.setString(3, playerName);
-          } catch (NullPointerException exception) {
-            stmt.setString(3, "migrated" + generatedString);
-          }
-
-          stmt.setInt(4, sprop.getValue(SlimeProperties.SPAWN_X));
-          stmt.setInt(5, sprop.getValue(SlimeProperties.SPAWN_Y));
-          stmt.setInt(6, sprop.getValue(SlimeProperties.SPAWN_Z));
-          stmt.setString(7, world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT));
-          stmt.setString(8, Rooms.configs.getGeneralConfig().getString("bordercolour"));
-
+          stmt.setString(3, playername);
+          stmt.setString(4, spawnloc);
+          stmt.setString(5, "normal");
+          stmt.setString(6, blocked);
+          stmt.setString(7, members);
+          stmt.setString(8, trusted);
+          stmt.setString(9, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
               "SELECT `id`, `owner`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
@@ -324,8 +325,8 @@ public class MySQL {
         try {
           Gson gson = new GsonBuilder().create();
           String blocked = gson.toJson(roomWorld.getBlocked());
-          String trusted = gson.toJson(roomWorld.getBlocked());
-          String members = gson.toJson(roomWorld.getBlocked());
+          String trusted = gson.toJson(roomWorld.getTrustedMembers());
+          String members = gson.toJson(roomWorld.getMembers());
           PreparedStatement stmt = connection.prepareStatement(
               "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,spawnlocation=?, roomname=?, preset=? ,bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
