@@ -221,26 +221,28 @@ public class MySQL {
   }
 
   // todo timestamp from plot long
-  public void insertMigratedRoomWorld(UUID playeruuid, String playername, SlimeWorld world, SlimePropertyMap sprop,
+  public void insertMigratedRoomWorld(UUID OwnerUUID, String Ownername, SlimeWorld world, SlimePropertyMap sprop,
       Map<String, Map<UUID, String>> groupsMap, String timeString) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
         try {
+          UUID uuid = UUID.fromString(world.getName());
           String x = sprop.getValue(SlimeProperties.SPAWN_X).toString();
           String y = sprop.getValue(SlimeProperties.SPAWN_Y).toString();
           String z = sprop.getValue(SlimeProperties.SPAWN_Z).toString();
-          String spawnloc = x + ";" + y + ";" + z + ";" + ";" + ";";
+          String spawnlocation = x + ";" + y + ";" + z + ";" + "0;" + "0";
           Gson gson = new GsonBuilder().create();
           String blocked = gson.toJson(groupsMap.get(usergroup.BLOCKED.name()));
           String members = gson.toJson(groupsMap.get(usergroup.TRUSTED.name()));
           String trusted = gson.toJson(groupsMap.get(usergroup.MEMBER.name()));
+          String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
           PreparedStatement stmt = connection.prepareStatement(
               "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
-          stmt.setString(2, playeruuid.toString());
-          stmt.setString(3, playername);
-          stmt.setString(4, spawnloc);
+          stmt.setString(2, OwnerUUID.toString());
+          stmt.setString(3, Ownername);
+          stmt.setString(4, spawnlocation);
           stmt.setString(5, "normal");
           stmt.setString(6, blocked);
           stmt.setString(7, members);
@@ -253,13 +255,12 @@ public class MySQL {
           ResultSet result = stmt2.executeQuery();
           if (result.next()) {
             int rowid = result.getInt("id");
-            String ownername = result.getString("owner");
+            //String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
-            RoomWorlds.addRoom(UUID.fromString(world.getName()),
-                new RoomWorld(rowid, UUID.fromString(world.getName()), playeruuid, ownername, timestamp,
-                    sprop.getValue(SlimeProperties.SPAWN_X), sprop.getValue(SlimeProperties.SPAWN_Y),
-                    sprop.getValue(SlimeProperties.SPAWN_Z), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-                    world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT), "green"));
+            if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
+                  groupsMap, bordercolour, false, false, null, "GRASS_BLOCK", Rooms.configs.getGeneralConfig().getString("defaultpreset")));
+            }
           }
 
         } catch (SQLException e) {

@@ -1,5 +1,6 @@
 enabledebugging: false
 enabledpresets: true #todo if false use first preset or?
+defaultpreset: normal
 disablenether: false #todo 
 disableend: false #todo
 spawnanimals: false
