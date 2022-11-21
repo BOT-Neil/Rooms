@@ -97,21 +97,17 @@ public class MySQL {
           ResultSet result = statement.executeQuery();
           while (result.next()) {
             int rowid = result.getInt("id");
-            // Gson gson = new GsonBuilder().create();
-            // String json = gson.toJson(roomWorld.getBlocked());
             UUID uuid = UUID.fromString(result.getString("worlduuid"));
             UUID OwnerUUID = player.getUniqueId();
             String Ownername = player.getName();
             String timestamp = result.getString("timestamp");
             String spawnlocation = result.getString("spawnlocation");
-            //String enviroment = result.getString("enviroment");
             String bordercolour = result.getString("bordercolour");
             Boolean hasnether = result.getBoolean("hasnether");//if nether-linked island is generated
             Boolean hasend = result.getBoolean("hasend");//if end-linked island is generated
             String roomname = result.getString("roomname");//todo add hex support for gui etc
             String iconMaterial = result.getString("icon");//todo add customizablity
             String preset = result.getString("preset");//selectable on creation only due to world type
-            //todo preset
             Gson gson = new GsonBuilder().create();
             Map<String, Map<UUID, String>> groupsMap= new HashMap<>();
             //todoinmysql add colum of users customgroups?
@@ -127,20 +123,10 @@ public class MySQL {
             groupsMap.put("MEMBERS", members);
             groupsMap.put("TRUSTED", trusted);
             groupsMap.put("BLOCKED", blocked);
-            // trustedMembers.putIfAbsent();
-            //todo fix this
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
-                  groupsMap, bordercolour, preset));
-            } /*
-               * else {
-               * if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-               * RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername,
-               * locktime, spawnX, spawnY,
-               * spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
-               * }
-               * }
-               */
+                  groupsMap, bordercolour,hasnether,hasend,roomname,iconMaterial, preset));
+            } 
 
           }
         } catch (SQLException e) {
@@ -162,73 +148,48 @@ public class MySQL {
     r.runTaskAsynchronously(Rooms.getPlugin());
 
   }
-  //update
+  //todo fix roomnumber direct tp?  called from cmd only ie room v 69
   public void loadOthersRoomWorlds(Player player, String target, @Nullable Integer roomnumber) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
         try {
           PreparedStatement statement = connection.prepareStatement(
-              "SELECT * FROM `room_worlds` WHERE `owner` LIKE ? ORDER BY `id` ASC;");
-          statement.setString(1, target);
+              "SELECT * FROM `room_worlds` WHERE `owneruuid` LIKE ? ORDER BY `id` ASC;");
+          statement.setString(1, player.getUniqueId().toString());
           ResultSet result = statement.executeQuery();
           while (result.next()) {
             int rowid = result.getInt("id");
-
             UUID uuid = UUID.fromString(result.getString("worlduuid"));
-            Rooms.debug(uuid.toString());
-            UUID OwnerUUID = UUID.fromString(result.getString("owneruuid"));
-            String Ownername = result.getString("owner");
-            String locktime = result.getString("timestamp");
-            Integer spawnX = result.getInt("x");
-            Integer spawnY = result.getInt("y");
-            Integer spawnZ = result.getInt("z");
-            Map<UUID, String> blockedMembers = new HashMap<>();
-            PreparedStatement blockedstmt = connection.prepareStatement(
-                "SELECT * FROM `room_blocked` WHERE `roomid` = ?;");
-            blockedstmt.setInt(1, rowid);
-            ResultSet blockedresult = blockedstmt.executeQuery();
-            while (blockedresult.next()) {
-              UUID trustuuid = UUID.fromString(result.getString("player_uuid"));
-              String name = result.getString("player_name");
-              blockedMembers.put(trustuuid, name);
-            }
-            Map<UUID, String> trustedMembers = new HashMap<>();
-            PreparedStatement trustedmembersstmt = connection.prepareStatement(
-                "SELECT * FROM `room_trustedmembers` WHERE `roomid` = ?;");
-            trustedmembersstmt.setInt(1, rowid);
-            ResultSet trustedresult = trustedmembersstmt.executeQuery();
-            while (trustedresult.next()) {
-              UUID trustuuid = UUID.fromString(result.getString("player_uuid"));
-              String name = result.getString("player_name");
-              trustedMembers.put(trustuuid, name);
-            }
-            Map<UUID, String> members = new HashMap<>();
-            PreparedStatement membersstmt = connection.prepareStatement(
-                "SELECT * FROM `room_members` WHERE `roomid` = ?;");
-            membersstmt.setInt(1, rowid);
-            ResultSet memberresult = membersstmt.executeQuery();// https://stackoverflow.com/questions/21442148/java-select-from-array-of-values
-            while (memberresult.next()) {
-              UUID memberuuid = UUID.fromString(result.getString("player_uuid"));
-              String membername = result.getString("player_name");
-              members.put(memberuuid, membername);
-            }
-            String enviroment = result.getString("enviroment");
+            UUID OwnerUUID = player.getUniqueId();
+            String Ownername = player.getName();
+            String timestamp = result.getString("timestamp");
+            String spawnlocation = result.getString("spawnlocation");
             String bordercolour = result.getString("bordercolour");
-            // trustedMembers.putIfAbsent();
-            //todo update, maybe copy from loadroomworld
+            Boolean hasnether = result.getBoolean("hasnether");// if nether-linked island is generated
+            Boolean hasend = result.getBoolean("hasend");// if end-linked island is generated
+            String roomname = result.getString("roomname");// todo add hex support for gui etc
+            String iconMaterial = result.getString("icon");// todo add customizablity
+            String preset = result.getString("preset");// selectable on creation only due to world type
+            Gson gson = new GsonBuilder().create();
+            Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+            // todoinmysql add colum of users customgroups?
+            Map<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
+                new TypeToken<Map<UUID, String>>() {
+                }.getType());
+            Map<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
+                new TypeToken<Map<UUID, String>>() {
+                }.getType());
+            Map<UUID, String> members = gson.fromJson(result.getString("members"),
+                new TypeToken<Map<UUID, String>>() {
+                }.getType());
+            groupsMap.put("MEMBERS", members);
+            groupsMap.put("TRUSTED", trusted);
+            groupsMap.put("BLOCKED", blocked);
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, locktime, spawnX, spawnY,
-                  spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
-            } /*
-               * else {
-               * if (RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
-               * RoomWorlds.addHouse(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername,
-               * locktime, spawnX, spawnY,
-               * spawnZ, blockedMembers, trustedMembers, members, enviroment, bordercolour));
-               * }
-               * }
-               */
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
+                  groupsMap, bordercolour, hasnether, hasend, roomname, iconMaterial, preset));
+            }
 
           }
           if (target != null) {

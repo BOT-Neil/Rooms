@@ -24,10 +24,7 @@ public class RoomWorld {
   private String Ownername;
   private String timestamp;
   private String spawnLocation;
-  // <groupid, Map<PlayerUUID,PlayerName>
   private Map<String, Map<UUID, String>> groupsMap;
-  // todo customgroups/perms/users/etc
-  // private Map<UUID, String> blocked;
   private Map<UUID, String> trustedMembers;
   private Map<UUID, String> members;
   private int inactiveTicks;// temp
@@ -58,7 +55,7 @@ public class RoomWorld {
   };
 
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
-      Map<String, Map<UUID, String>> groupsMap, String bordercolour,String preset) {
+      Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether,Boolean hasEnd,String roomName, String icon,String preset) {
     this.rowid = rowid;
     this.uuid = uuid;
     this.OwnerUUID = ownerUUID;
@@ -67,6 +64,10 @@ public class RoomWorld {
     this.spawnLocation = spawnlocation;
     this.groupsMap = groupsMap;
     this.BorderColor=bordercolour;
+    this.hasNether=hasNether;
+    this.hasEnd=hasEnd;
+    this.roomName=roomName;
+    this.icon=Material.getMaterial(icon);
     this.preset=preset;
   }
 

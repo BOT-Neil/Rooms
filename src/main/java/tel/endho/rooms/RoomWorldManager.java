@@ -44,8 +44,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,7 +123,7 @@ public class RoomWorldManager {
       plot.unclaim();
     }
   }
-
+  //todo update and maybe use roomWorld class
   public void migratePlot(Player player) throws SQLException, IOException, WorldAlreadyExistsException {
     PlotAPI api = new PlotAPI();
     Rooms.debug("debug1");
