@@ -5,65 +5,95 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.*;
+
+import com.sk89q.worldguard.bukkit.event.entity.SpawnEntityEvent;
+
 import tel.endho.rooms.RoomWorlds;
 
-
 public class EntitiyListener implements Listener {
+  @EventHandler
+  public void onSpawnEntity(SpawnEntityEvent event) {
+    try {
+      if (RoomWorlds.isRoomWorld(event.getWorld().getName())) {
+        event.setCancelled(true);
+      }
+    } catch (Exception exception) {
+    }
+  }
 
-    @EventHandler
-    public void onMobSpawn(CreatureSpawnEvent event){
-        try{
-        if(RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())){
-            if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.EGG)){
-                event.setCancelled(true);
-            }
+  @EventHandler
+  public void onMobSpawn(CreatureSpawnEvent event) {
+    try {
+      if (RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())) {
+        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.EGG)) {
+          event.setCancelled(true);
+        }
 
-        }}catch(Exception ex){}
+      }
+    } catch (Exception ex) {
     }
-    @EventHandler
-    public void onMobSpawn(SpawnerSpawnEvent event){
-        try{
-        if(RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())){
-            event.setCancelled(true);
-        }}catch (Exception exception){}
-    }
-    @EventHandler
-    public void onMobSpawn(EntitySpawnEvent event){
-        try{
-        if(RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())){
-            //if(event)
-            event.setCancelled(true);
-        }}catch(Exception ex){}
-    }
+  }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockExplode(BlockExplodeEvent explodeEvent){
-        try{
-        if(RoomWorlds.isRoomWorld(explodeEvent.getBlock().getLocation().getWorld().getName())){
-            explodeEvent.setCancelled(true);
-        }}catch(Exception ex){}
+  @EventHandler
+  public void onMobSpawn(SpawnerSpawnEvent event) {
+    try {
+      if (RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())) {
+        event.setCancelled(true);
+      }
+    } catch (Exception exception) {
     }
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockExplode(EntityExplodeEvent explodeEvent){
-        try{
-        if(RoomWorlds.isRoomWorld(explodeEvent.getLocation().getWorld().getName())){
-            explodeEvent.setCancelled(true);
-        }}catch(Exception ex){}
+  }
+
+  @EventHandler
+  public void onMobSpawn(EntitySpawnEvent event) {
+    try {
+      if (RoomWorlds.isRoomWorld(event.getLocation().getWorld().getName())) {
+        // if(event)
+        event.setCancelled(true);
+      }
+    } catch (Exception ex) {
     }
-    @EventHandler
-    public void onSplashPotion(PotionSplashEvent e){
-        try{
-        if(RoomWorlds.isRoomWorld(e.getEntity().getLocation().getWorld().getName())){
-            //add config
-            e.setCancelled(true);
-        }}catch(Exception ex){}
+  }
+
+  @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+  public void onBlockExplode(BlockExplodeEvent explodeEvent) {
+    try {
+      if (RoomWorlds.isRoomWorld(explodeEvent.getBlock().getLocation().getWorld().getName())) {
+        explodeEvent.setCancelled(true);
+      }
+    } catch (Exception ex) {
     }
-    @EventHandler
-    public void onThrow(ProjectileLaunchEvent e){
-        try{
-        if(RoomWorlds.isRoomWorld(e.getEntity().getLocation().getWorld().getName())){
-            //add config
-            e.setCancelled(true);
-        }}catch(Exception ex){}
+  }
+
+  @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+  public void onBlockExplode(EntityExplodeEvent explodeEvent) {
+    try {
+      if (RoomWorlds.isRoomWorld(explodeEvent.getLocation().getWorld().getName())) {
+        explodeEvent.setCancelled(true);
+      }
+    } catch (Exception ex) {
     }
+  }
+
+  @EventHandler
+  public void onSplashPotion(PotionSplashEvent e) {
+    try {
+      if (RoomWorlds.isRoomWorld(e.getEntity().getLocation().getWorld().getName())) {
+        // add config
+        e.setCancelled(true);
+      }
+    } catch (Exception ex) {
+    }
+  }
+
+  @EventHandler
+  public void onThrow(ProjectileLaunchEvent e) {
+    try {
+      if (RoomWorlds.isRoomWorld(e.getEntity().getLocation().getWorld().getName())) {
+        // add config
+        e.setCancelled(true);
+      }
+    } catch (Exception ex) {
+    }
+  }
 }

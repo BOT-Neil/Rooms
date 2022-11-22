@@ -97,7 +97,6 @@ public class RoomWorld {
   public Map<UUID, String> getTrustedMembers() {
     //return this.groupsMap.getOrDefault(usergroup.TRUSTED.toString(), new HashMap<>());
     this.groupsMap.keySet().forEach(key->{
-      System.out.println("key+"+key);
     });
     return getGroupMap().get(usergroup.TRUSTED.toString());
   }

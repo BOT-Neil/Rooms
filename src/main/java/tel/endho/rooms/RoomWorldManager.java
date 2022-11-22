@@ -451,7 +451,7 @@ public class RoomWorldManager {
       // RoomWorlds.houseWorldBungeeInfoArrayList.remove(roomWorld.getWorldUUID());
       Rooms.debug("system path: " + Rooms.getPlugin().getDataFolder().getAbsolutePath());// system path:
       // /home/creative/CreativeEU1/plugins/Rooms
-      WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());
+      //WorldGuardManager.unloadWorld(roomWorld.getWorldUUID());
       File bob = new File(
           Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + roomWorld.getWorldUUID().toString());
       bob.deleteOnExit();

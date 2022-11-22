@@ -21,10 +21,8 @@ public class BlockListener implements Listener {
     try {
       if (RoomWorlds.isRoomWorld(e.getPlayer().getLocation().getWorld().getName())) {
         final RoomWorld roomWorld = RoomWorlds.getRoomWorldString(e.getPlayer().getLocation().getWorld().getName());
-        System.out.println("DEBUG69");
         if (!roomWorld.isMember(e.getPlayer()) && !roomWorld.isTrusted(e.getPlayer())
             && !roomWorld.isOwner(e.getPlayer())) {
-          System.out.println("DEBUG70");
           if (!e.getPlayer().hasPermission("rooms.admin")) {
             e.setCancelled(true);
           }
