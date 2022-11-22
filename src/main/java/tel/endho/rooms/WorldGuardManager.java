@@ -34,11 +34,11 @@ public class WorldGuardManager {
       global.getMembers().addPlayer(uuid);
     });
     global.setFlag(Flags.PASSTHROUGH, StateFlag.State.DENY);
-    for (Flag<?> all : WorldGuard.getInstance().getFlagRegistry().getAll()) {
-      String named = all.getName();
+    /*for (Flag<?> all : WorldGuard.getInstance().getFlagRegistry().getAll()) {
+      //String named = all.getName();
       //String value = all.getDefault().toString();
      // Rooms.debug("named: "+named+" value: "+value);
-    }
+    }*/
   }
 
   public static void unloadWorld(UUID uuid) {
