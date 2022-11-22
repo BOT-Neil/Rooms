@@ -12,10 +12,13 @@ import tel.endho.rooms.util.enums.usergroup;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nullable;
 
 public class RoomWorld {
   private int rowid;
@@ -35,27 +38,8 @@ public class RoomWorld {
   private String roomName;// todo room.user.rename if string null || null { }
   private Material icon;
 
-  public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String Ownername, String timestamp, Integer spawnX,
-      Integer spawnY, Integer spawnZ, Map<UUID, String> blocked, Map<UUID, String> trustedMembers,
-      Map<UUID, String> members, String preset, String borderColor) {
-    this.rowid = rowid;
-    this.uuid = uuid;
-    this.OwnerUUID = ownerUUID;
-    this.Ownername = Ownername;
-    this.timestamp = timestamp;
-    this.groupsMap.put("BLOCKED", blocked);
-    // this.blocked = blocked;
-    this.trustedMembers = trustedMembers;
-    this.members = members;
-    this.preset = preset;
-    this.BorderColor = borderColor;
-    this.inactiveTicks = 0;// noplayers in world
-    this.hasNether = false;
-    // this.icon=Material.GRASS_BLOCK;
-  };
-
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
-      Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd, String roomName,
+      @Nullable Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd, @Nullable String roomName,
       String icon, String preset) {
     this.rowid = rowid;
     this.uuid = uuid;
@@ -63,7 +47,11 @@ public class RoomWorld {
     this.Ownername = ownername;
     this.timestamp = timestamp;
     this.spawnLocation = spawnlocation;
-    this.groupsMap = groupsMap;
+    if(groupsMap!=null){
+      this.groupsMap = groupsMap;
+    }else{
+      this.groupsMap=new HashMap<>();
+    }
     this.BorderColor = bordercolour;
     this.hasNether = hasNether;
     this.hasEnd = hasEnd;

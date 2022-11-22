@@ -238,7 +238,7 @@ public class MySQL {
           String trusted = gson.toJson(groupsMap.get(usergroup.MEMBER.name()));
           String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, OwnerUUID.toString());
           stmt.setString(3, Ownername);
@@ -279,34 +279,36 @@ public class MySQL {
       @Override
       public void run() {
         try {
+          UUID uuid = UUID.fromString(world.getName());
+          String x = sprop.getValue(SlimeProperties.SPAWN_X).toString();
+          String y = sprop.getValue(SlimeProperties.SPAWN_Y).toString();
+          String z = sprop.getValue(SlimeProperties.SPAWN_Z).toString();
+          String spawnlocation = x + ";" + y + ";" + z + ";" + "0;" + "0";
+          String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
+          String Ownername=player.getName();
+          UUID OwnerUUID=player.getUniqueId();
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`worlduuid`, `owneruuid`, `owner`, `timestamp`, `x`, `y`, `z`, `enviroment`, `bordercolour`) VALUES (?, ?, ?, current_timestamp(), ?, ?, ?, ?,?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?);");
           stmt.setString(1, world.getName());
-          stmt.setString(2, player.getUniqueId().toString());
-          stmt.setString(3, player.getName());
-          stmt.setInt(4, sprop.getValue(SlimeProperties.SPAWN_X));
-          stmt.setInt(5, sprop.getValue(SlimeProperties.SPAWN_Y));
-          stmt.setInt(6, sprop.getValue(SlimeProperties.SPAWN_Z));
-          stmt.setString(7, preset.getName());
-          // stmt.setString(7,
-          // world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT));
-          stmt.setString(8, Rooms.configs.getGeneralConfig().getString("bordercolour"));
-
+          stmt.setString(2, OwnerUUID.toString());
+          stmt.setString(3, Ownername);
+          stmt.setString(4, spawnlocation);
+          stmt.setString(5, "normal");
+          stmt.setString(6, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
-              "SELECT `id`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
+              "SELECT `id`, `owner`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
           stmt2.setString(1, world.getName());
           ResultSet result = stmt2.executeQuery();
           if (result.next()) {
             int rowid = result.getInt("id");
+            // String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
-            Rooms.debug("ROW ID: " + rowid);
-            RoomWorlds.addRoom(UUID.fromString(world.getName()),
-                new RoomWorld(rowid, UUID.fromString(world.getName()), player.getUniqueId(), player.getName(),
-                    timestamp, sprop.getValue(SlimeProperties.SPAWN_X), sprop.getValue(SlimeProperties.SPAWN_Y),
-                    sprop.getValue(SlimeProperties.SPAWN_Z), new HashMap<>(), new HashMap<>(), new HashMap<>(),
-                    world.getPropertyMap().getValue(SlimeProperties.ENVIRONMENT), "green"));
-
+            if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
+              RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
+                  null, bordercolour, false, false, null, "GRASS_BLOCK",
+                  Rooms.configs.getGeneralConfig().getString("defaultpreset")));
+            }
           }
 
         } catch (SQLException e) {
