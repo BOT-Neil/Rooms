@@ -557,6 +557,7 @@ public class RoomWorldManager {
 
       }
     };
+    //r.runTask(Rooms.getPlugin());
     r.runTaskAsynchronously(Rooms.getPlugin());
 
     // plugin.loadWorld(sqlLoader,houseWorld.getWorldUUID().toString(),false,properties);
