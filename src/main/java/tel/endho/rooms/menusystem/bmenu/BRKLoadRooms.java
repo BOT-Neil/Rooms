@@ -48,7 +48,7 @@ public class BRKLoadRooms {
       // short version of getClickedButtonId == 0
       int dropclick0 = response.getDropdown(0);
       try {
-        Rooms.roomWorldManager.TpOrLoadHouseWorld(player, playerhouses.get(dropclick0).getWorldUUID());
+        Rooms.roomWorldManager.TpOrLoadHouseWorld(player, playerhouses.get(dropclick0).getWorldUUID().toString());
       } catch (CorruptedWorldException | NewerFormatException | WorldInUseException | UnknownWorldException
           | IOException e) {
         e.printStackTrace();

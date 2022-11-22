@@ -49,8 +49,8 @@ public class LoadRoomMenu extends PaginatedMenu {
     switch (e.getCurrentItem().getType()) {
       case ENDER_EYE, GRASS_BLOCK, NETHERRACK -> {
         Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
-            UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-                .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING)));
+            e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+                .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING));
       }
       default -> {
         break;

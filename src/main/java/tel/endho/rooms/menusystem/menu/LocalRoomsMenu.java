@@ -62,7 +62,7 @@ public class LocalRoomsMenu extends PaginatedMenu {
         .has(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)) {
       UUID uuid = UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
           .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
-      Rooms.roomWorldManager.TpOrLoadHouseWorld(p, uuid);
+      Rooms.roomWorldManager.TpOrLoadHouseWorld(p, uuid.toString());
       
     }
     

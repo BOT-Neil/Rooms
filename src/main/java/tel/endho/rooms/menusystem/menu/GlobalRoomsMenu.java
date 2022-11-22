@@ -53,8 +53,8 @@ public class GlobalRoomsMenu extends PaginatedMenu {
       // playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
       // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
       Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
-          UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)));
+          e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
       // new LoadRoomMenu(playerMenuUtility).open();
       // new KillConfirmMenu(playerMenuUtility).open();
 

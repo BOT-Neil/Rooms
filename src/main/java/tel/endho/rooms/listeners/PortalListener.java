@@ -110,7 +110,7 @@ public class PortalListener implements Listener {
       if (currentLocation.getWorld().getName().endsWith("rmnether")) {
         Rooms.debug("debug7");
         newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()), 1, 70, 1);
-        Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID());
+        Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID().toString());
         // p.teleport(newlocation);
       } else {
         if (roomWorld.getHasNether()) {

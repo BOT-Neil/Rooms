@@ -55,7 +55,7 @@ public class BRKVisitTargetRooms {
 
       int dropclick0 = response.getDropdown(0);
       try {
-        Rooms.roomWorldManager.TpOrLoadHouseWorld(player, playerhouses.get(dropclick0).getWorldUUID());
+        Rooms.roomWorldManager.TpOrLoadHouseWorld(player, playerhouses.get(dropclick0).getWorldUUID().toString());
         return;
       } catch (CorruptedWorldException | NewerFormatException | WorldInUseException | UnknownWorldException
           | IOException e) {

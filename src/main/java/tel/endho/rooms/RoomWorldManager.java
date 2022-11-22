@@ -398,43 +398,6 @@ public class RoomWorldManager {
     }
   }
 
-  // todo depreciate and remove this
-  public void TpOrLoadHouseWorld(Player p, UUID uuid)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
-    // todo implement lobby mode
-    if (GlobalRoomWorlds.isOnAnotherServer(uuid)) {
-      // maybe if globalroomworld(uuid).getserver=thisserver{load, but that dont load
-      // duplicate idk tired}
-      // todo &&if roomworld isnt on this server
-      // todo if() roomworld is on this server
-      // todo if(globalroomworld.region!= config.region)
-      //
-
-      Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
-      Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver, uuid, "");
-    } else {
-      if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
-        Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(uuid).lastserver);
-      } else {
-        if (RoomWorlds.isRoomWorld(uuid)) {
-          RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(uuid);
-          if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()) != null) {
-            Location location = new Location(Bukkit.getWorld(uuid.toString()), roomWorld.getSpawnX().doubleValue(),
-                roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
-            p.teleport(location);
-          } else {
-            // todo make async andput player teleport after
-            loadWorld(roomWorld);
-            Location location = new Location(Bukkit.getWorld(uuid.toString()), roomWorld.getSpawnX().doubleValue(),
-                roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
-            p.teleport(location);
-          }
-        }
-
-      }
-    }
-  }
-
   public void TpOrLoadHouseWorld(Player p, String uuidstring)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     UUID realuuid = UUID.fromString(uuidstring.substring(0, Math.min(uuidstring.length(), 36)));
