@@ -19,7 +19,6 @@ import tel.endho.rooms.util.enums.usergroup;
 import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class MySQL {
@@ -69,9 +68,9 @@ public class MySQL {
          `hasend` tinyint(1) NOT NULL DEFAULT '0',
          `roomname` varchar(100) NULL DEFAULT NULL,
          `icon` varchar(40) NULL DEFAULT NULL,
-         `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-         `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-         `trusted` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+         `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '{}',
+         `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '{}',
+         `trusted` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '{}',
          `preset` varchar(40) NOT NULL,
          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
@@ -106,16 +105,16 @@ public class MySQL {
             String iconMaterial = result.getString("icon");// todo add customizablity
             String preset = result.getString("preset");// selectable on creation only due to world type
             Gson gson = new GsonBuilder().create();
-            Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+            HashMap<String, HashMap<UUID, String>> groupsMap = new HashMap<>();
             // todoinmysql add colum of users customgroups?
-            Map<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> members = gson.fromJson(result.getString("members"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> members = gson.fromJson(result.getString("members"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
             groupsMap.put("MEMBERS", members);
             groupsMap.put("TRUSTED", trusted);
@@ -170,16 +169,16 @@ public class MySQL {
             String iconMaterial = result.getString("icon");// todo add customizablity
             String preset = result.getString("preset");// selectable on creation only due to world type
             Gson gson = new GsonBuilder().create();
-            Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+            HashMap<String, HashMap<UUID, String>> groupsMap = new HashMap<>();
             // todoinmysql add colum of users customgroups?
-            Map<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> blocked = gson.fromJson(result.getString("blocked"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> trusted = gson.fromJson(result.getString("trusted"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
-            Map<UUID, String> members = gson.fromJson(result.getString("members"),
-                new TypeToken<Map<UUID, String>>() {
+            HashMap<UUID, String> members = gson.fromJson(result.getString("members"),
+                new TypeToken<HashMap<UUID, String>>() {
                 }.getType());
             groupsMap.put("MEMBERS", members);
             groupsMap.put("TRUSTED", trusted);
@@ -220,7 +219,7 @@ public class MySQL {
 
   // todo timestamp from plot long
   public void insertMigratedRoomWorld(UUID OwnerUUID, String Ownername, SlimeWorld world, SlimePropertyMap sprop,
-      Map<String, Map<UUID, String>> groupsMap, String timeString) throws SQLException {
+      HashMap<String, HashMap<UUID, String>> groupsMap, String timeString) throws SQLException {
     BukkitRunnable r = new BukkitRunnable() {
       @Override
       public void run() {
@@ -302,9 +301,16 @@ public class MySQL {
             int rowid = result.getInt("id");
             // String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
+            HashMap<String, HashMap<UUID, String>> groupsMap= new HashMap<>();
+            HashMap<UUID, String> blocked = new HashMap<>();
+            HashMap<UUID, String> trusted = new HashMap<>();
+            HashMap<UUID, String> members = new HashMap<>();
+            groupsMap.put("MEMBERS", members);
+            groupsMap.put("TRUSTED", trusted);
+            groupsMap.put("BLOCKED", blocked);
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
-                  null, bordercolour, false, false, null, "GRASS_BLOCK",
+                  groupsMap, bordercolour, false, false, null, "GRASS_BLOCK",
                   Rooms.configs.getGeneralConfig().getString("defaultpreset")));
             }
           }

@@ -27,9 +27,7 @@ public class RoomWorld {
   private String Ownername;
   private String timestamp;
   private String spawnLocation;
-  private Map<String, Map<UUID, String>> groupsMap;
-  private Map<UUID, String> trustedMembers;
-  private Map<UUID, String> members;
+  private HashMap<String, HashMap<UUID, String>> groupsMap= new HashMap<>();
   private int inactiveTicks;// temp
   private String preset;// presetconfig options
   private String BorderColor;// red, blue, green
@@ -39,7 +37,8 @@ public class RoomWorld {
   private Material icon;
 
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
-      @Nullable Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd, @Nullable String roomName,
+      HashMap<String, HashMap<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd,
+      @Nullable String roomName,
       String icon, String preset) {
     this.rowid = rowid;
     this.uuid = uuid;
@@ -47,11 +46,7 @@ public class RoomWorld {
     this.Ownername = ownername;
     this.timestamp = timestamp;
     this.spawnLocation = spawnlocation;
-    if(groupsMap!=null){
-      this.groupsMap = groupsMap;
-    }else{
-      this.groupsMap=new HashMap<>();
-    }
+    this.groupsMap = groupsMap;
     this.BorderColor = bordercolour;
     this.hasNether = hasNether;
     this.hasEnd = hasEnd;
@@ -80,7 +75,7 @@ public class RoomWorld {
     return this.timestamp;
   }
 
-  public Map<String, Map<UUID, String>> getGroupMap() {
+  public HashMap<String, HashMap<UUID, String>> getGroupMap() {
     return this.groupsMap;
   }
 
@@ -89,16 +84,22 @@ public class RoomWorld {
   }
 
   public Map<UUID, String> getBlocked() {
-    return getGroupMap().get(usergroup.BLOCKED.toString());
+    return this.groupsMap.getOrDefault(usergroup.BLOCKED.toString(), new HashMap<>());
+    // return getGroupMap().get(usergroup.BLOCKED.toString());
   }
 
   // public Map<UUID, String> getBlocked(){return this.blocked;}
   public Map<UUID, String> getMembers() {
-    return this.members;
+    return this.groupsMap.getOrDefault(usergroup.MEMBER.toString(), new HashMap<>());
+    // return getGroupMap().get(usergroup.MEMBER.toString());
   }
 
   public Map<UUID, String> getTrustedMembers() {
-    return this.trustedMembers;
+    //return this.groupsMap.getOrDefault(usergroup.TRUSTED.toString(), new HashMap<>());
+    this.groupsMap.keySet().forEach(key->{
+      System.out.println("key+"+key);
+    });
+    return getGroupMap().get(usergroup.TRUSTED.toString());
   }
 
   // todo getcustommembers(?)
@@ -176,11 +177,11 @@ public class RoomWorld {
   }
 
   public Boolean isTrusted(Player player) {
-    return trustedMembers.containsKey(player.getUniqueId());
+    return this.getTrustedMembers().containsKey(player.getUniqueId());
   }
 
   public Boolean isMember(Player player) {
-    return members.containsKey(player.getUniqueId());
+    return this.getMembers().containsKey(player.getUniqueId());
   }
 
   public Boolean isOwner(Player player) {
@@ -200,11 +201,11 @@ public class RoomWorld {
   }
 
   public void removeMember(UUID uuid) {
-    members.remove(uuid);
+    getMembers().remove(uuid);
   }
 
   public void clearMembers(Boolean updateRedis) {
-    members.clear();
+    getMembers().clear();
     if (updateRedis && Rooms.configs.getStorageConfig().getBoolean("enabledredis")) {
       Rooms.redis.clearMembers(getWorldUUID());
     }

@@ -56,7 +56,7 @@ public class Redis {
 
     // asyncCommands.pubsubChannels().get().add("Rooms"+bungeesrvname);
     // syncCommands.set("key", "Hello, Redis!");
-
+    isLoaded=true;
     try {
       redis();
     } catch (Exception e) {

@@ -15,15 +15,16 @@ import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 
-
 public class BlockListener implements Listener {
   @EventHandler
   public void onBreak(BlockBreakEvent e) {
     try {
       if (RoomWorlds.isRoomWorld(e.getPlayer().getLocation().getWorld().getName())) {
         final RoomWorld roomWorld = RoomWorlds.getRoomWorldString(e.getPlayer().getLocation().getWorld().getName());
+        System.out.println("DEBUG69");
         if (!roomWorld.isMember(e.getPlayer()) && !roomWorld.isTrusted(e.getPlayer())
             && !roomWorld.isOwner(e.getPlayer())) {
+          System.out.println("DEBUG70");
           if (!e.getPlayer().hasPermission("rooms.admin")) {
             e.setCancelled(true);
           }
@@ -155,7 +156,7 @@ public class BlockListener implements Listener {
   public void onBlockPhysics(BlockPhysicsEvent event) {
     try {
       if (RoomWorlds.isRoomWorld(event.getBlock().getWorld().getName())) {
-        if (event.getBlock().getType().equals(Material.ICE) || event.getBlock().getType().equals(Material.SNOW_BLOCK)) {
+        if (event.getBlock().getType().equals(Material.ICE) && event.getBlock().getType().equals(Material.SNOW_BLOCK)) {
           event.setCancelled(true);
         }
       }

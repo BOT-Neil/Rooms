@@ -26,10 +26,6 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.biome.BiomeTypes;
 import com.sk89q.worldedit.world.block.BlockTypes;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -48,12 +44,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
 
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
@@ -104,10 +101,10 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("plotsquaredheight"));
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
       plugin.generateWorld(world);
-      Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
-      Map<UUID, String> blocked = new HashMap<>();
-      Map<UUID, String> trusted = new HashMap<>();
-      Map<UUID, String> members = new HashMap<>();
+      HashMap<String, HashMap<UUID, String>> groupsMap = new HashMap<>();
+      HashMap<UUID, String> blocked = new HashMap<>();
+      HashMap<UUID, String> trusted = new HashMap<>();
+      HashMap<UUID, String> members = new HashMap<>();
       PlotAPI api = new PlotAPI();
       String pusername;
       try {
@@ -116,13 +113,13 @@ public class RoomWorldManager {
         String generatedString = RandomStringUtils.random(4, true, true);
         pusername = ("migrated" + generatedString);
       }
-      plot.getMembers().forEach(uuid->{
+      plot.getMembers().forEach(uuid -> {
         String username;
-        try{
-          username=api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
-        }catch(Exception e){
+        try {
+          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+        } catch (Exception e) {
           String generatedString = RandomStringUtils.random(4, true, true);
-          username=("migrated" + generatedString);
+          username = ("migrated" + generatedString);
         }
         members.put(uuid, username);
       });
@@ -150,7 +147,8 @@ public class RoomWorldManager {
       groupsMap.put("TRUSTED", trusted);
       groupsMap.put("BLOCKED", blocked);
       Instant timestamp = Instant.ofEpochSecond(plot.getTimestamp());
-      Rooms.mysql.insertMigratedRoomWorld(plot.getOwner(), pusername, world, properties,groupsMap, timestamp.toString());
+      Rooms.mysql.insertMigratedRoomWorld(plot.getOwner(), pusername, world, properties, groupsMap,
+          timestamp.toString());
       defaultBorder(world.getName());
       CuboidRegion region = plot.getLargestRegion();
       BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
@@ -431,10 +429,10 @@ public class RoomWorldManager {
             p.teleport(location);
           } else {
             // todo make async andput player teleport after
-            loadWorld(roomWorld);
-            Location location = new Location(world, roomWorld.getSpawnX().doubleValue(),
+            loadWorld(roomWorld, p);
+            /*Location location = new Location(world, roomWorld.getSpawnX().doubleValue(),
                 roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
-            p.teleport(location);
+            p.teleport(location);*/
           }
         }
 
@@ -475,7 +473,7 @@ public class RoomWorldManager {
 
   }
 
-  public void loadWorld(RoomWorld roomWorld)
+  public void loadWorld(RoomWorld roomWorld, @Nullable Player player)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     SlimePropertyMap properties = new SlimePropertyMap();
     Preset preset = roomWorld.getPreset();
@@ -502,16 +500,33 @@ public class RoomWorldManager {
           Optional<SlimeWorld> opworld = plugin
               .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties).get();
           SlimeWorld world = opworld.get();
-          // todo sync
-          plugin.generateWorld(world);
-          if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()) != null) {
-            World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
-            world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-            world2.setGameRule(GameRule.DO_FIRE_TICK, false);
-            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            RegionManager regions = container.get(FaweAPI.getWorld(world2.getName()));
-            regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());
-          }
+          BukkitRunnable r = new BukkitRunnable() {
+            @SuppressWarnings("null")
+            @Override
+            public void run() {
+              try {
+                plugin.generateWorld(world);
+                if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()) != null) {
+                  World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
+                  world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+                  world2.setGameRule(GameRule.DO_FIRE_TICK, false);
+                  //RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                  //RegionManager regions = container.get(FaweAPI.getWorld(world2.getName()));
+                  //regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());
+                }
+                if (player != null) {
+                  Location location = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()), roomWorld.getSpawnX().doubleValue(),
+                      roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
+                  player.teleport(location);
+                }
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+
+            }
+          };
+          // r.runTask(Rooms.getPlugin());
+          r.runTask(Rooms.getPlugin());
 
         } catch (InterruptedException | ExecutionException e) {
           // TODO Auto-generated catch block
@@ -520,7 +535,7 @@ public class RoomWorldManager {
 
       }
     };
-    //r.runTask(Rooms.getPlugin());
+    // r.runTask(Rooms.getPlugin());
     r.runTaskAsynchronously(Rooms.getPlugin());
 
     // plugin.loadWorld(sqlLoader,houseWorld.getWorldUUID().toString(),false,properties);

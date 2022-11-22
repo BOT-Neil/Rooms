@@ -142,7 +142,7 @@ public class SettingsMenu extends Menu {
             membersitem_lore.add(ChatColor.AQUA + "Members: "+membersint);
             membersItemMeta.setLore(membersitem_lore);
             membersItem.setItemMeta(membersItemMeta);
-
+            System.out.println("bsdebug: "+membersint);
             int trustedint = roomWorld.getTrustedMembers().size();
             ItemStack trustedItem = new ItemStack(Material.BOOK, 1);
             ItemMeta trustedItemMeta = trustedItem.getItemMeta();

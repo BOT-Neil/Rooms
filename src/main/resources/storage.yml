@@ -8,6 +8,6 @@ mysqlport: 3306
 enableredis: false #only if using multiple spigots
 redishost: "localhost"
 redispassword: ""
-redisport: 6639
+redisport: 6379
 region: "eu"
 enableregion: false #todo implement this

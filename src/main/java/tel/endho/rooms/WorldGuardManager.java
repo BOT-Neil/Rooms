@@ -36,8 +36,8 @@ public class WorldGuardManager {
     global.setFlag(Flags.PASSTHROUGH, StateFlag.State.DENY);
     for (Flag<?> all : WorldGuard.getInstance().getFlagRegistry().getAll()) {
       String named = all.getName();
-      String value = all.getDefault().toString();
-      Rooms.debug("named: "+named+" value: "+value);
+      //String value = all.getDefault().toString();
+     // Rooms.debug("named: "+named+" value: "+value);
     }
   }
 

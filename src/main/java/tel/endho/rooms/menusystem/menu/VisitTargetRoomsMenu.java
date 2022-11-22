@@ -22,7 +22,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 

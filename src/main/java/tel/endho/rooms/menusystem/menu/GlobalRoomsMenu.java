@@ -18,7 +18,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class GlobalRoomsMenu extends PaginatedMenu {
 
