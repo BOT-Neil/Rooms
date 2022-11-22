@@ -83,6 +83,7 @@ public class Rooms extends JavaPlugin {
     // getServer().getPluginManager().registerEvents(new FaweListener(), this);
     getServer().getPluginManager().registerEvents(new MenuListener(), this);
     getServer().getPluginManager().registerEvents(new PortalListener(), this);
+    getServer().getPluginManager().registerEvents(new VehicleListener(), this);
     if (!Bukkit.getServer().getOnlinePlayers().isEmpty()) {
       Bukkit.getServer().getOnlinePlayers().forEach(e -> {
         try {
