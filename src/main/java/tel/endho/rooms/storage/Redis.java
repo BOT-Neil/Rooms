@@ -31,6 +31,10 @@ public class Redis {
   StatefulRedisConnection<String, String> StatefulredisCommands;
   // RedisAsyncCommands<String, String> asyncCommands;
 
+  public void initRedis(){
+    isLoaded=null;
+  }
+
   public void initRedis(String bungeesrvname, String host, String password, int port)
       throws ExecutionException, InterruptedException, TimeoutException {
     serverUuid = UUID.randomUUID();

@@ -9,7 +9,8 @@ public class UpdateGlobalTask implements Runnable{
     @Override
     public void run() {
         RoomWorlds.getRoomWolrds().forEach((uuid, roomWorld) -> {
-            if(roomWorld.isLoaded()){
+            if(roomWorld.isLoaded()&&Rooms.redis.isLoaded()){
+
                 Rooms.redis.insertGlobal(roomWorld);
             }
         });

@@ -64,17 +64,15 @@ public class MySQL {
          `ownername` varchar(40) NOT NULL,
          `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
          `spawnlocation` varchar(60) NOT NULL,
-         `enviroment` varchar(20) NOT NULL,
          `bordercolour` varchar(20) NOT NULL,
-         `hasnether` tinyint(1) NOT NULL,
-         `hasend` tinyint(1) NOT NULL,
-         `roomname` varchar(100) NOT NULL,
-         `icon` varchar(40) NOT NULL,
-         `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-         `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-         `trusted` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-         `levels` varchar(100) NOT NULL,
-         `totallevel` int(15) NOT NULL,
+         `hasnether` tinyint(1) NOT NULL DEFAULT '0',
+         `hasend` tinyint(1) NOT NULL DEFAULT '0',
+         `roomname` varchar(100) NULL DEFAULT NULL,
+         `icon` varchar(40) NULL DEFAULT NULL,
+         `blocked` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+         `members` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+         `trusted` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+         `preset` varchar(40) NOT NULL,
          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         """;
@@ -238,7 +236,7 @@ public class MySQL {
           String trusted = gson.toJson(groupsMap.get(usergroup.MEMBER.name()));
           String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, OwnerUUID.toString());
           stmt.setString(3, Ownername);
@@ -250,7 +248,7 @@ public class MySQL {
           stmt.setString(9, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
-              "SELECT `id`, `owner`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
+              "SELECT `id`, `ownername`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
           stmt2.setString(1, world.getName());
           ResultSet result = stmt2.executeQuery();
           if (result.next()) {
@@ -288,7 +286,7 @@ public class MySQL {
           String Ownername=player.getName();
           UUID OwnerUUID=player.getUniqueId();
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `owner`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, OwnerUUID.toString());
           stmt.setString(3, Ownername);
@@ -297,7 +295,7 @@ public class MySQL {
           stmt.setString(6, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
-              "SELECT `id`, `owner`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
+              "SELECT `id`, `ownername`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
           stmt2.setString(1, world.getName());
           ResultSet result = stmt2.executeQuery();
           if (result.next()) {
@@ -330,7 +328,7 @@ public class MySQL {
           String trusted = gson.toJson(roomWorld.getTrustedMembers());
           String members = gson.toJson(roomWorld.getMembers());
           PreparedStatement stmt = connection.prepareStatement(
-              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,owner=? ,spawnlocation=?, roomname=?, preset=? ,bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
+              "UPDATE `room_worlds` SET worlduuid=? ,owneruuid=? ,ownername=? ,spawnlocation=?, roomname=?, preset=? ,bordercolour=?, blocked=?, members=?, trusted=? WHERE `id` = ?;");
           stmt.setString(1, roomWorld.getWorldUUID().toString());
           stmt.setString(2, roomWorld.getOwnerUUID().toString());
           stmt.setString(3, roomWorld.getOwnerName());

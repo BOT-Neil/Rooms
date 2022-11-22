@@ -10,6 +10,7 @@ import tel.endho.rooms.util.Presets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldedit.world.biome.BiomeType;
@@ -23,6 +24,8 @@ public class Configs {
   private FileConfiguration presetConfig;
 
   public void loadConfigs() {
+    mainBiomeList = new ArrayList<>();
+    netherBiomeList = new ArrayList<>();
     createGeneralConfig();
     createStorageConfig();
     createPresetConfig();

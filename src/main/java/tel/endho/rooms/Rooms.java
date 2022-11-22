@@ -43,9 +43,9 @@ public class Rooms extends JavaPlugin {
     configs.loadConfigs();
     File schemfolder = new File(this.getDataFolder() + "/schematics");
     schemfolder.mkdir();
-    this.saveResource("schematics/normal.schem", false);
-    this.saveResource("schematics/nether.schem", false);
-    this.saveResource("schematics/the_end.schem", false);
+    //this.saveResource("schematics/normal.schem", false);
+    //this.saveResource("schematics/nether.schem", false);
+    //this.saveResource("schematics/the_end.schem", false);
     debugMode = configs.getGeneralConfig().getBoolean("enabledebugging");
     roomWorldManager = new RoomWorldManager();
     mysql = new MySQL();
@@ -56,15 +56,18 @@ public class Rooms extends JavaPlugin {
     } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
+    redis = new Redis();
     if (configs.getStorageConfig().getBoolean("enableredis")) {
-      redis = new Redis();
       try {
         redis.initRedis(configs.getStorageConfig().getString("bungeeservername"),
             configs.getStorageConfig().getString("redishost"), configs.getStorageConfig().getString("redispassword"),
             configs.getStorageConfig().getInt("redisport"));
       } catch (ExecutionException | InterruptedException | TimeoutException e) {
+        redis.initRedis();
         e.printStackTrace();
       }
+    }else{
+      redis.initRedis();
     }
     getCommand("Room").setExecutor(new RoomCommand());
     this.faweListener = new FaweListener();
