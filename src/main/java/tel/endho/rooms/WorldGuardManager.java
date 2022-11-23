@@ -46,7 +46,7 @@ public class WorldGuardManager {
       
     }
   }
-  //todo call after load
+
   @SuppressWarnings("null")
   public static void setupRoom(RoomWorld roomWorld) {
     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"wg reload");
