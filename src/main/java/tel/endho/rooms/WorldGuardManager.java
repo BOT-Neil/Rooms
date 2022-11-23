@@ -11,6 +11,7 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.GlobalProtectedRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 
@@ -46,6 +47,7 @@ public class WorldGuardManager {
     }
   }
   //todo call after load
+  @SuppressWarnings("null")
   public static void setupRoom(RoomWorld roomWorld) {
     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"wg reload");
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -53,13 +55,17 @@ public class WorldGuardManager {
     if (regions == null) {
       return;
     }
+    
     if (!regions.hasRegion("__global__")) {
-      return;
+      ProtectedRegion region = new GlobalProtectedRegion("__global__");
+      regions.addRegion(region);
+      //return;
     }
     ProtectedRegion global = regions.getRegion("__global__");
     if (global == null) {
       return;
     }
+
     global.getOwners().addPlayer(roomWorld.getOwnerUUID());
     roomWorld.getTrustedMembers().keySet().forEach(uuid -> {
       global.getMembers().addPlayer(uuid);

@@ -312,6 +312,22 @@ public class MySQL {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
                   groupsMap, bordercolour, false, false, null, "GRASS_BLOCK",
                   Rooms.configs.getGeneralConfig().getString("defaultpreset")));
+             
+              BukkitRunnable r = new BukkitRunnable() {
+                @SuppressWarnings("null")
+                @Override
+                public void run() {
+                  try {
+                    //todo remove when worldguard aswm starts working 
+                    WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid));
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                  }
+
+                }
+              };
+              // r.runTask(Rooms.getPlugin());
+              r.runTask(Rooms.getPlugin());
             }
           }
 
