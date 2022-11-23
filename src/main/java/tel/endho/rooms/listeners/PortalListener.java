@@ -90,7 +90,7 @@ public class PortalListener implements Listener {
     }
     Rooms.debug("debug3");
     Location currentLocation = portalEvent.getLocation();
-    if (currentLocation.getWorld() != null && !RoomWorlds.isRoomWorld(currentLocation.getWorld().getName())) {
+    if (currentLocation.getWorld() == null && !RoomWorlds.isRoomWorld(currentLocation.getWorld().getName())) {
       return;
     }
     Rooms.debug("debug4");
@@ -114,6 +114,7 @@ public class PortalListener implements Listener {
         // p.teleport(newlocation);
       } else {
         if (roomWorld.getHasNether()) {
+          //is nether loaded or load|| just fix unload task so all islands are loaded
           newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether"), 1, 70, 1);
           p.teleport(newlocation);
         } else {

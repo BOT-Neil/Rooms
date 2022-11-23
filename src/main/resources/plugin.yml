@@ -3,7 +3,7 @@ version: "${version}"
 main: tel.endho.rooms.Rooms
 api-version: 1.17
 depend: [SlimeWorldManager, FastAsyncWorldEdit]
-softdepend: [PlotSquared, floodgate]
+softdepend: [PlotSquared, floodgate, WorldGuard]
 authors: [Trashulius]
 description: Private World Manager [ASWM Addon]
 website: https://endho.tel

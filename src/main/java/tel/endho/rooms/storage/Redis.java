@@ -56,10 +56,12 @@ public class Redis {
 
     // asyncCommands.pubsubChannels().get().add("Rooms"+bungeesrvname);
     // syncCommands.set("key", "Hello, Redis!");
-    isLoaded=true;
+    
     try {
       redis();
+      isLoaded=true;
     } catch (Exception e) {
+      isLoaded=false;
       e.printStackTrace();
     }
     // connection.close();

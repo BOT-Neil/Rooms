@@ -510,6 +510,7 @@ public class RoomWorldManager {
                   World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
                   world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
                   world2.setGameRule(GameRule.DO_FIRE_TICK, false);
+                  WorldGuardManager.setupRoom(roomWorld);
                   //RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                   //RegionManager regions = container.get(FaweAPI.getWorld(world2.getName()));
                   //regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());

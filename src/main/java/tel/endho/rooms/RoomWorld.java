@@ -51,8 +51,11 @@ public class RoomWorld {
     this.hasNether = hasNether;
     this.hasEnd = hasEnd;
     this.roomName = roomName;
-    this.icon = Material.getMaterial(icon);
     this.preset = preset;
+    this.icon = Material.getMaterial(icon);
+    if(icon==null){
+      this.icon=getPreset().getIconMaterial();
+    }
   }
 
   public int getRowid() {
