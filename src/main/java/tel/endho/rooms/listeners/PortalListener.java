@@ -20,11 +20,11 @@ import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PortalListener implements Listener {
-  public static HashMap<UUID,Integer> portalcooldowns;
+  public static Map<UUID,Integer> portalcooldowns;
   @EventHandler
   public void onPortal(PlayerPortalEvent portalEvent) {
     Rooms.debug("debug1f");
@@ -51,6 +51,7 @@ public class PortalListener implements Listener {
     } else {
       return;
     }
+    System.out.println("tomatoe");
     RoomWorld roomWorld = RoomWorlds.getRoomWorldString(currentLocation.getWorld().getName());
     Location newlocation;
     if (type.equals(PortalType.NETHER)) {
@@ -122,6 +123,7 @@ public class PortalListener implements Listener {
       } else {
         if (roomWorld.getHasNether()) {
           //is nether loaded or load|| just fix unload task so all islands are loaded
+          System.out.println("pumpkin");
           Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID().toString() + "rmnether");
           //newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether"), 1, 70, 1);
           //p.teleport(newlocation);

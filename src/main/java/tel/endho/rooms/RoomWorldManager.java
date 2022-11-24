@@ -374,14 +374,19 @@ public class RoomWorldManager {
               es2.setBiome(bv, BiomeTypes.SOUL_SAND_VALLEY);
             });
             // es2.setBiome((Region)region, BiomeTypes.CRIMSON_FOREST);
-            Bukkit.getScheduler().runTask(Rooms.getPlugin(), () -> {
+            TpOrLoadHouseWorld(player, "rmnether");
+            /*Bukkit.getScheduler().runTask(Rooms.getPlugin(), () -> {
               Location loc = new Location(Rooms.getPlugin().getServer().getWorld(world.getName()),
                   Double.valueOf(SlimeProperties.SPAWN_X.getDefaultValue()),
                   Rooms.configs.getGeneralConfig().getInt("spawnheight"),
                   Double.valueOf(SlimeProperties.SPAWN_Z.getDefaultValue()));
               player.teleport(loc);
-            });
+            });*/
             // do bedrock too
+          } catch (CorruptedWorldException | NewerFormatException | WorldInUseException | UnknownWorldException
+              | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
           }
         }
       };
@@ -443,8 +448,13 @@ public class RoomWorldManager {
   public void unloadRoomWorld(RoomWorld roomWorld) {
     World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
     assert world != null;
-    world.save();
+    //world.save();
     Rooms.debug("unloadWorld: " + Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(), true));
+    if(roomWorld.getHasNether()){
+      World nworld = Bukkit.getWorld(roomWorld.getWorldUUID().toString()+"rmnether");
+      assert nworld != null;
+      Rooms.debug("unloadWorld: " + Bukkit.unloadWorld(nworld, true));
+    }
     // Bukkit.unloadWorld(world,true);
     try {
       Rooms.mysql.saveRoomWorld(roomWorld, true);
@@ -528,7 +538,7 @@ public class RoomWorldManager {
                   //regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());
                 }
                 if (player != null) {
-                  Location location = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()), roomWorld.getSpawnX().doubleValue(),
+                  Location location = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix), roomWorld.getSpawnX().doubleValue(),
                       roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
                   player.teleport(location);
                 }
