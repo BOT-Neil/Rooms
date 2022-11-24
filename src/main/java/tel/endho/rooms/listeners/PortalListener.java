@@ -87,6 +87,10 @@ public class PortalListener implements Listener {
       return;
     }
     Player p = (Player) portalEvent.getEntity();
+    if(portalcooldowns.containsKey(p.getUniqueId())){
+      return;
+    }
+    portalcooldowns.put(p.getUniqueId() ,0);
     Rooms.debug("debug2");
     if (!Rooms.configs.getGeneralConfig().getBoolean("islandmode")) {
       return;

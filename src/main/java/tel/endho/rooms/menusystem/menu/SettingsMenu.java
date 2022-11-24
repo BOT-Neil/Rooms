@@ -16,7 +16,6 @@ import tel.endho.rooms.menusystem.Menu;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 
 public class SettingsMenu extends Menu {
@@ -28,7 +27,6 @@ public class SettingsMenu extends Menu {
     @Override
     public String getMenuName() {
         return "Settings";
-        //return "Kill " + playerMenuUtility.getPlayerToKill().getDisplayName();
     }
 
     @Override
