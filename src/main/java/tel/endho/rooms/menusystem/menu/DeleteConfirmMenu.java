@@ -14,7 +14,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class DeleteConfirmMenu extends Menu {
 
@@ -34,10 +33,10 @@ public class DeleteConfirmMenu extends Menu {
 
   @Override
   public void handleMenu(InventoryClickEvent e) {
-    if (RoomWorlds.isRoomWorld(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()))
+    if (RoomWorlds.isRoomWorld(playerMenuUtility.getOwner().getLocation().getWorld().getName())
         || playerMenuUtility.getOwner().hasPermission("rooms.admin")) {
       RoomWorld roomWorld = RoomWorlds
-          .getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
+          .getRoomWorldString(playerMenuUtility.getOwner().getLocation().getWorld().getName());
       switch (e.getCurrentItem().getType()) {
         case EMERALD:
           try {

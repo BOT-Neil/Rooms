@@ -40,8 +40,8 @@ public class SettingsMenu extends Menu {
     public void handleMenu(InventoryClickEvent e) {
         if(e.getWhoClicked() instanceof Player){
             Player player = (Player)e.getWhoClicked();
-            if(RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))){
-                RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
+            if(RoomWorlds.isRoomWorld(player.getLocation().getWorld().getName())){
+                RoomWorld roomWorld = RoomWorlds.getRoomWorldString(player.getLocation().getWorld().getName());
                 if(roomWorld.isOwner(player)){
                     switch (e.getCurrentItem().getType()){
                         case LIGHT_BLUE_CONCRETE:
@@ -81,8 +81,8 @@ public class SettingsMenu extends Menu {
 
     @Override
     public void setMenuItems() {
-        if(RoomWorlds.isRoomWorld(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()))){
-            RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
+        if(RoomWorlds.isRoomWorld(playerMenuUtility.getOwner().getLocation().getWorld().getName())){
+            RoomWorld roomWorld = RoomWorlds.getRoomWorldString(playerMenuUtility.getOwner().getLocation().getWorld().getName());
             ItemStack greenBorder = new ItemStack(Material.LIME_CONCRETE,1);
             ItemMeta grass_meta = greenBorder.getItemMeta();
             grass_meta.setDisplayName(ChatColor.GREEN + "Green Border");

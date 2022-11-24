@@ -15,7 +15,6 @@ import tel.endho.rooms.menusystem.PlayerMenuUtility;
 import tel.endho.rooms.util.Presets;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainMenu extends Menu {
@@ -144,16 +143,25 @@ public class MainMenu extends Menu {
     inventory.setItem(2, personalRooms);
     inventory.setItem(3, localRooms);
     inventory.setItem(4, globalRooms);
+    System.out.println("bug123");
     try {
-      UUID uuidd = UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName());
-      if (RoomWorlds.isRoomWorld(uuidd)) {
-        RoomWorld roomWorld = RoomWorlds
-            .getRoomWorldUUID(UUID.fromString(playerMenuUtility.getOwner().getLocation().getWorld().getName()));
+      String worldname = playerMenuUtility.getOwner().getLocation().getWorld().getName();
+      System.out.println("bug1234");
+      if (RoomWorlds.isRoomWorld(worldname)) {
+        System.out.println("bug1235");
+        RoomWorld roomWorld = RoomWorlds.getRoomWorldString(worldname);
+        System.out.println("bug1236");
+        System.out.println("ownername:"+playerMenuUtility.getOwner().getName());
+        System.out.println("owneruuid:" + playerMenuUtility.getOwner().getUniqueId().toString());
+        System.out.println("roomownername:" + roomWorld.getOwnerName());
+        System.out.println("roomowneruuid:" + roomWorld.getOwnerUUID().toString());
         if (roomWorld.isOwner(playerMenuUtility.getOwner())) {
+          System.out.println("bug1237");
           inventory.setItem(5, settingsmenu);
         }
       }
     } catch (Exception ignored) {
+      System.out.println(ignored.toString());
     }
 
     if (playerMenuUtility.getOwner().hasPermission("rooms.admin")) {

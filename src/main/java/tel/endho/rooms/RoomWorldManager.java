@@ -429,7 +429,7 @@ public class RoomWorldManager {
             p.teleport(location);
           } else {
             // todo make async andput player teleport after
-            loadWorld(roomWorld, p);
+            loadWorld(roomWorld, p,uuidsuffix);//add island option
             /*Location location = new Location(world, roomWorld.getSpawnX().doubleValue(),
                 roomWorld.getSpawnY().doubleValue(), roomWorld.getSpawnZ().doubleValue());
             p.teleport(location);*/
@@ -473,12 +473,24 @@ public class RoomWorldManager {
 
   }
 
-  public void loadWorld(RoomWorld roomWorld, @Nullable Player player)
+  public void loadWorld(RoomWorld roomWorld, @Nullable Player player, String uuidsuffix)
       throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
     SlimePropertyMap properties = new SlimePropertyMap();
     Preset preset = roomWorld.getPreset();
     properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
-    properties.setValue(SlimeProperties.ENVIRONMENT, preset.getmainEnvironment());
+    switch(uuidsuffix){
+      case "rmnether":
+        properties.setValue(SlimeProperties.ENVIRONMENT, "nether");
+        properties.setValue(SlimeProperties.DEFAULT_BIOME, roomWorld.getPreset().getnetherBiome());
+        break;
+      case "rmend":
+        properties.setValue(SlimeProperties.ENVIRONMENT, "the_end");
+        break;
+      default:
+        properties.setValue(SlimeProperties.ENVIRONMENT, preset.getmainEnvironment());
+        break;
+    }
+    
     properties.setValue(SlimeProperties.DIFFICULTY, "normal");
     properties.setValue(SlimeProperties.SPAWN_X, 1);
     properties.setValue(SlimeProperties.SPAWN_Y, roomWorld.getSpawnY());
@@ -498,7 +510,7 @@ public class RoomWorldManager {
       public void run() {
         try {
           Optional<SlimeWorld> opworld = plugin
-              .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString(), false, properties).get();
+              .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString()+uuidsuffix, false, properties).get();
           SlimeWorld world = opworld.get();
           BukkitRunnable r = new BukkitRunnable() {
             @SuppressWarnings("null")
@@ -506,11 +518,11 @@ public class RoomWorldManager {
             public void run() {
               try {
                 plugin.generateWorld(world);
-                if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()) != null) {
-                  World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
+                if (Bukkit.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix) != null) {
+                  World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix);
                   world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
                   world2.setGameRule(GameRule.DO_FIRE_TICK, false);
-                  WorldGuardManager.setupRoom(roomWorld);
+                  WorldGuardManager.setupRoom(roomWorld,uuidsuffix);
                   //RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                   //RegionManager regions = container.get(FaweAPI.getWorld(world2.getName()));
                   //regions.getRegion("__global__").getOwners().addPlayer(roomWorld.getOwnerUUID());

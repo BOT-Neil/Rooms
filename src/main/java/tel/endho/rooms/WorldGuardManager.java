@@ -48,10 +48,10 @@ public class WorldGuardManager {
   }
 
   @SuppressWarnings("null")
-  public static void setupRoom(RoomWorld roomWorld) {
+  public static void setupRoom(RoomWorld roomWorld,String uuidsuffix) {
     Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"wg reload");
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-    RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString()));
+    RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix));
     if (regions == null) {
       return;
     }

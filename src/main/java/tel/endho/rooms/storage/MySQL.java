@@ -319,7 +319,7 @@ public class MySQL {
                 public void run() {
                   try {
                     //todo remove when worldguard aswm starts working 
-                    WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid));
+                    WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid),"");
                   } catch (Exception e) {
                     e.printStackTrace();
                   }

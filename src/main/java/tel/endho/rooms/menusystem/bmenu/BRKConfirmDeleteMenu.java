@@ -11,7 +11,6 @@ import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class BRKConfirmDeleteMenu {
   public void makemenu(Player player) {
@@ -30,9 +29,9 @@ public class BRKConfirmDeleteMenu {
       }
 
       // short version of getClickedButtonId == 0
-      if (RoomWorlds.isRoomWorld(UUID.fromString(player.getLocation().getWorld().getName()))
+      if (RoomWorlds.isRoomWorld(player.getLocation().getWorld().getName())
           || player.hasPermission("rooms.admin")) {
-        RoomWorld roomWorld = RoomWorlds.getRoomWorldUUID(UUID.fromString(player.getLocation().getWorld().getName()));
+        RoomWorld roomWorld = RoomWorlds.getRoomWorldString(player.getLocation().getWorld().getName());
         if (response.getClickedButtonId() == 0) {
           try {
             Rooms.roomWorldManager.deleteRoomWorld(roomWorld);

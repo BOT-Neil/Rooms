@@ -20,8 +20,11 @@ import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class PortalListener implements Listener {
+  public static HashMap<UUID,Integer> portalcooldowns;
   @EventHandler
   public void onPortal(PlayerPortalEvent portalEvent) {
     Rooms.debug("debug1f");
@@ -104,19 +107,20 @@ public class PortalListener implements Listener {
     }
     Rooms.debug("debug5");
     RoomWorld roomWorld = RoomWorlds.getRoomWorldString(currentLocation.getWorld().getName());
-    Location newlocation;
+    //Location newlocation;
     if (type.equals(PortalType.NETHER)) {
       Rooms.debug("debug6");
       if (currentLocation.getWorld().getName().endsWith("rmnether")) {
         Rooms.debug("debug7");
-        newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()), 1, 70, 1);
+        //newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString()), 1, 70, 1);
         Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID().toString());
         // p.teleport(newlocation);
       } else {
         if (roomWorld.getHasNether()) {
           //is nether loaded or load|| just fix unload task so all islands are loaded
-          newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether"), 1, 70, 1);
-          p.teleport(newlocation);
+          Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID().toString() + "rmnether");
+          //newlocation = new Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether"), 1, 70, 1);
+          //p.teleport(newlocation);
         } else {
           Rooms.debug("debug9");
           Rooms.roomWorldManager.genNether(roomWorld, p);

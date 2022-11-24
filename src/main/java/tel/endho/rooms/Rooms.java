@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import tel.endho.rooms.Tasks.PortalCooldownTask;
 import tel.endho.rooms.Tasks.UnloadEmptyTask;
 import tel.endho.rooms.Tasks.UnloadStaleGlobalTask;
 import tel.endho.rooms.Tasks.UpdateGlobalTask;
@@ -93,7 +95,9 @@ public class Rooms extends JavaPlugin {
         }
       });
     }
+    PortalListener.portalcooldowns=new HashMap<>();
     // todo purge globalhouselist
+    this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new PortalCooldownTask(), 0, 1);
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UpdateGlobalTask(), 0, 300);
     // this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new
     // FetchBungeeInfoTask(), 0, 600);

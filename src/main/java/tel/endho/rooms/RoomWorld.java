@@ -187,7 +187,7 @@ public class RoomWorld {
   }
 
   public Boolean isOwner(Player player) {
-    return player.getUniqueId() == getOwnerUUID();
+    return player.getUniqueId().equals(player.getUniqueId());
   }
 
   public Boolean isOwnerOnline() {
