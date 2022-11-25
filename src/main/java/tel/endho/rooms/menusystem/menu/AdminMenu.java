@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
 import tel.endho.rooms.Tasks.MigrateOnePlot;
@@ -42,6 +43,8 @@ public class AdminMenu extends Menu {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(Rooms.getPlugin(), new MigrateOnePlot(), 0, 160);
         // Rooms.housemanager.migrateAll();
         break;
+      case SUNFLOWER:
+        Rooms.roomWorldManager.migrateOnePlot(playerMenuUtility.getOwner());
       case BOOK:
         switch (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
             .get(new NamespacedKey(Rooms.getPlugin(), "menu"), PersistentDataType.STRING)) {
@@ -73,17 +76,17 @@ public class AdminMenu extends Menu {
     grass_meta.setLore(yes_lore);
     createHouse.setItemMeta(grass_meta);
 
-    ItemStack personalRooms = new ItemStack(Material.BOOK, 1);
-    ItemMeta personalHousesItemMeta = personalRooms.getItemMeta();
-    personalHousesItemMeta.setDisplayName(ChatColor.DARK_RED + "Personal Rooms");
-    personalHousesItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
+    ItemStack MigrateOne = new ItemStack(Material.SUNFLOWER, 1);
+    ItemMeta MigrateOnePlotItemMeta = MigrateOne.getItemMeta();
+    MigrateOnePlotItemMeta.setDisplayName(ChatColor.DARK_RED + "Migrate one plot to Rooms");
+    MigrateOnePlotItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
         PersistentDataType.STRING, "personal");
     ArrayList<String> personal_lore = new ArrayList<>();
-    personal_lore.add(ChatColor.AQUA + "Your Rooms");
-    personalHousesItemMeta.setLore(personal_lore);
+    personal_lore.add(ChatColor.AQUA + "Migrate one plot to Rooms");
+    MigrateOnePlotItemMeta.setLore(personal_lore);
     ArrayList<String> personalHousesLore = new ArrayList<>();
-    personalHousesLore.add(ChatColor.AQUA + "Personal houses");
-    personalRooms.setItemMeta(personalHousesItemMeta);
+    personalHousesLore.add(ChatColor.AQUA + "Migrate one plot to Rooms");
+    MigrateOne.setItemMeta(MigrateOnePlotItemMeta);
     int localroomsint = RoomWorlds.getLoadedRoomWorlds().size();
     ItemStack localRooms = new ItemStack(Material.BOOK, 1);
     ItemMeta localRoomsItemMeta = localRooms.getItemMeta();
