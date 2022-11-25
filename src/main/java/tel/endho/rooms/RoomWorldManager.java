@@ -178,6 +178,8 @@ public class RoomWorldManager {
         es1.close();
       } // it is automatically closed/flushed when the code exits the block
       try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(worlduuid.toString()))) {
+        System.out.println("distancefromorigin:"+plot.getDistanceFromOrigin());
+        System.out.println("oldconfigdistance:" + (Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2));
         int plotsize = -(Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2);
         @SuppressWarnings("all")
         Operation operation = new ClipboardHolder(clipboard)
@@ -188,7 +190,6 @@ public class RoomWorldManager {
         Operations.complete(operation);
         es2.close();
       } // it is automatically closed/flushed when the code exits the block
-
       plot.unclaim();
     }
   }

@@ -103,7 +103,7 @@ public class AdminMenu extends Menu {
     ItemMeta adminmenuMeta = adminmenu.getItemMeta();
     adminmenuMeta.setDisplayName(ChatColor.DARK_RED + "Admin");
     inventory.setItem(1, createHouse);
-    // inventory.setItem(2, personalRooms);
+    inventory.setItem(2, MigrateOne);
     // inventory.setItem(3, localRooms);
     // inventory.setItem(4, globalRooms);
     // inventory.setItem(5, settings);
