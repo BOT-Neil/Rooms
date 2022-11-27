@@ -74,7 +74,7 @@ public class Configs {
       e.printStackTrace();
     }
   }
-  
+
   private void createPresetConfig() {
     File presetConfigFile = new File(Rooms.getPlugin().getDataFolder(), "preset.yml");
     if (!presetConfigFile.exists()) {
@@ -90,7 +90,7 @@ public class Configs {
     }
   }
 
-  private void fillPresetmap(){
+  private void fillPresetmap() {
     presetConfig.getKeys(false).forEach(x -> {
       int id = Integer.parseInt(x);
       ConfigurationSection presetSection = presetConfig.getConfigurationSection(x);
@@ -187,21 +187,22 @@ public class Configs {
       }
       Preset preset = new Preset(name, locString, netherlocString, endlocString, mainEnvironmentString, mainBiome,
           netherBiome, iconMaterial, mainSchematic, netherSchematic, endSchematic, mainfillblock, netherfillblock,
-          endfillblock,fillsize,flatbedrock);
-      //Rooms.roomWorldManager.getPresetMap().put(id, preset);
+          endfillblock, fillsize, flatbedrock);
+      // Rooms.roomWorldManager.getPresetMap().put(id, preset);
       Presets.getPresetMap().put(id, preset);
     });
   }
-  private void fillBiomes(){
-    for(BiomeType bt:BiomeTypes.values()){
-      switch(bt.getId()){
-        case "nether"->{
+
+  private void fillBiomes() {
+    for (BiomeType bt : BiomeTypes.values()) {
+      switch (bt.getId()) {
+        case "nether" -> {
           break;
         }
-        case "custom"->{
+        case "custom" -> {
           break;
         }
-        case "minecraft:basalt_deltas"->{
+        case "minecraft:basalt_deltas" -> {
           netherBiomeList.add(bt.getId());
           break;
         }

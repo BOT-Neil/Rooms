@@ -31,8 +31,8 @@ public class Redis {
   StatefulRedisConnection<String, String> StatefulredisCommands;
   // RedisAsyncCommands<String, String> asyncCommands;
 
-  public void initRedis(){
-    isLoaded=null;
+  public void initRedis() {
+    isLoaded = null;
   }
 
   public void initRedis(String bungeesrvname, String host, String password, int port)
@@ -56,12 +56,12 @@ public class Redis {
 
     // asyncCommands.pubsubChannels().get().add("Rooms"+bungeesrvname);
     // syncCommands.set("key", "Hello, Redis!");
-    
+
     try {
       redis();
-      isLoaded=true;
+      isLoaded = true;
     } catch (Exception e) {
-      isLoaded=false;
+      isLoaded = false;
       e.printStackTrace();
     }
     // connection.close();
@@ -107,7 +107,7 @@ public class Redis {
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
                   RoomWorlds.getRoomWolrds().remove(worlduuid);
                 }
-                //removememberfromgroup
+                // removememberfromgroup
                 if (tag.equals("removemember")) {
                   UUID serveruuid = UUID.fromString(byteArray.readUTF());
                   if (serveruuid == serverUuid)
@@ -143,20 +143,23 @@ public class Redis {
                     return;
                   UUID playeruuid = UUID.fromString(byteArray.readUTF());
                   UUID worlduuid = UUID.fromString(byteArray.readUTF());
-                  String islandchoice=byteArray.readUTF();
+                  String islandchoice = byteArray.readUTF();
                   Long syslong = Long.valueOf(byteArray.readUTF());
-                  if(syslong>(System.currentTimeMillis()+15000)){
+                  if (syslong > (System.currentTimeMillis() + 15000)) {
                     return;
                   }
                   if (RoomWorlds.isRoomWorld(worlduuid)) {
-                    //if player online put into island
-                    //else put player into map with playeruuid,worldstring, systime,play
-                    //on playerjoinevent if in joinmap put tporload..
-                    if(Bukkit.getOfflinePlayer(playeruuid)==null||!Bukkit.getOfflinePlayer(playeruuid).isOnline()){
-                      //put in map
-                      //later make a repeating task to expire waiting teleports after 30 seconds run every 10 seconds
-                    }else{
-                      Rooms.roomWorldManager.TpOrLoadHouseWorld(Bukkit.getPlayer(playeruuid), worlduuid.toString()+islandchoice);
+                    // if player online put into island
+                    // else put player into map with playeruuid,worldstring, systime,play
+                    // on playerjoinevent if in joinmap put tporload..
+                    if (Bukkit.getOfflinePlayer(playeruuid) == null
+                        || !Bukkit.getOfflinePlayer(playeruuid).isOnline()) {
+                      // put in map
+                      // later make a repeating task to expire waiting teleports after 30 seconds run
+                      // every 10 seconds
+                    } else {
+                      Rooms.roomWorldManager.TpOrLoadHouseWorld(Bukkit.getPlayer(playeruuid),
+                          worlduuid.toString() + islandchoice);
                     }
                   }
                 }
@@ -274,7 +277,7 @@ public class Redis {
   }
 
   public void delete(UUID worlduuid) {
-    if(!this.isLoaded()){
+    if (!this.isLoaded()) {
       return;
     }
     BukkitRunnable r = new BukkitRunnable() {
@@ -290,7 +293,8 @@ public class Redis {
     };
     r.runTaskAsynchronously(Rooms.getPlugin());
   }
-//todo add group specificity
+
+  // todo add group specificity
   public void removeMember(UUID worlduuid, UUID playerUUID) {
     BukkitRunnable r = new BukkitRunnable() {
       @Override

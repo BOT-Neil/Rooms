@@ -253,11 +253,12 @@ public class MySQL {
           ResultSet result = stmt2.executeQuery();
           if (result.next()) {
             int rowid = result.getInt("id");
-            //String ownername = result.getString("owner");
+            // String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
             if (!RoomWorlds.getRoomWolrds().containsKey(uuid) || !RoomWorlds.getRoomWorldUUID(uuid).isLoaded()) {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
-                  groupsMap, bordercolour, false, false, null, "GRASS_BLOCK", Rooms.configs.getGeneralConfig().getString("defaultpreset")));
+                  groupsMap, bordercolour, false, false, null, "GRASS_BLOCK",
+                  Rooms.configs.getGeneralConfig().getString("defaultpreset")));
             }
           }
 
@@ -283,8 +284,8 @@ public class MySQL {
           String z = sprop.getValue(SlimeProperties.SPAWN_Z).toString();
           String spawnlocation = x + ";" + y + ";" + z + ";" + "0;" + "0";
           String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
-          String Ownername=player.getName();
-          UUID OwnerUUID=player.getUniqueId();
+          String Ownername = player.getName();
+          UUID OwnerUUID = player.getUniqueId();
           PreparedStatement stmt = connection.prepareStatement(
               "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?);");
           stmt.setString(1, world.getName());
@@ -302,7 +303,7 @@ public class MySQL {
             int rowid = result.getInt("id");
             // String ownername = result.getString("owner");
             String timestamp = result.getString("timestamp");
-            Map<String, Map<UUID, String>> groupsMap= new HashMap<>();
+            Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
             Map<UUID, String> blocked = new HashMap<>();
             Map<UUID, String> trusted = new HashMap<>();
             Map<UUID, String> members = new HashMap<>();
@@ -313,14 +314,14 @@ public class MySQL {
               RoomWorlds.addRoom(uuid, new RoomWorld(rowid, uuid, OwnerUUID, Ownername, timestamp, spawnlocation,
                   groupsMap, bordercolour, false, false, null, "GRASS_BLOCK",
                   Rooms.configs.getGeneralConfig().getString("defaultpreset")));
-             
+
               BukkitRunnable r = new BukkitRunnable() {
                 @SuppressWarnings("null")
                 @Override
                 public void run() {
                   try {
-                    //todo remove when worldguard aswm starts working 
-                    WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid),"");
+                    // todo remove when worldguard aswm starts working
+                    WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid), "");
                   } catch (Exception e) {
                     e.printStackTrace();
                   }
