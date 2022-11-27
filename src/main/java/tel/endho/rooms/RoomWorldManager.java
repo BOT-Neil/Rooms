@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -120,22 +121,23 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("plotsquaredheight"));
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
       plugin.generateWorld(world);
-      HashMap<String, HashMap<UUID, String>> groupsMap = new HashMap<>();
-      HashMap<UUID, String> blocked = new HashMap<>();
-      HashMap<UUID, String> trusted = new HashMap<>();
-      HashMap<UUID, String> members = new HashMap<>();
+      Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
+      Map<UUID, String> blocked = new HashMap<>();
+      Map<UUID, String> trusted = new HashMap<>();
+      Map<UUID, String> members = new HashMap<>();
       PlotAPI api = new PlotAPI();
       String pusername;
       try {
-        pusername = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(plot.getOwner(), 1000L);
+        pusername = api.getPlotSquared().getImpromptuUUIDPipeline().getSingle(plot.getOwner(), 1000L);
       } catch (Exception e) {
+        System.out.println(e);
         String generatedString = RandomStringUtils.random(4, true, true);
         pusername = ("migrated" + generatedString);
       }
       plot.getMembers().forEach(uuid -> {
         String username;
         try {
-          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+          username = api.getPlotSquared().getImpromptuUUIDPipeline().getSingle(uuid, 1000L);
         } catch (Exception e) {
           String generatedString = RandomStringUtils.random(4, true, true);
           username = ("migrated" + generatedString);
@@ -145,7 +147,7 @@ public class RoomWorldManager {
       plot.getTrusted().forEach(uuid -> {
         String username;
         try {
-          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+          username = api.getPlotSquared().getImpromptuUUIDPipeline().getSingle(uuid, 1000L);
         } catch (Exception e) {
           String generatedString = RandomStringUtils.random(4, true, true);
           username = ("migrated" + generatedString);
@@ -155,7 +157,7 @@ public class RoomWorldManager {
       plot.getDenied().forEach(uuid -> {
         String username;
         try {
-          username = api.getPlotSquared().getBackgroundUUIDPipeline().getSingle(uuid, 1000L);
+          username = api.getPlotSquared().getImpromptuUUIDPipeline().getSingle(uuid, 1000L);
         } catch (Exception e) {
           String generatedString = RandomStringUtils.random(4, true, true);
           username = ("migrated" + generatedString);
@@ -178,9 +180,7 @@ public class RoomWorldManager {
         es1.close();
       } // it is automatically closed/flushed when the code exits the block
       try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(worlduuid.toString()))) {
-        System.out.println("distancefromorigin:"+plot.getDistanceFromOrigin());
-        System.out.println("oldconfigdistance:" + (Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2));
-        int plotsize = -(Rooms.configs.getGeneralConfig().getInt("plotsquaredsize") / 2);
+        int plotsize = -(plot.getLargestRegion().getWidth() / 2);
         @SuppressWarnings("all")
         Operation operation = new ClipboardHolder(clipboard)
             .createPaste(es2)

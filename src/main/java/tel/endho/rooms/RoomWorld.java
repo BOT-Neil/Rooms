@@ -27,7 +27,7 @@ public class RoomWorld {
   private String Ownername;
   private String timestamp;
   private String spawnLocation;
-  private HashMap<String, HashMap<UUID, String>> groupsMap= new HashMap<>();
+  private Map<String, Map<UUID, String>> groupsMap= new HashMap<>();
   private int inactiveTicks;// temp
   private String preset;// presetconfig options
   private String BorderColor;// red, blue, green
@@ -37,7 +37,7 @@ public class RoomWorld {
   private Material icon;
 
   public RoomWorld(int rowid, UUID uuid, UUID ownerUUID, String ownername, String timestamp, String spawnlocation,
-      HashMap<String, HashMap<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd,
+      Map<String, Map<UUID, String>> groupsMap, String bordercolour, Boolean hasNether, Boolean hasEnd,
       @Nullable String roomName,
       String icon, String preset) {
     this.rowid = rowid;
@@ -78,7 +78,7 @@ public class RoomWorld {
     return this.timestamp;
   }
 
-  public HashMap<String, HashMap<UUID, String>> getGroupMap() {
+  public Map<String, Map<UUID, String>> getGroupMap() {
     return this.groupsMap;
   }
 
