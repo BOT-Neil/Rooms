@@ -67,6 +67,7 @@ public class SettingsMenu extends Menu {
                                     ChatColor.AQUA+"Purchase a rank at endho.tel");}
                             return;
                         default:
+                        //todo trusted 
                             break;
                     }
                 }

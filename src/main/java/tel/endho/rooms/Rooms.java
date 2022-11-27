@@ -45,9 +45,9 @@ public class Rooms extends JavaPlugin {
     configs.loadConfigs();
     File schemfolder = new File(this.getDataFolder() + "/schematics");
     schemfolder.mkdir();
-    //this.saveResource("schematics/normal.schem", false);
-    //this.saveResource("schematics/nether.schem", false);
-    //this.saveResource("schematics/the_end.schem", false);
+    // this.saveResource("schematics/normal.schem", false);
+    // this.saveResource("schematics/nether.schem", false);
+    // this.saveResource("schematics/the_end.schem", false);
     debugMode = configs.getGeneralConfig().getBoolean("enabledebugging");
     roomWorldManager = new RoomWorldManager();
     mysql = new MySQL();
@@ -68,7 +68,7 @@ public class Rooms extends JavaPlugin {
         redis.initRedis();
         e.printStackTrace();
       }
-    }else{
+    } else {
       redis.initRedis();
     }
     getCommand("Room").setExecutor(new RoomCommand());
@@ -76,16 +76,19 @@ public class Rooms extends JavaPlugin {
     faweListener.startListening();
     // Menu listener system
     getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-    getServer().getPluginManager().registerEvents(new BlockListener(), this);
-    getServer().getPluginManager().registerEvents(new EntitiyListener(), this);
-    getServer().getPluginManager().registerEvents(new FallEvent(), this);
+    if (!Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+      getServer().getPluginManager().registerEvents(new BlockListener(), this);
+      getServer().getPluginManager().registerEvents(new EntitiyListener(), this);
+      getServer().getPluginManager().registerEvents(new FallEvent(), this);
+      getServer().getPluginManager().registerEvents(new VehicleListener(), this);
+      getServer().getPluginManager().registerEvents(new BucketListener(), this);
+    }
+    // getServer().getPluginManager().registerEvents(new FaweListener(), this);
     getServer().getPluginManager().registerEvents(new JoinListener(), this);
     getServer().getPluginManager().registerEvents(new LeaveListener(), this);
-    getServer().getPluginManager().registerEvents(new BucketListener(), this);
-    // getServer().getPluginManager().registerEvents(new FaweListener(), this);
     getServer().getPluginManager().registerEvents(new MenuListener(), this);
     getServer().getPluginManager().registerEvents(new PortalListener(), this);
-    getServer().getPluginManager().registerEvents(new VehicleListener(), this);
+    ;
     if (!Bukkit.getServer().getOnlinePlayers().isEmpty()) {
       Bukkit.getServer().getOnlinePlayers().forEach(e -> {
         try {
@@ -95,7 +98,7 @@ public class Rooms extends JavaPlugin {
         }
       });
     }
-    PortalListener.portalcooldowns=new HashMap<>();
+    PortalListener.portalcooldowns = new HashMap<>();
     // todo purge globalhouselist
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new PortalCooldownTask(), 0, 1);
     this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new UpdateGlobalTask(), 0, 300);
