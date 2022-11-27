@@ -97,7 +97,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                 if (RoomWorlds.getRoomWorldsPlayer(args[1]).isEmpty()) {
                   Rooms.mysql.loadOthersRoomWorlds(player, args[1], null);
                 } else {
-                  if (Rooms.isFloodgateLoaded() &&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+                  if (Rooms.isFloodgateLoaded() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
                     new BRKVisitTargetRooms().makemenu(player, args[1]);
                   } else {
                     new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), args[1]).open();
@@ -120,7 +120,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                       .getRoomWorldString(player.getLocation().getWorld().getName());
                   if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
                     try {
-                      WorldGuardManager.addPlayerGroup(roomWorld, player,usergroup.TRUSTED);
+                      WorldGuardManager.addPlayerGroup(roomWorld, player, usergroup.TRUSTED);
                       roomWorld.getTrustedMembers().put(target.getUniqueId(), target.getName());
                       player.sendMessage("You trusted " + target.getName());
                     } catch (Exception exception) {
@@ -157,14 +157,14 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
 
             }
           }
-          case "locationdebug" ->{
+          case "locationdebug" -> {
             player.sendMessage(LocationSerializer.getSerializedPresetLocation(player.getLocation()));
           }
         }
         // check houses for player if online or else load offlinehouseworld hashmap for
         // player
       } else {
-        if (Rooms.isFloodgateLoaded()&&FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+        if (Rooms.isFloodgateLoaded() && FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
           new BRKMainMenu().makemenu(player);
         } else {
           new MainMenu(Rooms.getPlayerMenuUtility(player)).open();

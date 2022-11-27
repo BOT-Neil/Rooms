@@ -18,7 +18,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import tel.endho.rooms.util.enums.usergroup;
 
 public class WorldGuardManager {
-  public static void addPlayerGroup(RoomWorld roomWorld, Player player, usergroup usergroup){
+  public static void addPlayerGroup(RoomWorld roomWorld, Player player, usergroup usergroup) {
 
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
     RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString()));
@@ -32,34 +32,35 @@ public class WorldGuardManager {
     if (global == null) {
       return;
     }
-    switch(usergroup){
+    switch (usergroup) {
       case BLOCKED:
         break;
       case MEMBER:
-        global.getMembers().addPlayer(player.getUniqueId());;
+        global.getMembers().addPlayer(player.getUniqueId());
+        ;
         break;
       case TRUSTED:
         global.getMembers().addPlayer(player.getUniqueId());
         break;
       default:
         break;
-      
+
     }
   }
 
   @SuppressWarnings("null")
-  public static void setupRoom(RoomWorld roomWorld,String uuidsuffix) {
-    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"wg reload");
+  public static void setupRoom(RoomWorld roomWorld, String uuidsuffix) {
+    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "wg reload");
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-    RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString()+uuidsuffix));
+    RegionManager regions = container.get(FaweAPI.getWorld(roomWorld.getWorldUUID().toString() + uuidsuffix));
     if (regions == null) {
       return;
     }
-    
+
     if (!regions.hasRegion("__global__")) {
       ProtectedRegion region = new GlobalProtectedRegion("__global__");
       regions.addRegion(region);
-      //return;
+      // return;
     }
     ProtectedRegion global = regions.getRegion("__global__");
     if (global == null) {
@@ -70,7 +71,7 @@ public class WorldGuardManager {
     roomWorld.getTrustedMembers().keySet().forEach(uuid -> {
       global.getMembers().addPlayer(uuid);
     });
-    roomWorld.getMembers().keySet().forEach(uuid->{
+    roomWorld.getMembers().keySet().forEach(uuid -> {
       global.getMembers().addPlayer(uuid);
     });
     global.setFlag(Flags.PASSTHROUGH, StateFlag.State.DENY);
@@ -78,14 +79,14 @@ public class WorldGuardManager {
     for (Flag<?> all : WorldGuard.getInstance().getFlagRegistry().getAll()) {
       String named = all.getName();
       String value;
-      if(all.getDefault()==null){
-        value="null";
-      }else{
-        
-        value= all.getDefault().toString();
+      if (all.getDefault() == null) {
+        value = "null";
+      } else {
+
+        value = all.getDefault().toString();
       }
-       
-      System.out.println("named: "+named+" value: "+value);
+
+      System.out.println("named: " + named + " value: " + value);
     }
   }
 
