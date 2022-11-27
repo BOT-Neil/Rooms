@@ -10,6 +10,7 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
+import tel.endho.rooms.WorldGuardManager;
 import tel.endho.rooms.menusystem.bmenu.BRKConfirmDeleteMenu;
 import tel.endho.rooms.menusystem.bmenu.BRKMainMenu;
 import tel.endho.rooms.menusystem.bmenu.BRKVisitTargetRooms;
@@ -17,6 +18,7 @@ import tel.endho.rooms.menusystem.menu.DeleteConfirmMenu;
 import tel.endho.rooms.menusystem.menu.MainMenu;
 import tel.endho.rooms.menusystem.menu.VisitTargetRoomsMenu;
 import tel.endho.rooms.util.LocationSerializer;
+import tel.endho.rooms.util.enums.usergroup;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -118,6 +120,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                       .getRoomWorldString(player.getLocation().getWorld().getName());
                   if (roomWorld.getOwnerUUID().equals(player.getUniqueId())) {
                     try {
+                      WorldGuardManager.addPlayerGroup(roomWorld, player,usergroup.TRUSTED);
                       roomWorld.getTrustedMembers().put(target.getUniqueId(), target.getName());
                       player.sendMessage("You trusted " + target.getName());
                     } catch (Exception exception) {
