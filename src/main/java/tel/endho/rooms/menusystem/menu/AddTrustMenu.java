@@ -90,12 +90,12 @@ public class AddTrustMenu extends PaginatedMenu {
 
           // Create an item from our collection and place it into the inventory
           ItemStack playerItem = new ItemStack(Material.PLAYER_HEAD, 1);
-          ItemMeta playerMeta = playerItem.getItemMeta();
-          playerMeta.setDisplayName(ChatColor.RED + players.get(index).getDisplayName());
+          ItemMeta playerItemMeta = playerItem.getItemMeta();
+          playerItemMeta.setDisplayName(ChatColor.RED + players.get(index).getDisplayName());
 
-          playerMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "uuid"),
+          playerItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "uuid"),
               PersistentDataType.STRING, players.get(index).getUniqueId().toString());
-          playerItem.setItemMeta(playerMeta);
+          playerItem.setItemMeta(playerItemMeta);
 
           inventory.addItem(playerItem);
 
