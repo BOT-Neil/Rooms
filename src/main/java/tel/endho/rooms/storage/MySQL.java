@@ -21,6 +21,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MySQL {
   private Connection connection;
@@ -153,14 +154,16 @@ public class MySQL {
       public void run() {
         try {
           PreparedStatement statement = connection.prepareStatement(
-              "SELECT * FROM `room_worlds` WHERE `owneruuid` LIKE ? ORDER BY `id` ASC;");
-          statement.setString(1, player.getUniqueId().toString());
+              "SELECT * FROM `room_worlds` WHERE `ownername` LIKE ? ORDER BY `id` ASC;");
+          statement.setString(1, target);
           ResultSet result = statement.executeQuery();
+          AtomicReference<UUID> targetuuidd = new AtomicReference<>();
           while (result.next()) {
             int rowid = result.getInt("id");
             UUID uuid = UUID.fromString(result.getString("worlduuid"));
-            UUID OwnerUUID = player.getUniqueId();
-            String Ownername = player.getName();
+            UUID OwnerUUID = UUID.fromString(result.getString("owneruuid"));
+            targetuuidd.set(OwnerUUID);
+            String Ownername = result.getString("ownername");
             String timestamp = result.getString("timestamp");
             String spawnlocation = result.getString("spawnlocation");
             String bordercolour = result.getString("bordercolour");
@@ -201,7 +204,7 @@ public class MySQL {
                 @Override
                 public void run() {
                   Rooms.debug("debugjj");
-                  new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), target).open();
+                  new VisitTargetRoomsMenu(Rooms.getPlayerMenuUtility(player), targetuuidd.get()).open();
                 }
               };
               run.runTask(Rooms.getPlugin());
