@@ -18,6 +18,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import tel.endho.rooms.util.enums.usergroup;
 
 public class WorldGuardManager {
+  //todo add island suffix rmnether rmend
   public static void addPlayerGroup(RoomWorld roomWorld, Player player, usergroup usergroup) {
 
     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -28,6 +29,7 @@ public class WorldGuardManager {
     if (!regions.hasRegion("__global__")) {
       return;
     }
+    
     ProtectedRegion global = regions.getRegion("__global__");
     if (global == null) {
       return;
@@ -46,6 +48,7 @@ public class WorldGuardManager {
         break;
 
     }
+    ProtectedRegion region = new GlobalProtectedRegion("roomworld");
   }
 
   @SuppressWarnings("null")
