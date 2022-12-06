@@ -409,8 +409,8 @@ public class RoomWorldManager {
   public void unloadRoomWorld(RoomWorld roomWorld) {
     World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
     assert world != null;
-    // world.save();
-    Rooms.debug("unloadWorld: " + Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(), true));
+    world.save();
+    Rooms.debug("unloadWorld: " + Bukkit.unloadWorld(roomWorld.getWorldUUID().toString(), false));
     if (roomWorld.getHasNether()) {
       World nworld = Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether");
       assert nworld != null;

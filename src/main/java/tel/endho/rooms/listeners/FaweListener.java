@@ -57,8 +57,8 @@ public class FaweListener {
               BlockVector3 placement = session.getPlacementPosition(actor);
               int absX = Math.abs(placement.getX());
               int absZ = Math.abs(placement.getZ());
-              int totalX = absX + width;
-              int totalZ = absZ + length;
+              int totalX = absX + length;
+              int totalZ = absZ + width;
               
               if (Bukkit.getWorld(event.getWorld().getName()).getWorldBorder() == null) {
                 event.setCancelled(true);
