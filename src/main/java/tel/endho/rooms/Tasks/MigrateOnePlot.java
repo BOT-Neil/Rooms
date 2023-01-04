@@ -1,12 +1,9 @@
 package tel.endho.rooms.Tasks;
 
-import com.grinderwolf.swm.api.exceptions.WorldAlreadyExistsException;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.plot.Plot;
 import tel.endho.rooms.Rooms;
 
-import java.io.IOException;
-import java.sql.SQLException;
 //import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,7 +21,7 @@ public class MigrateOnePlot implements Runnable{
                     Rooms.roomWorldManager.migratePlot(plot);
                     migratedOne.set(true);
                     break;
-                } catch (SQLException | IOException | WorldAlreadyExistsException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

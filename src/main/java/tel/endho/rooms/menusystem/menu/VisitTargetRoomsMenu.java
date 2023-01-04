@@ -1,9 +1,5 @@
 package tel.endho.rooms.menusystem.menu;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -53,7 +49,7 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
 
   @Override
   public void handleMenu(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws IOException {
     Player p = (Player) e.getWhoClicked();
 
     ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());

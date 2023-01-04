@@ -1,9 +1,5 @@
 package tel.endho.rooms.menusystem;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -40,7 +36,7 @@ public abstract class Menu implements InventoryHolder {
 
   // let each menu decide how the items in the menu will be handled when clicked
   public abstract void handleMenu(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException;
+      throws IOException;
 
   // let each menu decide what items are to be placed in the inventory menu
   public abstract void setMenuItems();

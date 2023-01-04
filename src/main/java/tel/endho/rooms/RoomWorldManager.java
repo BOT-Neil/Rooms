@@ -1,12 +1,18 @@
 package tel.endho.rooms;
 
 import com.fastasyncworldedit.core.FaweAPI;
-import com.grinderwolf.swm.api.SlimePlugin;
-import com.grinderwolf.swm.api.exceptions.*;
-import com.grinderwolf.swm.api.loaders.SlimeLoader;
-import com.grinderwolf.swm.api.world.SlimeWorld;
-import com.grinderwolf.swm.api.world.properties.SlimeProperties;
-import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
+import com.infernalsuite.aswm.SlimePlugin;
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.exceptions.WorldAlreadyExistsException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+import com.infernalsuite.aswm.exceptions.WorldLockedException;
+import com.infernalsuite.aswm.loaders.SlimeLoader;
+import com.infernalsuite.aswm.world.SlimeWorld;
+import com.infernalsuite.aswm.world.properties.SlimeProperties;
+import com.infernalsuite.aswm.world.properties.SlimeProperty;
+import com.infernalsuite.aswm.world.properties.SlimePropertyMap;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
@@ -31,6 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -94,7 +101,7 @@ public class RoomWorldManager {
     if (plot == null) {
       return;
     }
-    if (!player.getUniqueId().equals(plot.getOwner())&&!player.hasPermission("rooms.admin")) {
+    if (!player.getUniqueId().equals(plot.getOwner()) && !player.hasPermission("rooms.admin")) {
       return;
     }
     try {
@@ -342,11 +349,11 @@ public class RoomWorldManager {
              * });
              */
             // do bedrock too
-          } catch (CorruptedWorldException | NewerFormatException | WorldInUseException | UnknownWorldException
+          } catch (CorruptedWorldException | NewerFormatException | WorldLoadedException | UnknownWorldException
               | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-          }
+          } 
         }
       };
       r.runTaskAsynchronously(Rooms.getPlugin());
@@ -361,7 +368,7 @@ public class RoomWorldManager {
   }
 
   public void TpOrLoadHouseWorld(Player p, String uuidstring)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws CorruptedWorldException, NewerFormatException, WorldLoadedException, UnknownWorldException, IOException {
     UUID realuuid = UUID.fromString(uuidstring.substring(0, Math.min(uuidstring.length(), 36)));
     String uuidsuffix = "";
     if (uuidstring.endsWith("rmnether")) {
@@ -378,8 +385,8 @@ public class RoomWorldManager {
       // todo if(globalroomworld.region!= config.region)
       //
       // todo implement lobby mode
-      Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
       Rooms.redis.teleportPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver, realuuid, uuidsuffix);
+      Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
     } else {
       if (Rooms.configs.getStorageConfig().getBoolean("redislobby") && Rooms.redis.isLoaded()) {
         Rooms.getPlugin().sendPlayer(p, GlobalRoomWorlds.getGlobalRoomWorldUUID(realuuid).lastserver);
@@ -407,6 +414,10 @@ public class RoomWorldManager {
   }
 
   public void unloadRoomWorld(RoomWorld roomWorld) {
+    WorldCreator wCreator = new WorldCreator("");
+    wCreator.seed(0);
+    wCreator.name("null");
+    Bukkit.createWorld(wCreator);
     World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
     assert world != null;
     world.save();
@@ -445,7 +456,7 @@ public class RoomWorldManager {
   }
 
   public void loadWorld(RoomWorld roomWorld, @Nullable Player player, String uuidsuffix)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws CorruptedWorldException, NewerFormatException, WorldLoadedException, UnknownWorldException, IOException {
     SlimePropertyMap properties = new SlimePropertyMap();
     Preset preset = roomWorld.getPreset();
     properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
@@ -480,9 +491,9 @@ public class RoomWorldManager {
       @Override
       public void run() {
         try {
-          Optional<SlimeWorld> opworld = plugin
-              .asyncLoadWorld(sqlLoader, roomWorld.getWorldUUID().toString() + uuidsuffix, false, properties).get();
-          SlimeWorld world = opworld.get();
+          SlimeWorld opworld = plugin
+              .loadWorld(sqlLoader, roomWorld.getWorldUUID().toString() + uuidsuffix, false, properties);
+          SlimeWorld world = opworld;
           BukkitRunnable r = new BukkitRunnable() {
             @SuppressWarnings("null")
             @Override
@@ -514,7 +525,7 @@ public class RoomWorldManager {
           // r.runTask(Rooms.getPlugin());
           r.runTask(Rooms.getPlugin());
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch ( UnknownWorldException | CorruptedWorldException | NewerFormatException | WorldLockedException | IOException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }

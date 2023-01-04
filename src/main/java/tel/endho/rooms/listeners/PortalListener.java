@@ -1,9 +1,6 @@
 package tel.endho.rooms.listeners;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +12,12 @@ import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.exceptions.WorldAlreadyExistsException;
+
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
@@ -82,7 +85,7 @@ public class PortalListener implements Listener {
 
   @EventHandler
   public void onPortal(EntityPortalEnterEvent portalEvent)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws CorruptedWorldException, NewerFormatException, WorldAlreadyExistsException, UnknownWorldException, IOException {
     Rooms.debug("debug1");
     if (!(portalEvent.getEntity() instanceof Player)) {
       return;
