@@ -1,9 +1,7 @@
 package tel.endho.rooms.menusystem.menu;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -36,8 +34,7 @@ public class GlobalRoomsMenu extends PaginatedMenu {
   }
 
   @Override
-  public void handleMenu(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+  public void handleMenu(InventoryClickEvent e){
     Player p = (Player) e.getWhoClicked();
     ArrayList<GlobalRoomWorld> globalrooms = new ArrayList<>(GlobalRoomWorlds.getGlobalRoomWorlds().values());
     // ArrayList<Player> players = new
@@ -51,9 +48,16 @@ public class GlobalRoomsMenu extends PaginatedMenu {
       // NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
       // playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
       // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
-      Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
-          e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
+      try {
+        Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
+            e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+                .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
+      } catch (com.infernalsuite.aswm.exceptions.CorruptedWorldException
+          | com.infernalsuite.aswm.exceptions.NewerFormatException | WorldLoadedException
+          | com.infernalsuite.aswm.exceptions.UnknownWorldException | IOException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
       // new LoadRoomMenu(playerMenuUtility).open();
       // new KillConfirmMenu(playerMenuUtility).open();
 

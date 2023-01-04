@@ -1,9 +1,6 @@
 package tel.endho.rooms.menusystem.menu;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,6 +9,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
@@ -40,16 +43,21 @@ public class LoadRoomMenu extends PaginatedMenu {
 
   @Override
   public void handleMenu(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws  IOException {
     Player p = (Player) e.getWhoClicked();
 
     // ArrayList<Player> players = new
     // ArrayList<Player>(getServer().getOnlinePlayers());
     switch (e.getCurrentItem().getType()) {
       case ENDER_EYE, GRASS_BLOCK, NETHERRACK -> {
-        Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
-            e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-                .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING));
+        try {
+          Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
+              e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+                  .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING));
+        } catch (CorruptedWorldException | NewerFormatException | WorldLoadedException | UnknownWorldException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
       default -> {
         break;

@@ -1,15 +1,17 @@
 package tel.endho.rooms.menusystem.bmenu;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.geysermc.cumulus.CustomForm;
 import org.geysermc.cumulus.response.CustomFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
+
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+
 import tel.endho.rooms.*;
 
 import java.io.IOException;
@@ -57,10 +59,13 @@ public class BRKVisitTargetRooms {
       try {
         Rooms.roomWorldManager.TpOrLoadHouseWorld(player, playerhouses.get(dropclick0).getWorldUUID().toString());
         return;
-      } catch (CorruptedWorldException | NewerFormatException | WorldInUseException | UnknownWorldException
-          | IOException e) {
-        e.printStackTrace();
+      } catch (CorruptedWorldException | NewerFormatException | WorldLoadedException | UnknownWorldException
+          | IOException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
+
+
       Rooms.debug(response.getResponses().toString());
     });
     FloodgatePlayer flapiPlayer = flapi.getPlayer(player.getUniqueId());

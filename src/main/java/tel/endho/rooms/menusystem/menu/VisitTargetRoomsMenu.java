@@ -9,6 +9,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
 import tel.endho.rooms.Rooms;
@@ -55,9 +61,14 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
     ArrayList<Player> players = new ArrayList<Player>(getServer().getOnlinePlayers());
     switch (e.getCurrentItem().getType()) {
       case ENDER_EYE, GRASS_BLOCK -> {
-        Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
-            e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-                .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING));
+        try {
+          Rooms.roomWorldManager.TpOrLoadHouseWorld(p,
+              e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+                  .get(new NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING));
+        } catch (CorruptedWorldException | NewerFormatException | WorldLoadedException | UnknownWorldException e1) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        }
       }
       default -> {
         break;

@@ -1,13 +1,15 @@
 package tel.endho.rooms.listeners;
 
-import com.grinderwolf.swm.api.exceptions.CorruptedWorldException;
-import com.grinderwolf.swm.api.exceptions.NewerFormatException;
-import com.grinderwolf.swm.api.exceptions.UnknownWorldException;
-import com.grinderwolf.swm.api.exceptions.WorldInUseException;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
+
+import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+
 import tel.endho.rooms.menusystem.Menu;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ public class MenuListener implements Listener {
 
   @EventHandler
   public void onMenuClick(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, WorldInUseException, UnknownWorldException, IOException {
+      throws CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
 
     InventoryHolder holder = e.getInventory().getHolder();
     // If the inventoryholder of the inventory clicked on

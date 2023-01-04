@@ -17,6 +17,7 @@ import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
 import com.infernalsuite.aswm.exceptions.NewerFormatException;
 import com.infernalsuite.aswm.exceptions.UnknownWorldException;
 import com.infernalsuite.aswm.exceptions.WorldAlreadyExistsException;
+import com.infernalsuite.aswm.exceptions.WorldLoadedException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
@@ -85,7 +86,7 @@ public class PortalListener implements Listener {
 
   @EventHandler
   public void onPortal(EntityPortalEnterEvent portalEvent)
-      throws CorruptedWorldException, NewerFormatException, WorldAlreadyExistsException, UnknownWorldException, IOException {
+      throws CorruptedWorldException, NewerFormatException, WorldAlreadyExistsException, UnknownWorldException, IOException, WorldLoadedException {
     Rooms.debug("debug1");
     if (!(portalEvent.getEntity() instanceof Player)) {
       return;
