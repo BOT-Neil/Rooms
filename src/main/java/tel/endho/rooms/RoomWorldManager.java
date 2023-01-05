@@ -11,7 +11,6 @@ import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperty;
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
@@ -37,7 +36,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -125,7 +123,7 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.DIFFICULTY, "normal");
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("plotsquaredheight"));
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
-      plugin.generateWorld(world);
+      plugin.loadWorld(world);
       Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
       Map<UUID, String> blocked = new HashMap<>();
       Map<UUID, String> trusted = new HashMap<>();
@@ -214,7 +212,7 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.SPAWN_Z, 1);
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
       // This method must be called synchronously
-      plugin.generateWorld(world);
+      plugin.loadWorld(world);
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_MOB_SPAWNING, false);
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_FIRE_TICK, false);
       BukkitRunnable r = new BukkitRunnable() {
@@ -309,7 +307,7 @@ public class RoomWorldManager {
       SlimeWorld world = plugin.createEmptyWorld(sqlLoader, roomWorld.getWorldUUID().toString() + "rmnether", false,
           properties);
       // This method must be called synchronously
-      plugin.generateWorld(world);
+      plugin.loadWorld(world);
       String schematic = Rooms.configs.getPresetConfig().getString("netherschematic");
       BukkitRunnable r = new BukkitRunnable() {
         @Override
@@ -493,7 +491,7 @@ public class RoomWorldManager {
             @Override
             public void run() {
               try {
-                plugin.generateWorld(world);
+                plugin.loadWorld(world);
                 if (Bukkit.getWorld(roomWorld.getWorldUUID().toString() + uuidsuffix) != null) {
                   World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString() + uuidsuffix);
                   world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
