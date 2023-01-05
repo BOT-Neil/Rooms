@@ -25,6 +25,9 @@ repositories {
     maven {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    maven {
+      url = 'https://repo.infernalsuite.com/repository/maven-snapshots/'
+    }
     //maven { url "https://repo.codemc.org/repository/maven-public/" }
 }
 configurations {
@@ -37,8 +40,9 @@ dependencies {
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0'
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.4.3")
     compileOnly("com.plotsquared:PlotSquared-Core:6.4.0")
-    compileOnly(files("libs/api-1.19.3-R0.1-SNAPSHOT.jar"))
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly("com.infernalsuite.aswm:api:1.19.3-R0.1-SNAPSHOT")
+    //compileOnly(files("libs/api-1.19.3-R0.1-SNAPSHOT.jar"))
+    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
     compileOnly('com.sk89q.worldguard:worldguard-bukkit:7.0.7')
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.1")
