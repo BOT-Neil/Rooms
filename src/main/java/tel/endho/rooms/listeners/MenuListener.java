@@ -1,14 +1,13 @@
 package tel.endho.rooms.listeners;
 
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
 
-import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 
 import tel.endho.rooms.menusystem.Menu;
 

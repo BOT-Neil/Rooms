@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;

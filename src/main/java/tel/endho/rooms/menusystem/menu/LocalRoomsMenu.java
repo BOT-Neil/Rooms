@@ -9,10 +9,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
@@ -46,20 +46,26 @@ public class LocalRoomsMenu extends PaginatedMenu {
     Player p = (Player) e.getWhoClicked();
     ArrayList<RoomWorld> playerhouses = new ArrayList<>(RoomWorlds.getLoadedRoomWorlds().values());
 
-    /*if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
-        || e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
-      // PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
-      // playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
-      // NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
-      // playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
-      // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
-      Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
-          UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
-              .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)));
-      // new LoadRoomMenu(playerMenuUtility).open();
-      // new KillConfirmMenu(playerMenuUtility).open();
-
-    } */
+    /*
+     * if (e.getCurrentItem().getType().equals(Material.GRASS_BLOCK)
+     * || e.getCurrentItem().getType().equals(Material.ENDER_EYE)) {
+     * // PlayerMenuUtility playerMenuUtility = Rooms.getPlayerMenuUtility(p);
+     * // playerMenuUtility.setPlayerToKill(Bukkit.getPlayer(UUID.fromString(e.
+     * getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
+     * // NamespacedKey(Rooms.getPlugin(), "uuid"), PersistentDataType.STRING))));
+     * //
+     * playerMenuUtility.setPlayerGetHouseList(Bukkit.getPlayer(UUID.fromString(e.
+     * getCurrentItem().getItemMeta().getPersistentDataContainer().get(new
+     * // NamespacedKey(Rooms.getPlugin(),"UUID"),PersistentDataType.STRING))));
+     * Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
+     * UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
+     * .get(new NamespacedKey(Rooms.getPlugin(), "UUID"),
+     * PersistentDataType.STRING)));
+     * // new LoadRoomMenu(playerMenuUtility).open();
+     * // new KillConfirmMenu(playerMenuUtility).open();
+     * 
+     * }
+     */
     if (e.getCurrentItem().getItemMeta().getPersistentDataContainer()
         .has(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING)) {
       UUID uuid = UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer()
@@ -70,9 +76,9 @@ public class LocalRoomsMenu extends PaginatedMenu {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
-      
+
     }
-    
+
     else if (e.getCurrentItem().getType().equals(Material.BARRIER)) {
       new MainMenu(playerMenuUtility).open();
       // close inventory
@@ -116,13 +122,16 @@ public class LocalRoomsMenu extends PaginatedMenu {
           ///////////////////////////
 
           // Create an item from our collection and place it into the inventory
-          /*ItemStack playerItem = switch (playerhouses.get(index).getEnviroment()) {
-            case "normal" -> new ItemStack(Material.GRASS_BLOCK, 1);
-            case "nether" -> new ItemStack(Material.NETHERRACK, 1);
-            case "the_end" -> new ItemStack(Material.ENDER_EYE, 1);
-            default -> throw new IllegalStateException("Unexpected value: " + playerhouses.get(index).getEnviroment());
-          };*/
-          ItemStack playerItem = new ItemStack(playerhouses.get(index).getIcon(),1);
+          /*
+           * ItemStack playerItem = switch (playerhouses.get(index).getEnviroment()) {
+           * case "normal" -> new ItemStack(Material.GRASS_BLOCK, 1);
+           * case "nether" -> new ItemStack(Material.NETHERRACK, 1);
+           * case "the_end" -> new ItemStack(Material.ENDER_EYE, 1);
+           * default -> throw new IllegalStateException("Unexpected value: " +
+           * playerhouses.get(index).getEnviroment());
+           * };
+           */
+          ItemStack playerItem = new ItemStack(playerhouses.get(index).getIcon(), 1);
           ItemMeta playerMeta = playerItem.getItemMeta();
           playerMeta.setDisplayName(ChatColor.RED + playerhouses.get(index).getOwnerName());
 

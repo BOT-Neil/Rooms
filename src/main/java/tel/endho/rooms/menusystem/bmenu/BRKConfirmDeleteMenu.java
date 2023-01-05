@@ -6,7 +6,7 @@ import org.geysermc.cumulus.response.SimpleFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
-import com.infernalsuite.aswm.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;

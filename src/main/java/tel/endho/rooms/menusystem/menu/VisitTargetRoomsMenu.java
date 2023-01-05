@@ -10,10 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import com.infernalsuite.aswm.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
+import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
@@ -32,17 +32,19 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
   private Boolean useUUID;
   private String target;
   private UUID targetuuid;
+
   public VisitTargetRoomsMenu(PlayerMenuUtility playerMenuUtility, String target) {
     super(playerMenuUtility);
     this.target = target;
-    this.useUUID=false;
+    this.useUUID = false;
   }
 
   public VisitTargetRoomsMenu(PlayerMenuUtility playerMenuUtility, UUID uuid) {
     super(playerMenuUtility);
     this.targetuuid = uuid;
-    this.useUUID =true;
+    this.useUUID = true;
   }
+
   @Override
   public String getMenuName() {
     return "Choose room to visit";
@@ -103,20 +105,20 @@ public class VisitTargetRoomsMenu extends PaginatedMenu {
 
     addMenuBorder();
     ArrayList<RoomWorld> playerhouses = new ArrayList<>();
-    if(useUUID){
+    if (useUUID) {
       if (Bukkit.getPlayer(targetuuid) == null) {
         playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(targetuuid).values());
       } else {
         playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(Bukkit.getPlayer(targetuuid)).values());
       }
-    }else{
-      if (Bukkit.getPlayer(target) == null) {
-      playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(target).values());
     } else {
-      playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(Bukkit.getPlayer(target)).values());
+      if (Bukkit.getPlayer(target) == null) {
+        playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(target).values());
+      } else {
+        playerhouses.addAll(RoomWorlds.getRoomWorldsPlayer(Bukkit.getPlayer(target)).values());
+      }
     }
-    }
-    
+
     // ArrayList<Player> players = new
     // ArrayList<Player>(getServer().getOnlinePlayers());
     playerhouses.sort(Comparator.comparingInt(RoomWorld::getRowid));

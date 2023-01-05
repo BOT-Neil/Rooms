@@ -1,6 +1,6 @@
 package tel.endho.rooms.menusystem.menu;
 
-import com.infernalsuite.aswm.exceptions.WorldLoadedException;
+import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,7 +34,7 @@ public class GlobalRoomsMenu extends PaginatedMenu {
   }
 
   @Override
-  public void handleMenu(InventoryClickEvent e){
+  public void handleMenu(InventoryClickEvent e) {
     Player p = (Player) e.getWhoClicked();
     ArrayList<GlobalRoomWorld> globalrooms = new ArrayList<>(GlobalRoomWorlds.getGlobalRoomWorlds().values());
     // ArrayList<Player> players = new
@@ -52,9 +52,9 @@ public class GlobalRoomsMenu extends PaginatedMenu {
         Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
             e.getCurrentItem().getItemMeta().getPersistentDataContainer()
                 .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
-      } catch (com.infernalsuite.aswm.exceptions.CorruptedWorldException
-          | com.infernalsuite.aswm.exceptions.NewerFormatException | WorldLoadedException
-          | com.infernalsuite.aswm.exceptions.UnknownWorldException | IOException e1) {
+      } catch (com.infernalsuite.aswm.api.exceptions.CorruptedWorldException
+          | com.infernalsuite.aswm.api.exceptions.NewerFormatException | WorldLoadedException
+          | com.infernalsuite.aswm.api.exceptions.UnknownWorldException | IOException e1) {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
