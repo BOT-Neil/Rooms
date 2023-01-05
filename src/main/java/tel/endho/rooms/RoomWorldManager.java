@@ -414,10 +414,6 @@ public class RoomWorldManager {
   }
 
   public void unloadRoomWorld(RoomWorld roomWorld) {
-    WorldCreator wCreator = new WorldCreator("");
-    wCreator.seed(0);
-    wCreator.name("null");
-    Bukkit.createWorld(wCreator);
     World world = Bukkit.getWorld(roomWorld.getWorldUUID().toString());
     assert world != null;
     world.save();
