@@ -43,9 +43,9 @@ dependencies {
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0'
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.4.3")
     compileOnly("com.plotsquared:PlotSquared-Core:6.4.0")
-    compileOnly("com.infernalsuite.aswm:api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("com.infernalsuite.aswm:api:1.20.2-R0.1-SNAPSHOT")
     //compileOnly(files("libs/api-1.19.3-R0.1-SNAPSHOT.jar"))
-    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT'
     compileOnly('com.sk89q.worldguard:worldguard-bukkit:7.0.7')
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.1")

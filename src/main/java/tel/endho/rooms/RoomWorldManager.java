@@ -74,7 +74,8 @@ public class RoomWorldManager {
         api.getAllPlots().forEach(plot -> {
           try {
             migratePlot(plot);
-          } catch (SQLException | WorldAlreadyExistsException | IOException e) {
+          } catch (SQLException | WorldAlreadyExistsException | IOException | WorldLockedException |
+                   UnknownWorldException e) {
             e.printStackTrace();
           }
           try {
@@ -102,14 +103,14 @@ public class RoomWorldManager {
     }
     try {
       this.migratePlot(plot);
-    } catch (WorldAlreadyExistsException | SQLException | IOException e) {
+    } catch (WorldAlreadyExistsException | SQLException | IOException | WorldLockedException | UnknownWorldException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
   }
 
-  public void migratePlot(Plot plot) throws SQLException, IOException, WorldAlreadyExistsException {
+  public void migratePlot(Plot plot) throws SQLException, IOException, WorldAlreadyExistsException, WorldLockedException, UnknownWorldException {
     if (plot != null && !plot.isMerged() && plot.getOwner() != null) {
       /*
        * for (Plot allPlot : api.getAllPlots()) {
@@ -273,7 +274,7 @@ public class RoomWorldManager {
 
       Rooms.mysql.insertRoomWorld(player, world, properties, preset);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
-    } catch (IOException | WorldAlreadyExistsException | SQLException ex) {
+    } catch (IOException | WorldAlreadyExistsException | SQLException | UnknownWorldException | WorldLockedException ex) {
       /* Exception handling */
     }
   }
@@ -358,7 +359,7 @@ public class RoomWorldManager {
       // todo mysql update hasnether
       // Rooms.mysql.insertRoomWorld(player, world, properties);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
-    } catch (IOException | WorldAlreadyExistsException ex) {
+    } catch (IOException | WorldAlreadyExistsException | UnknownWorldException | WorldLockedException ex) {
       /* Exception handling */
     }
   }
