@@ -60,7 +60,8 @@ FAWE
 
 ## Usage
 
-Use '/rooms' command to get started  
+Use '/rooms' command to get started   
+DON'T MIGRATE YOUR PLOTSQUARED PLOTs WITHOUT BACKING UP EVERYTHING, EVERYTHING!  
 
 _For more examples, please refer to the [Documentation](https://github.com/BOT-Neil/Rooms/wiki)_
 
@@ -74,7 +75,7 @@ _For more examples, please refer to the [Documentation](https://github.com/BOT-N
 *Make Text configurable   
 *Hex support to text config aswell   
 *island support after biomes are fixed upstream   
-*possibly change island UUID to standard UUID format instead of suffix, apparently better index performance  
+*possibly change end/nether island UUID to standard UUID format instead of suffix, apparently better index performance  
 
 ## Contributing
 
@@ -94,7 +95,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/BOT-Neil/Rooms/blob/main/LICENSE.md) for more information.
+Distributed under the GPL-V3 License. See [LICENSE](https://github.com/BOT-Neil/Rooms/blob/main/LICENSE.md) for more information.
 
 ## Authors
 
