@@ -66,11 +66,11 @@ _For more examples, please refer to the [Documentation](https://github.com/BOT-N
 
 ## Roadmap
 
-TODO LIST:
-*Finish Java GUI's
-*Finish Bedrock forms
-*Finish Commands
-*Finish Redis and implement matchmaking
+TODO LIST:  
+*Finish Java GUI's  
+*Finish Bedrock forms  
+*Finish Commands  
+*Finish Redis and implement matchmaking  
 
 ## Contributing
 
