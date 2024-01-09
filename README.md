@@ -54,7 +54,9 @@ FAWE
 
 1.Install ASP+plugin and setup your config as wanted  
 2.Add FastAsyncWorldEdit and WorldGuard plugins.  
-3.I would recommend you use mysql instead of sqlite  
+3.Optionally, I would recommend you use mysql instead of sqlite  
+4.Optionally migrate your plotsquared plots via the admin setting menu,
+my storage went from 100gb untrimmed to under 200mb for 10000 plots although alot were empty and had no grass.  
 
 
 
