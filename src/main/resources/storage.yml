@@ -1,6 +1,6 @@
 #name as in bungee config/ leave default if single server
-aspaperloader: mysql #which database to use for ASPaper world storage {mysql, file, mongodb, redis?}
-enablemysql: true #false uses sqlite(not recommended, doesnt work) USE TRUE
+aspaperloader: file #which database to use for ASPaper world storage {mysql, file, mongodb, redis?}
+enablemysql: false #false uses sqlite(not recommended, doesnt work) USE TRUE
 bungeeservername: Creative
 mysqlhost: "localhost"
 mysqlusername: "user"
