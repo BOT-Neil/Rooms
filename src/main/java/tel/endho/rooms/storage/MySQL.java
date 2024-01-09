@@ -56,9 +56,9 @@ public class MySQL {
   }
 
   //
-  public void createTable() throws SQLException {
+  public void createTable() {
     String roomworlds = """
-        CREATE TABLE `room_worlds` (
+        CREATE TABLE IF NOT EXISTS `room_worlds` (
          `id` int(11) NOT NULL AUTO_INCREMENT,
          `worlduuid` varchar(40) NOT NULL,
          `owneruuid` varchar(40) NOT NULL,
@@ -80,6 +80,7 @@ public class MySQL {
     try {
       connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {
+      //e.addSuppressed(new SQLWarning("Table 'room_worlds' already exists"));
       e.printStackTrace();
     }
   }
