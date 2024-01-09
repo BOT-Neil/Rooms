@@ -66,14 +66,13 @@ _For more examples, please refer to the [Documentation](https://github.com/BOT-N
 
 ## Roadmap
 
-TODO LIST:  
 *Finish Java GUI's  
 *Finish Bedrock forms  
 *Finish Commands  
 *Finish Redis and implement matchmaking   
 *Make Text configurable   
 *Hex support to text config aswell   
-*island support after biomes are fixed upstream
+*island support after biomes are fixed upstream   
 *possibly change island UUID to standard UUID format instead of suffix, apparently better index performance  
 
 ## Contributing
