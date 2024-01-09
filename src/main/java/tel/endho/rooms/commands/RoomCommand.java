@@ -29,7 +29,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-    if (command.getName().equalsIgnoreCase("rooms")) { // checking if my command is the one i'm after
+    if (command.getName().equalsIgnoreCase("room")) { // checking if my command is the one i'm after
 
       List<String> autoCompletes = new ArrayList<>(); // create a new string list for tab completion
       autoCompletes.add("visit");
@@ -43,7 +43,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
         return autoCompletes; // then return the list
 
       }
-
+      return autoCompletes;
     }
 
     return null; // this will return nothing if it wasn't the disguise command I have

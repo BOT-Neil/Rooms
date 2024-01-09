@@ -1,5 +1,6 @@
 package tel.endho.rooms.Tasks;
 
+import tel.endho.rooms.Rooms;
 import tel.endho.rooms.listeners.PortalListener;
 
 public class PortalCooldownTask implements Runnable {
@@ -14,7 +15,7 @@ public class PortalCooldownTask implements Runnable {
     if (PortalListener.portalcooldowns.entrySet() == null) {
       return;
     }
-    System.out.println("dd+"+ PortalListener.portalcooldowns.entrySet().size());
+    Rooms.debug("dd+"+ PortalListener.portalcooldowns.entrySet().size());
     if(PortalListener.portalcooldowns.entrySet().size()==0){
       return;
     }try{

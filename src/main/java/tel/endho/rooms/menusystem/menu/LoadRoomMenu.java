@@ -32,7 +32,7 @@ public class LoadRoomMenu extends PaginatedMenu {
 
   @Override
   public String getMenuName() {
-    return "Choose house to visit";
+    return "Choose room to visit";
   }
 
   @Override

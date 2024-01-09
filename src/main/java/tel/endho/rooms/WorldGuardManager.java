@@ -89,7 +89,7 @@ public class WorldGuardManager {
         value = all.getDefault().toString();
       }
 
-      System.out.println("named: " + named + " value: " + value);
+      Rooms.debug("named: " + named + " value: " + value);
     }
   }
 

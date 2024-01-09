@@ -82,10 +82,8 @@ public class AdminMenu extends Menu {
     MigrateOnePlotItemMeta.getPersistentDataContainer().set(new NamespacedKey(Rooms.getPlugin(), "menu"),
         PersistentDataType.STRING, "personal");
     ArrayList<String> personal_lore = new ArrayList<>();
-    personal_lore.add(ChatColor.AQUA + "Migrate one plot to Rooms");
+    personal_lore.add(ChatColor.AQUA + "Migrate the plot you're standing onto rooms");
     MigrateOnePlotItemMeta.setLore(personal_lore);
-    ArrayList<String> personalHousesLore = new ArrayList<>();
-    personalHousesLore.add(ChatColor.AQUA + "Migrate one plot to Rooms");
     MigrateOne.setItemMeta(MigrateOnePlotItemMeta);
     int localroomsint = RoomWorlds.getLoadedRoomWorlds().size();
     ItemStack localRooms = new ItemStack(Material.BOOK, 1);

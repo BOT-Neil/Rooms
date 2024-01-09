@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -134,7 +135,7 @@ public class RoomWorldManager {
       try {
         pusername = api.getPlotSquared().getImpromptuUUIDPipeline().getSingle(plot.getOwner(), 1000L);
       } catch (Exception e) {
-        System.out.println(e);
+        Rooms.debug(e.toString());
         String generatedString = RandomStringUtils.random(4, true, true);
         pusername = ("migrated" + generatedString);
       }

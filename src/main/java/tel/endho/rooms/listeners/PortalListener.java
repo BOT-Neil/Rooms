@@ -55,7 +55,6 @@ public class PortalListener implements Listener {
     } else {
       return;
     }
-    System.out.println("tomatoe");
     RoomWorld roomWorld = RoomWorlds.getRoomWorldString(currentLocation.getWorld().getName());
     Location newlocation;
     if (type.equals(PortalType.NETHER)) {
@@ -129,7 +128,7 @@ public class PortalListener implements Listener {
       } else {
         if (roomWorld.getHasNether()) {
           // is nether loaded or load|| just fix unload task so all islands are loaded
-          System.out.println("pumpkin");
+          Rooms.debug("pumpkin");
           Rooms.roomWorldManager.TpOrLoadHouseWorld(p, roomWorld.getWorldUUID().toString() + "rmnether");
           // newlocation = new
           // Location(Bukkit.getWorld(roomWorld.getWorldUUID().toString() + "rmnether"),
