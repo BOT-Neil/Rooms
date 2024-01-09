@@ -72,7 +72,29 @@ public class MySQL {
 
   //
   public void createTable() {
-    String roomworlds = """
+    String roomworlds;
+    if(useSQLITE){
+      roomworlds = """
+              CREATE TABLE IF NOT EXISTS `room_worlds` (
+              `id` INTEGER PRIMARY KEY ,
+              `worlduuid` TEXT NOT NULL,
+              `owneruuid` TEXT NOT NULL,
+              `ownername` TEXT NOT NULL,
+              `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `spawnlocation` TEXT NOT NULL,
+              `bordercolour` TEXT NOT NULL,
+              `hasnether` tinyINTEGER NOT NULL DEFAULT '0',
+              `hasend` tinyINTEGER NOT NULL DEFAULT '0',
+              `roomname` TEXT NULL DEFAULT NULL,
+              `icon` TEXT NULL DEFAULT NULL,
+              `blocked` TEXT   NULL DEFAULT '{}',
+              `members` TEXT   NULL DEFAULT '{}',
+              `trusted` TEXT   NULL DEFAULT '{}',
+              `preset` TEXT NOT NULL
+              );
+        """;
+    }else{
+      roomworlds = """
         CREATE TABLE IF NOT EXISTS `room_worlds` (
          `id` int(11) NOT NULL AUTO_INCREMENT,
          `worlduuid` varchar(40) NOT NULL,
@@ -92,6 +114,8 @@ public class MySQL {
          PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
         """;
+    }
+
     try {
       connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {
@@ -254,17 +278,24 @@ public class MySQL {
           String members = gson.toJson(groupsMap.get(usergroup.MEMBER.name()));
           String trusted = gson.toJson(groupsMap.get(usergroup.TRUSTED.name()));
           String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
+          String sqlitetimestamp;
+          if(useSQLITE){
+            sqlitetimestamp="CURRENT_TIMESTAMP";
+          }else{
+            sqlitetimestamp="current_timestamp()";
+          }
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?, ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `blocked`, `members`, `trusted`, `bordercolour`) VALUES (NULL, ?, ?, ?, x, ?, ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, OwnerUUID.toString());
           stmt.setString(3, Ownername);
-          stmt.setString(4, spawnlocation);
-          stmt.setString(5, "normal");
-          stmt.setString(6, blocked);
-          stmt.setString(7, members);
-          stmt.setString(8, trusted);
-          stmt.setString(9, Rooms.configs.getGeneralConfig().getString("bordercolour"));
+          stmt.setString(4, sqlitetimestamp);
+          stmt.setString(5, spawnlocation);
+          stmt.setString(6, "normal");
+          stmt.setString(7, blocked);
+          stmt.setString(8, members);
+          stmt.setString(9, trusted);
+          stmt.setString(10, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
               "SELECT `id`, `ownername`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
@@ -305,14 +336,21 @@ public class MySQL {
           String bordercolour = Rooms.configs.getGeneralConfig().getString("bordercolour");
           String Ownername = player.getName();
           UUID OwnerUUID = player.getUniqueId();
+          String sqlitetimestamp;
+          if(useSQLITE){
+            sqlitetimestamp="CURRENT_TIMESTAMP";
+          }else{
+            sqlitetimestamp="current_timestamp()";
+          }
           PreparedStatement stmt = connection.prepareStatement(
-              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, current_timestamp(), ?, ?, ?);");
+              "INSERT INTO `room_worlds` (`id`, `worlduuid`, `owneruuid`, `ownername`, `timestamp`, `spawnlocation`, `preset`, `bordercolour`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);");
           stmt.setString(1, world.getName());
           stmt.setString(2, OwnerUUID.toString());
           stmt.setString(3, Ownername);
-          stmt.setString(4, spawnlocation);
-          stmt.setString(5, "normal");
-          stmt.setString(6, Rooms.configs.getGeneralConfig().getString("bordercolour"));
+          stmt.setString(4, sqlitetimestamp);
+          stmt.setString(5, spawnlocation);
+          stmt.setString(6, "normal");
+          stmt.setString(7, Rooms.configs.getGeneralConfig().getString("bordercolour"));
           stmt.executeUpdate();
           PreparedStatement stmt2 = connection.prepareStatement(
               "SELECT `id`, `ownername`, `timestamp` FROM `room_worlds` WHERE `worlduuid` = ?");
