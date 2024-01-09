@@ -32,7 +32,7 @@ public class Redis {
   // RedisAsyncCommands<String, String> asyncCommands;
 
   public void initRedis() {
-    isLoaded = null;
+    isLoaded = false;
   }
 
   public void initRedis(String bungeesrvname, String host, String password, int port)

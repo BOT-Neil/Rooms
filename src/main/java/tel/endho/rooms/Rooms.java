@@ -110,9 +110,7 @@ public class Rooms extends JavaPlugin {
     if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
       new PAPIExpansion(this).register();
     }
-    if (Bukkit.getPluginManager().isPluginEnabled("floodgate")) {
-      isFloodgateLoaded = true;
-    }
+    isFloodgateLoaded = Bukkit.getPluginManager().isPluginEnabled("floodgate");
   }
 
   @Override
