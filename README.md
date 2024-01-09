@@ -70,6 +70,7 @@ _For more examples, please refer to the [Documentation](https://github.com/BOT-N
 *Finish Bedrock forms  
 *Finish Commands  
 *Finish Redis and implement matchmaking   
+*Implement presets   
 *Make Text configurable   
 *Hex support to text config aswell   
 *island support after biomes are fixed upstream   
