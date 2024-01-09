@@ -58,7 +58,7 @@ import javax.annotation.Nullable;
 
 public class RoomWorldManager {
   SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-  SlimeLoader sqlLoader = plugin.getLoader("mysql");
+  SlimeLoader sqlLoader = plugin.getLoader(Rooms.configs.getStorageConfig().getString("aspaperloader"));
   /*
    * private static Map<Integer, Preset> presetMap = new HashMap<>();
    * 

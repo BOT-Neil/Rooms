@@ -1,11 +1,13 @@
 #name as in bungee config/ leave default if single server
+aspaperloader: mysql #which database to use for ASPaper world storage {mysql, file, mongodb, redis?}
+enablemysql: true #false uses sqlite(not recommended, doesnt work) USE TRUE
 bungeeservername: Creative
 mysqlhost: "localhost"
 mysqlusername: "user"
 mysqldatabase: "server_rooms"
 mysqlpassword: "gr3atpassword"
 mysqlport: 3306
-enableredis: false #only if using multiple spigots
+enableredis: false #only if using multiple paper instances
 redishost: "localhost"
 redispassword: ""
 redisport: 6379

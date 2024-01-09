@@ -52,11 +52,17 @@ public class Rooms extends JavaPlugin {
     roomWorldManager = new RoomWorldManager();
     mysql = new MySQL();
     try {
-      mysql.initmysql(configs.getStorageConfig().getString("mysqlhost"),
-          configs.getStorageConfig().getString("mysqldatabase"), configs.getStorageConfig().getString("mysqlusername"),
-          configs.getStorageConfig().getString("mysqlpassword"), configs.getStorageConfig().getInt("mysqlport"));
+      if(configs.getStorageConfig().getBoolean("enablemysql")){
+        mysql.initmysql(configs.getStorageConfig().getString("mysqlhost"),
+                configs.getStorageConfig().getString("mysqldatabase"), configs.getStorageConfig().getString("mysqlusername"),
+                configs.getStorageConfig().getString("mysqlpassword"), configs.getStorageConfig().getInt("mysqlport"));
+      }else {
+        mysql.initsqlLite();
+      }
+
     } catch (SQLException | ClassNotFoundException e) {
-      e.printStackTrace();
+      Rooms.debug(e.toString());
+      Rooms.logToConsole("Fix your mysql config");
     }
     redis = new Redis();
     if (configs.getStorageConfig().getBoolean("enableredis")) {
@@ -66,7 +72,8 @@ public class Rooms extends JavaPlugin {
             configs.getStorageConfig().getInt("redisport"));
       } catch (ExecutionException | InterruptedException | TimeoutException e) {
         redis.initRedis();
-        e.printStackTrace();
+        Rooms.debug(e.toString());
+        Rooms.logToConsole("Fix your redis config");
       }
     } else {
       redis.initRedis();
@@ -130,10 +137,10 @@ public class Rooms extends JavaPlugin {
             File bob = new File(Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + uuid);
             bob.deleteOnExit();
           } catch (SQLException e) {
-            e.printStackTrace();
+            Rooms.debug(e.toString());
           }
-          world.save();
-          Bukkit.unloadWorld(world, false);
+          //world.save();
+          Bukkit.unloadWorld(world, true);
         }
         // todo use unloadRoomworld
       }
@@ -172,6 +179,9 @@ public class Rooms extends JavaPlugin {
     if (debugMode) {
       getPlugin().getLogger().info(string);
     }
+  }
+  public static void logToConsole(String string) {
+    getPlugin().getLogger().info(string);
   }
 
   public static boolean isOffline(UUID uuid) {

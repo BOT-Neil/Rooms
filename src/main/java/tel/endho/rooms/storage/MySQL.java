@@ -27,6 +27,12 @@ public class MySQL {
   private Connection connection;
   private String host, database, username, password;
   private int port;
+  private boolean useSQLITE;
+
+  public void initsqlLite() throws SQLException, ClassNotFoundException {
+    this.useSQLITE=true;
+    openConnection();
+  }
 
   public void initmysql(String host, String database, String username, String password, int port)
       throws SQLException, ClassNotFoundException {
@@ -35,6 +41,7 @@ public class MySQL {
     this.username = username;
     this.password = password;
     this.port = port;
+    this.useSQLITE=false;
     openConnection();
   }
 
@@ -47,9 +54,17 @@ public class MySQL {
       if (connection != null && !connection.isClosed()) {
         return;
       }
-      String url = ("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?autoReconnect=true");
-      Rooms.debug(url);
-      connection = DriverManager.getConnection(url, this.username, this.password);
+      if(useSQLITE){
+        String url = ("jdbc:sqlite:" + Rooms.getPlugin().getDataFolder() + '/' + "rooms.db");
+        Rooms.debug(url);
+        connection = DriverManager.getConnection(url);
+
+      }else{
+        String url = ("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?autoReconnect=true");
+        Rooms.debug(url);
+        connection = DriverManager.getConnection(url, this.username, this.password);
+      }
+
 
       createTable();
     }
@@ -81,7 +96,7 @@ public class MySQL {
       connection.prepareStatement(roomworlds).executeUpdate();
     } catch (SQLException e) {
       //e.addSuppressed(new SQLWarning("Table 'room_worlds' already exists"));
-      e.printStackTrace();
+      Rooms.debug(e.toString());
     }
   }
 
@@ -138,9 +153,9 @@ public class MySQL {
             Rooms.debug("isconnection()" + connection.isClosed());
           } catch (SQLException ex) {
 
-            ex.printStackTrace();
+            Rooms.debug(e.toString());
           }
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
@@ -214,7 +229,7 @@ public class MySQL {
           }
 
         } catch (SQLException e) {
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
@@ -267,7 +282,7 @@ public class MySQL {
           }
 
         } catch (SQLException e) {
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
@@ -327,7 +342,7 @@ public class MySQL {
                     // todo remove when worldguard aswm starts working
                     WorldGuardManager.setupRoom(RoomWorlds.getRoomWorldUUID(uuid), "");
                   } catch (Exception e) {
-                    e.printStackTrace();
+                    Rooms.debug(e.toString());
                   }
 
                 }
@@ -338,7 +353,7 @@ public class MySQL {
           }
 
         } catch (SQLException e) {
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
@@ -372,7 +387,7 @@ public class MySQL {
           stmt.executeUpdate();
           // todo make sync instead of sync for shutdown
         } catch (SQLException e) {
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
@@ -394,7 +409,7 @@ public class MySQL {
           purgestmt.setString(1, worlduuid.toString());
           purgestmt.executeUpdate();
         } catch (SQLException e) {
-          e.printStackTrace();
+          Rooms.debug(e.toString());
         }
       }
     };
