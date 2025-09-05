@@ -5,10 +5,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-
 import tel.endho.rooms.menusystem.Menu;
 
 import java.io.IOException;
@@ -17,7 +13,7 @@ public class MenuListener implements Listener {
 
   @EventHandler
   public void onMenuClick(InventoryClickEvent e)
-      throws CorruptedWorldException, NewerFormatException, UnknownWorldException, IOException {
+      throws IOException {
 
     InventoryHolder holder = e.getInventory().getHolder();
     // If the inventoryholder of the inventory clicked on

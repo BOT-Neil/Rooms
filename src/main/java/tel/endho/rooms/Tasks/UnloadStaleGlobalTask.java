@@ -2,6 +2,7 @@ package tel.endho.rooms.Tasks;
 
 
 import tel.endho.rooms.GlobalRoomWorlds;
+import tel.endho.rooms.Rooms;
 
 
 public class UnloadStaleGlobalTask implements Runnable{
@@ -19,7 +20,7 @@ public class UnloadStaleGlobalTask implements Runnable{
 
             //Rooms.mysql.loadGlobalRoomWorlds();
         } catch (Exception e) {
-            e.printStackTrace();
+            Rooms.logToConsole(e.toString());
         }
     }
 }

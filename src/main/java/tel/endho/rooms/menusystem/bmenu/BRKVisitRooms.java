@@ -51,14 +51,14 @@ public class BRKVisitRooms {
             Rooms.mysql.loadOthersRoomWorlds(player, target, null);
             return;
           } catch (SQLException e) {
-            e.printStackTrace();
+              Rooms.logToConsole(e.toString());
           }
         } else {
           try {
             new BRKVisitTargetRooms().makemenu(player, target);
             return;
           } catch (SQLException e) {
-            e.printStackTrace();
+              Rooms.logToConsole(e.toString());
           }
         }
       } else {
@@ -66,7 +66,7 @@ public class BRKVisitRooms {
           new BRKVisitTargetRooms().makemenu(player, target);
           return;
         } catch (SQLException e) {
-          e.printStackTrace();
+            Rooms.logToConsole(e.toString());
         }
       }
 

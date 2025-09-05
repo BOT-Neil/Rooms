@@ -1,6 +1,9 @@
 package tel.endho.rooms.menusystem.menu;
 
-import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
+import com.infernalsuite.asp.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.asp.api.exceptions.NewerFormatException;
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
+import com.infernalsuite.asp.api.exceptions.WorldLoadedException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -52,11 +55,11 @@ public class GlobalRoomsMenu extends PaginatedMenu {
         Rooms.roomWorldManager.TpOrLoadHouseWorld((Player) e.getWhoClicked(),
             e.getCurrentItem().getItemMeta().getPersistentDataContainer()
                 .get(new NamespacedKey(Rooms.getPlugin(), "UUID"), PersistentDataType.STRING));
-      } catch (com.infernalsuite.aswm.api.exceptions.CorruptedWorldException
-          | com.infernalsuite.aswm.api.exceptions.NewerFormatException | WorldLoadedException
-          | com.infernalsuite.aswm.api.exceptions.UnknownWorldException | IOException e1) {
+      } catch (CorruptedWorldException
+               | NewerFormatException | WorldLoadedException
+               | UnknownWorldException | IOException e1) {
         // TODO Auto-generated catch block
-        e1.printStackTrace();
+          Rooms.logToConsole(e.toString());
       }
       // new LoadRoomMenu(playerMenuUtility).open();
       // new KillConfirmMenu(playerMenuUtility).open();

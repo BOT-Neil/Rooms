@@ -1,12 +1,11 @@
 package tel.endho.rooms.menusystem.menu;
 
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
@@ -43,8 +42,8 @@ public class DeleteConfirmMenu extends Menu {
         case EMERALD:
           try {
             Rooms.roomWorldManager.deleteRoomWorld(roomWorld);
-          } catch (UnknownWorldException | IOException ex) {
-            ex.printStackTrace();
+          } catch (IOException | UnknownWorldException ex) {
+              Rooms.logToConsole(ex.toString());
           }
           break;
         case BARRIER:

@@ -5,6 +5,7 @@ import org.geysermc.cumulus.SimpleForm;
 import org.geysermc.cumulus.response.SimpleFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
+import tel.endho.rooms.Rooms;
 
 import java.sql.SQLException;
 
@@ -43,7 +44,7 @@ public class BRKMainMenu {
         try {
           new BRKVisitRooms().makemenu(player);
         } catch (SQLException e) {
-          e.printStackTrace();
+            Rooms.logToConsole(e.toString());
         }
       }
     });

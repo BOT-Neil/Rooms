@@ -62,7 +62,7 @@ public class Redis {
       isLoaded = true;
     } catch (Exception e) {
       isLoaded = false;
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
     // connection.close();
     // redisClient.shutdown();

@@ -91,7 +91,7 @@ public class SettingsMenu extends Menu {
             green_lore.add(ChatColor.AQUA + "more space at endho.tel");
             grass_meta.setLore(green_lore);
             if(roomWorld.getBorderColor().equals("green")||(roomWorld.getBorderColor().isEmpty()&&Rooms.configs.getGeneralConfig().getString("bordercolour").equals("green"))){
-                grass_meta.addEnchant(Enchantment.ARROW_FIRE,1,true);
+                grass_meta.addEnchant(Enchantment.LUCK_OF_THE_SEA,1,true);
                 grass_meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 grass_meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             }
@@ -107,7 +107,7 @@ public class SettingsMenu extends Menu {
             blue_lore.add(ChatColor.AQUA + "more space at endho.tel");
             blueBorderItemMeta.setLore(blue_lore);
             if(roomWorld.getBorderColor().equals("blue")){
-                blueBorderItemMeta.addEnchant(Enchantment.ARROW_FIRE,1,true);
+                blueBorderItemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA,1,true);
                 blueBorderItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 blueBorderItemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             }
@@ -123,7 +123,7 @@ public class SettingsMenu extends Menu {
             red_lore.add(ChatColor.AQUA + "more space at endho.tel");
             redBorderItemMeta.setLore(red_lore);
             if(roomWorld.getBorderColor().equals("red")){
-                redBorderItemMeta.addEnchant(Enchantment.ARROW_FIRE,1,true);
+                redBorderItemMeta.addEnchant(Enchantment.LUCK_OF_THE_SEA,1,true);
                 redBorderItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 redBorderItemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             }

@@ -90,7 +90,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
               try {
                 Rooms.mysql.loadOthersRoomWorlds(player, args[1], Integer.valueOf(args[2]));
               } catch (SQLException e) {
-                e.printStackTrace();
+                  Rooms.logToConsole(e.toString());
               }
             } else if (args.length == 2) {
               try {
@@ -106,7 +106,7 @@ public class RoomCommand implements CommandExecutor, TabCompleter {
                 }
 
               } catch (SQLException e) {
-                e.printStackTrace();
+                  Rooms.logToConsole(e.toString());
               }
             }
           }

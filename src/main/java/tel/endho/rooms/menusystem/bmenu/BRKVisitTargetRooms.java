@@ -7,10 +7,10 @@ import org.geysermc.cumulus.response.CustomFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
+import com.infernalsuite.asp.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.asp.api.exceptions.NewerFormatException;
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
+import com.infernalsuite.asp.api.exceptions.WorldLoadedException;
 
 import tel.endho.rooms.*;
 

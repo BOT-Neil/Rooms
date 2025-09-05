@@ -1,17 +1,17 @@
 package tel.endho.rooms;
 
 import com.fastasyncworldedit.core.FaweAPI;
-import com.infernalsuite.aswm.api.SlimePlugin;
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.exceptions.WorldAlreadyExistsException;
-import com.infernalsuite.aswm.api.exceptions.WorldLoadedException;
-import com.infernalsuite.aswm.api.exceptions.WorldLockedException;
-import com.infernalsuite.aswm.api.loaders.SlimeLoader;
-import com.infernalsuite.aswm.api.world.SlimeWorld;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
-import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
+import com.infernalsuite.asp.api.AdvancedSlimePaperAPI;
+
+import com.infernalsuite.asp.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.asp.api.exceptions.NewerFormatException;
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
+import com.infernalsuite.asp.api.exceptions.WorldAlreadyExistsException;
+import com.infernalsuite.asp.api.exceptions.WorldLoadedException;
+import com.infernalsuite.asp.api.loaders.SlimeLoader;
+import com.infernalsuite.asp.api.world.SlimeWorld;
+import com.infernalsuite.asp.api.world.properties.SlimeProperties;
+import com.infernalsuite.asp.api.world.properties.SlimePropertyMap;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
@@ -51,14 +51,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
 public class RoomWorldManager {
-  SlimePlugin plugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-  SlimeLoader sqlLoader = plugin.getLoader(Rooms.configs.getStorageConfig().getString("aspaperloader"));
+    Rooms rooms = Rooms.getPlugin();
+    SlimeLoader sqlLoader = rooms.getSQLLoader();
+    AdvancedSlimePaperAPI plugin = rooms.getAsp();
+
+  //SlimeLoader sqlLoader = plugin.getLoader(Rooms.configs.getStorageConfig().getString("aspaperloader"));
   /*
    * private static Map<Integer, Preset> presetMap = new HashMap<>();
    * 
@@ -75,14 +77,14 @@ public class RoomWorldManager {
         api.getAllPlots().forEach(plot -> {
           try {
             migratePlot(plot);
-          } catch (SQLException | WorldAlreadyExistsException | IOException | WorldLockedException |
+          } catch (SQLException | WorldAlreadyExistsException | IOException |
                    UnknownWorldException e) {
-            e.printStackTrace();
+            Rooms.logToConsole(e.toString());
           }
           try {
             Thread.sleep(10000);
           } catch (InterruptedException e) {
-            e.printStackTrace();
+              Rooms.logToConsole(e.toString());
           }
         });
 
@@ -104,14 +106,14 @@ public class RoomWorldManager {
     }
     try {
       this.migratePlot(plot);
-    } catch (WorldAlreadyExistsException | SQLException | IOException | WorldLockedException | UnknownWorldException e) {
+    } catch (WorldAlreadyExistsException | SQLException | IOException | UnknownWorldException e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
 
   }
 
-  public void migratePlot(Plot plot) throws SQLException, IOException, WorldAlreadyExistsException, WorldLockedException, UnknownWorldException {
+  public void migratePlot(Plot plot) throws SQLException, IOException, WorldAlreadyExistsException, UnknownWorldException {
     if (plot != null && !plot.isMerged() && plot.getOwner() != null) {
       /*
        * for (Plot allPlot : api.getAllPlots()) {
@@ -124,8 +126,9 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.ENVIRONMENT, "normal");
       properties.setValue(SlimeProperties.DIFFICULTY, "normal");
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("plotsquaredheight"));
-      SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
-      plugin.loadWorld(world);
+      //SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
+      SlimeWorld world = plugin.createEmptyWorld(String.valueOf(worlduuid),false,properties,sqlLoader);
+      plugin.loadWorld(world,true);
       Map<String, Map<UUID, String>> groupsMap = new HashMap<>();
       Map<UUID, String> blocked = new HashMap<>();
       Map<UUID, String> trusted = new HashMap<>();
@@ -182,7 +185,6 @@ public class RoomWorldManager {
         ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
             es1, region, clipboard, region.getMinimumPoint());
         Operations.complete(forwardExtentCopy);
-        es1.close();
       } // it is automatically closed/flushed when the code exits the block
       try (EditSession es2 = WorldEdit.getInstance().newEditSession(FaweAPI.getWorld(worlduuid.toString()))) {
         int plotsize = -(plot.getLargestRegion().getWidth() / 2);
@@ -193,7 +195,6 @@ public class RoomWorldManager {
             // configure here
             .build();
         Operations.complete(operation);
-        es2.close();
       } // it is automatically closed/flushed when the code exits the block
       plot.unclaim();
     }
@@ -212,9 +213,8 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.SPAWN_X, 1);
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("spawnheight"));
       properties.setValue(SlimeProperties.SPAWN_Z, 1);
-      SlimeWorld world = plugin.createEmptyWorld(sqlLoader, String.valueOf(worlduuid), false, properties);
-      // This method must be called synchronously
-      plugin.loadWorld(world);
+      SlimeWorld world = plugin.createEmptyWorld(String.valueOf(worlduuid),false,properties,sqlLoader);
+      plugin.loadWorld(world,true);
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_MOB_SPAWNING, false);
       Objects.requireNonNull(Bukkit.getWorld(worlduuid.toString())).setGameRule(GameRule.DO_FIRE_TICK, false);
       BukkitRunnable r = new BukkitRunnable() {
@@ -249,13 +249,13 @@ public class RoomWorldManager {
               try {
                 reader = format.getReader(new FileInputStream(file));
               } catch (IOException e) {
-                e.printStackTrace();
+                  Rooms.logToConsole(e.toString());
               }
               Clipboard clipboard = null;
               try {
                 clipboard = reader.read();
               } catch (IOException e) {
-                e.printStackTrace();
+                  Rooms.logToConsole(e.toString());
               }
               @SuppressWarnings("all")
               Operation operation = new ClipboardHolder(clipboard)
@@ -275,7 +275,7 @@ public class RoomWorldManager {
 
       Rooms.mysql.insertRoomWorld(player, world, properties, preset);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
-    } catch (IOException | WorldAlreadyExistsException | SQLException | UnknownWorldException | WorldLockedException ex) {
+    } catch (SQLException ex) {
       /* Exception handling */
     }
   }
@@ -306,10 +306,8 @@ public class RoomWorldManager {
       properties.setValue(SlimeProperties.SPAWN_X, 1);
       properties.setValue(SlimeProperties.SPAWN_Y, Rooms.configs.getGeneralConfig().getInt("spawnheight"));
       properties.setValue(SlimeProperties.SPAWN_Z, 1);
-      SlimeWorld world = plugin.createEmptyWorld(sqlLoader, roomWorld.getWorldUUID().toString() + "rmnether", false,
-          properties);
-      // This method must be called synchronously
-      plugin.loadWorld(world);
+        SlimeWorld world = plugin.createEmptyWorld(roomWorld.getWorldUUID().toString() + "rmnether",false,properties,sqlLoader);
+        plugin.loadWorld(world,true);
       String schematic = Rooms.configs.getPresetConfig().getString("netherschematic");
       BukkitRunnable r = new BukkitRunnable() {
         @Override
@@ -350,7 +348,7 @@ public class RoomWorldManager {
           } catch (CorruptedWorldException | NewerFormatException | WorldLoadedException | UnknownWorldException
               | IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+              Rooms.logToConsole(e.toString());
           }
         }
       };
@@ -360,7 +358,7 @@ public class RoomWorldManager {
       // todo mysql update hasnether
       // Rooms.mysql.insertRoomWorld(player, world, properties);
       // HouseWorlds.getHouseWolrds().putIfAbsent(worlduuid,new HouseWorld(null));
-    } catch (IOException | WorldAlreadyExistsException | UnknownWorldException | WorldLockedException ex) {
+    } catch (IOException ex) {
       /* Exception handling */
     }
   }
@@ -432,7 +430,7 @@ public class RoomWorldManager {
           Rooms.getPlugin().getDataFolder().getParent() + "/WorldGuard/worlds/" + roomWorld.getWorldUUID().toString());
       bob.deleteOnExit();
     } catch (SQLException e) {
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
   }
 
@@ -449,8 +447,7 @@ public class RoomWorldManager {
 
   }
 
-  public void loadWorld(RoomWorld roomWorld, @Nullable Player player, String uuidsuffix)
-      throws CorruptedWorldException, NewerFormatException, WorldLoadedException, UnknownWorldException, IOException {
+  public void loadWorld(RoomWorld roomWorld, @Nullable Player player, String uuidsuffix) {
     SlimePropertyMap properties = new SlimePropertyMap();
     Preset preset = roomWorld.getPreset();
     properties.setValue(SlimeProperties.WORLD_TYPE, "flat");
@@ -485,15 +482,14 @@ public class RoomWorldManager {
       @Override
       public void run() {
         try {
-          SlimeWorld opworld = plugin
-              .loadWorld(sqlLoader, roomWorld.getWorldUUID().toString() + uuidsuffix, false, properties);
-          SlimeWorld world = opworld;
+            SlimeWorld world = plugin
+                .readWorld(sqlLoader, roomWorld.getWorldUUID().toString() + uuidsuffix, false, properties);
           BukkitRunnable r = new BukkitRunnable() {
             @SuppressWarnings("null")
             @Override
             public void run() {
               try {
-                plugin.loadWorld(world);
+                plugin.loadWorld(world,true);
                 if (Bukkit.getWorld(roomWorld.getWorldUUID().toString() + uuidsuffix) != null) {
                   World world2 = Bukkit.getWorld(roomWorld.getWorldUUID().toString() + uuidsuffix);
                   world2.setGameRule(GameRule.DO_MOB_SPAWNING, false);
@@ -511,7 +507,7 @@ public class RoomWorldManager {
                   player.teleport(location);
                 }
               } catch (Exception e) {
-                e.printStackTrace();
+                  Rooms.logToConsole(e.toString());
               }
 
             }
@@ -519,10 +515,10 @@ public class RoomWorldManager {
           // r.runTask(Rooms.getPlugin());
           r.runTask(Rooms.getPlugin());
 
-        } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | WorldLockedException
+        } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException
             | IOException e) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+            Rooms.logToConsole(e.toString());
         }
 
       }

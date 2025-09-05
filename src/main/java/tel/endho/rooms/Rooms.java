@@ -2,16 +2,14 @@ package tel.endho.rooms;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.infernalsuite.asp.api.AdvancedSlimePaperAPI;
+import com.infernalsuite.asp.api.loaders.SlimeLoader;
+import com.infernalsuite.asp.loaders.mysql.MysqlLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import tel.endho.rooms.Tasks.PortalCooldownTask;
-import tel.endho.rooms.Tasks.UnloadEmptyTask;
-import tel.endho.rooms.Tasks.UnloadStaleGlobalTask;
-import tel.endho.rooms.Tasks.UpdateGlobalTask;
-import tel.endho.rooms.Tasks.WorldBorderTask;
+import tel.endho.rooms.Tasks.*;
 import tel.endho.rooms.commands.RoomCommand;
 import tel.endho.rooms.listeners.*;
 import tel.endho.rooms.menusystem.PlayerMenuUtility;
@@ -30,6 +28,8 @@ public class Rooms extends JavaPlugin {
   public static Rooms instance;
   public static MySQL mysql;
   public static Redis redis;
+  private SlimeLoader sqlloader;
+  private final AdvancedSlimePaperAPI asp = AdvancedSlimePaperAPI.instance();
   private static Boolean debugMode;
   private static Boolean isFloodgateLoaded;
   public static RoomWorldManager roomWorldManager;
@@ -37,7 +37,6 @@ public class Rooms extends JavaPlugin {
   private FaweListener faweListener;
   private static final HashMap<Player, PlayerMenuUtility> playerMenuUtilityMap = new HashMap<>();
   public static HashMap<UUID, HashMap<UUID, Long>> pendingTeleports = new HashMap<>();
-
   @Override
   public void onEnable() {
     instance = this;
@@ -53,10 +52,9 @@ public class Rooms extends JavaPlugin {
     mysql = new MySQL();
     try {
       if(configs.getStorageConfig().getBoolean("enablemysql")){
-        mysql.initmysql(configs.getStorageConfig().getString("mysqlhost"),
-                configs.getStorageConfig().getString("mysqldatabase"), configs.getStorageConfig().getString("mysqlusername"),
-                configs.getStorageConfig().getString("mysqlpassword"), configs.getStorageConfig().getInt("mysqlport"));
+          initMYSQLloader();
       }else {
+          //todo add file loader
         mysql.initsqlLite();
       }
 
@@ -200,4 +198,28 @@ public class Rooms extends JavaPlugin {
     return isFloodgateLoaded;
   }
 
+  private void initMYSQLloader() throws SQLException, ClassNotFoundException {
+      String host = configs.getStorageConfig().getString("mysqlhost");
+      String database =configs.getStorageConfig().getString("mysqldatabase");
+      int port=configs.getStorageConfig().getInt("mysqlport");
+      boolean useSSL =configs.getStorageConfig().getBoolean("mysqlssl");
+      String username=configs.getStorageConfig().getString("mysqlusername");
+      String password=configs.getStorageConfig().getString("mysqlpassword");
+      String sqlURL = "jdbc:mysql://{host}:{port}/{database}?autoReconnect=true&useSSL={usessl}";
+      //String url ="jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true";
+      assert host != null;
+      assert database != null;
+      this.sqlloader = new MysqlLoader(sqlURL,host,port,database,useSSL,username,password);
+      mysql.initmysql(configs.getStorageConfig().getString("mysqlhost"),
+              configs.getStorageConfig().getString("mysqldatabase"), configs.getStorageConfig().getString("mysqlusername"),
+              configs.getStorageConfig().getString("mysqlpassword"), configs.getStorageConfig().getInt("mysqlport"));
+  }
+
+    public SlimeLoader getSQLLoader() {
+        return sqlloader;
+    }
+
+    public AdvancedSlimePaperAPI getAsp() {
+        return asp;
+    }
 }

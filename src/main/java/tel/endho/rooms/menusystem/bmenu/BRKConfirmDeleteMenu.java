@@ -6,7 +6,7 @@ import org.geysermc.cumulus.response.SimpleFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
 
 import tel.endho.rooms.RoomWorld;
 import tel.endho.rooms.RoomWorlds;
@@ -39,7 +39,7 @@ public class BRKConfirmDeleteMenu {
             Rooms.roomWorldManager.deleteRoomWorld(roomWorld);
           } catch (UnknownWorldException | IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+              Rooms.logToConsole(e.toString());
           }
 
           return;

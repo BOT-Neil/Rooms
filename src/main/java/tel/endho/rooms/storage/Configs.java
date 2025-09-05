@@ -56,7 +56,7 @@ public class Configs {
     try {
       generalConfig.load(generalConfigFile);
     } catch (IOException | InvalidConfigurationException e) {
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
   }
 
@@ -71,7 +71,7 @@ public class Configs {
     try {
       storageConfig.load(mysqlConfigFile);
     } catch (IOException | InvalidConfigurationException e) {
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
   }
 
@@ -86,7 +86,7 @@ public class Configs {
     try {
       presetConfig.load(presetConfigFile);
     } catch (IOException | InvalidConfigurationException e) {
-      e.printStackTrace();
+        Rooms.logToConsole(e.toString());
     }
   }
 

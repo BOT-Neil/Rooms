@@ -3,9 +3,9 @@ package tel.endho.rooms.storage;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.infernalsuite.aswm.api.world.SlimeWorld;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
-import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
+import com.infernalsuite.asp.api.world.SlimeWorld;
+import com.infernalsuite.asp.api.world.properties.SlimeProperties;
+import com.infernalsuite.asp.api.world.properties.SlimePropertyMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

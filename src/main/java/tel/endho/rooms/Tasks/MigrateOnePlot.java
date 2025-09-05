@@ -22,7 +22,7 @@ public class MigrateOnePlot implements Runnable{
                     migratedOne.set(true);
                     break;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Rooms.logToConsole(e.toString());
                 }
             }
 
